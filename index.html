@@ -82,15 +82,16 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .list{padding:4px 16px 12px;display:flex;flex-direction:column;gap:12px;}
 .lib-list{gap:8px;}
 .swipe-wrap{position:relative;overflow:hidden;border-radius:var(--r);touch-action:pan-y;--swipe-w:76px;}
-.swipe-actions{position:absolute;right:0;top:0;bottom:0;display:flex;flex-direction:row;z-index:1;height:100%;}
-.swipe-actions .act-btn{height:100%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;border:0;padding:0 10px;white-space:nowrap;min-width:64px;}
+.swipe-actions{position:absolute;right:0;top:0;bottom:0;display:flex;flex-direction:row;z-index:1;height:100%;width:var(--swipe-w);}
+.swipe-actions .act-btn{height:100%;flex:1;min-width:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;border:0;padding:0 6px;white-space:nowrap;}
 .swipe-actions .act-btn.del{background:var(--red);}
 .swipe-actions .act-btn.edit{background:var(--blue);}
-.swipe-content{position:relative;z-index:2;background:var(--card);border-radius:0;
+.swipe-actions .act-btn:last-child{border-radius:0 var(--r) var(--r) 0;}
+.swipe-content{position:relative;z-index:2;background:var(--card);border-radius:var(--r) 0 0 var(--r);
   transition:transform .25s cubic-bezier(.2,.8,.2,1);will-change:transform;}
 .swipe-content.swiping{transition:none;}
 .swipe-wrap.open .swipe-content{transform:translateX(calc(var(--swipe-w)*-1));}
-.swipe-content .dcard{border-radius:0;}
+.swipe-content .dcard{border-radius:var(--r) 0 0 var(--r);}
 .dcard{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);
   display:flex;align-items:center;gap:14px;cursor:pointer;position:relative;}
 .dcard:active{transform:scale(.985);}
@@ -131,13 +132,16 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
   text-align:center;line-height:1.25;cursor:pointer;}
 .lib-left .cat.active{background:linear-gradient(135deg,#FFF8E7,#FFEFD6);color:var(--accent2);
   box-shadow:var(--shadow);}
+.lib-main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;background:var(--bg);}
 .lib-right{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px 90px;min-width:0;}
 .lib-right .list{padding:2px 0 12px;}
 .lib-right .dcard{padding:12px 13px;gap:11px;}
-.topcats{display:flex;gap:5px;padding:2px 0 8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.topcats{flex-shrink:0;display:flex;gap:6px;padding:8px 12px 6px;flex-wrap:nowrap;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+  touch-action:pan-x;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--bg);}
 .topcats::-webkit-scrollbar{display:none;}
-.topcat{font-size:12px;font-weight:600;padding:5px 10px;border-radius:10px;background:#fff;
-  border:1px solid var(--line);color:var(--ink2);flex-shrink:0;white-space:nowrap;}
+.topcat{font-size:12px;font-weight:600;padding:6px 11px;border-radius:10px;background:#fff;
+  border:1px solid var(--line);color:var(--ink2);flex-shrink:0;white-space:nowrap;scroll-snap-align:start;}
 .topcat.active{background:var(--accent);color:#fff;border-color:var(--accent);}
 .lib-grid{display:grid;grid-template-columns:1fr;gap:9px;}
 .gcard{background:var(--card2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
@@ -164,9 +168,12 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .rate-stat{margin:10px 16px 4px;background:#fff;border:1px solid var(--line);border-radius:var(--r);
   padding:10px 12px;box-shadow:var(--shadow);}
 .rate-stat .rs-title{font-size:11px;color:var(--ink2);margin-bottom:7px;font-weight:600;}
-.rate-stat .rs-row{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;}
+.rate-stat .rs-row{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+  touch-action:pan-x;scrollbar-width:none;padding-bottom:2px;}
+.rate-stat .rs-row::-webkit-scrollbar{display:none;}
 .rate-chip{display:inline-flex;align-items:center;gap:3px;background:#fff;border:1px solid;
-  border-radius:9px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}
+  border-radius:9px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;scroll-snap-align:start;}
 .rate-chip .rc-emoji{font-size:13px;}
 .rate-chip b{font-weight:800;}
 .timeline{padding:8px 16px 100px;position:relative;}
@@ -2715,11 +2722,13 @@ function renderLibrary(){
     <div class="lib-left">
       ${LEFTCATS.map(c=>`<div class="cat ${state.libLeft===c?'active':''}" onclick="state.libLeft='${c}';save();render()">${c}</div>`).join("")}
     </div>
-    <div class="lib-right">
+    <div class="lib-main">
       <div class="topcats">
         ${(["全部"].concat(TOPCATS)).map(t=>`<div class="topcat ${state.libTop===t?'active':''}" data-t="${t}" onclick="setLibTop('${t}')">${t}</div>`).join("")}
       </div>
-      <div id="libGrid">${right}</div>
+      <div class="lib-right">
+        <div id="libGrid">${right}</div>
+      </div>
     </div>
   </div>
   ${tabbarHTML("library")}`;
@@ -3327,28 +3336,13 @@ function submitEditDish(id){
 /* ============ 其他 ============ */
 function renderOther(){
   return `
-  <div class="topbar"><h1>其他</h1><div class="sub">设置 · 数据 · 关于</div></div>
+  <div class="topbar"><h1>其他</h1><div class="sub">数据导入导出</div></div>
   <div class="list">
     <div class="dcard" onclick="exportBackup()"><div class="emoji">💾</div>
       <div class="body"><div class="nm">导出备份</div><div class="meta">含自定义菜/打卡/单菜修改</div></div><span class="arrow">›</span></div>
     <div class="dcard" onclick="document.getElementById('imp').click()"><div class="emoji">📥</div>
       <div class="body"><div class="nm">导入恢复</div><div class="meta">从 JSON 整覆盖恢复</div></div><span class="arrow">›</span></div>
     <input id="imp" type="file" accept="application/json" style="display:none" onchange="importBackup(this)">
-    <div class="dcard" onclick="confirmDialog('清空数据','将清空所有打卡记录与自定义菜品，今日餐食会重新生成。确定吗？',function(){state.checkins=[];state.custom=[];state.plan=null;save();render();},'清空')"><div class="emoji">🧹</div>
-      <div class="body"><div class="nm">清空本地数据</div><div class="meta">重置打卡与自定义菜</div></div><span class="arrow">›</span></div>
-  </div>
-  <div class="list">
-    <div class="dcard" style="display:block;cursor:default;">
-      <div class="about">
-        <b>关于 每日餐食</b><br>
-        一个纯本地、无联网的每日菜谱推送应用。所有数据存在你的浏览器本地（localStorage），不上传任何服务器。<br><br>
-        <b>功能</b><br>
-        · 今日餐食：默认推送 2 菜肴（1荤1素）1 主食 1 汤羹 1 小食，可换一批 / 替换 / 调人数与各类数量<br>
-        · 菜库：${allDishes().length} 道真实热门菜，左侧菜系 + 顶部类别双重筛选，支持菜名/食材搜索<br>
-        · 打卡：5 级评价（夯最好 → 拉最差）+ 花费 + 备注 + 图片，可编辑删除，统计本月花费与评价分布<br><br>
-        <span class="note-line">关于做菜视频：点「抖音/小红书做菜视频」会直接打开对应平台、以该菜名为关键词的视频搜索结果（默认按热度排序）。由于平台限制，无法在本地保证精准定位到「最高赞」那条，但搜出来的就是该菜最热门的做菜视频。</span>
-      </div>
-    </div>
   </div>
   ${tabbarHTML("other")}`;
 }
