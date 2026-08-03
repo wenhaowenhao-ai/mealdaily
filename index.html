@@ -4,54 +4,66 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="每日餐食">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#FDB11A">
+<meta name="format-detection" content="telephone=no">
+<link rel="apple-touch-icon" href="./icon180.png">
+<link rel="icon" type="image/png" href="./icon180.png">
 <title>每日餐食</title>
 <style>
 :root{
-  --bg:#f2f2f7; --card:#ffffff; --card2:rgba(255,255,255,0.72);
-  --ink:#1c1c1e; --ink2:#636366; --line:#e5e5ea;
-  --accent:#ff9500; --accent2:#ff6b00;
-  --red:#ff3b30; --green:#34c759; --blue:#007aff; --gray:#8e8e93;
+  --bg:#F5F5F7; --card:#ffffff; --card2:rgba(255,255,255,0.82);
+  --ink:#1C1C1E; --ink2:#636366; --line:#E5E5EA;
+  --accent:#FDB11A; --accent2:#E69A00;
+  --red:#FF3B30; --green:#34C759; --blue:#007AFF; --purple:#5856D6; --yellow:#FFCC00; --gray:#8E8E93;
   --r:16px; --shadow:0 1px 3px rgba(0,0,0,.06),0 6px 18px rgba(0,0,0,.05);
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{margin:0;padding:0;}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow-x:hidden;}
+html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif;
   background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased;
-  overscroll-behavior:none;
+  overscroll-behavior:none;touch-action:pan-y pan-up pan-down;-webkit-user-select:none;user-select:none;
+  -webkit-overflow-scrolling:touch;
 }
-.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);
-  padding-bottom:84px;padding-top:env(safe-area-inset-top);}
+input,textarea{-webkit-user-select:auto;user-select:auto;touch-action:manipulation;}
+button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulation;}
+.app{max-width:480px;margin:0 auto;min-height:100dvh;background:var(--bg);
+  padding-bottom:calc(84px + env(safe-area-inset-bottom));
+  padding-top:max(12px, env(safe-area-inset-top));}
 .hide{display:none!important;}
 
 /* ---------- 顶部 ---------- */
-.topbar{padding:12px 16px 2px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.topbar{padding:10px 16px 6px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .topbar .title{flex:1;min-width:0;}
 .topbar h1{font-size:25px;font-weight:800;letter-spacing:-.5px;margin:0;}
 .topbar .sub{color:var(--ink2);font-size:12px;margin-top:1px;}
-.search-mini{width:132px;flex-shrink:0;}
-.search-mini .search-box{padding:6px 10px;border-radius:11px;}
-.search-mini input{font-size:12px;}
-.search-box{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);
-  border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);}
-.search-box .ic{font-size:15px;opacity:.45;}
-.search-box input{flex:1;border:0;outline:0;font-size:12px;background:transparent;color:var(--ink);}
-.search-box input::placeholder{color:var(--gray);}
-.search-box .clear{width:18px;height:18px;border-radius:50%;border:0;background:var(--line);color:var(--ink2);
+.search-mini{width:140px;flex-shrink:0;}
+.search-mini .search-box{padding:7px 11px;border-radius:12px;}
+.search-mini input{font-size:13px;}
+.search-box{display:flex;align-items:center;gap:7px;background:#E5E5EA;border:0;
+  border-radius:14px;padding:10px 14px;}
+.search-box .ic{width:16px;height:16px;color:var(--gray);opacity:.85;display:flex;align-items:center;justify-content:center;}
+.search-box .ic svg{width:100%;height:100%;}
+.search-box input{flex:1;border:0;outline:0;font-size:14px;background:transparent;color:var(--ink);}
+.search-box input::placeholder{color:#8E8E93;}
+.search-box .clear{width:18px;height:18px;border-radius:50%;border:0;background:rgba(0,0,0,.1);color:var(--ink2);
   font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
 /* ---------- 紧凑控件 ---------- */
-.controls{display:flex;flex-direction:column;gap:7px;padding:9px 16px 11px;background:#fff;border-bottom:1px solid var(--line);}
+.controls{display:flex;flex-direction:column;gap:7px;padding:9px 16px 11px;background:transparent;border-bottom:0;}
 .ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.chip{background:#f7f7fa;border:1px solid var(--line);border-radius:10px;padding:7px 9px;
+.chip{background:#F2F2F7;border:1px solid var(--line);border-radius:10px;padding:7px 9px;
   display:flex;align-items:center;justify-content:space-between;gap:5px;}
 .chip .lab{font-size:12px;color:var(--ink2);font-weight:600;}
 .stepper{display:flex;align-items:center;gap:6px;}
 .stepper button{width:22px;height:22px;border-radius:6px;border:0;background:#fff;color:var(--ink);
   font-size:15px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;
   border:1px solid var(--line);}
-.stepper button:active{background:#e0e0e5;}
+.stepper button:active{background:#E5E5EA;}
 .stepper .val{font-size:14px;font-weight:700;min-width:16px;text-align:center;}
 .refresh-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   border:0;border-radius:10px;padding:0 12px;font-size:13px;font-weight:700;box-shadow:var(--shadow);width:100%;height:100%;}
@@ -65,30 +77,36 @@ body{
 .section-title .tag.stepper-tag{display:inline-flex;align-items:center;gap:2px;padding:2px 6px;font-size:12px;color:var(--ink2);}
 .ts-btn{width:18px;height:18px;border:0;border-radius:5px;background:transparent;color:var(--ink2);
   font-size:12px;font-weight:600;line-height:1;display:flex;align-items:center;justify-content:center;}
-.ts-btn:active{background:#f2f2f7;}
+.ts-btn:active{background:#F2F2F7;}
 .ts-val{min-width:16px;text-align:center;font-size:12px;font-weight:600;color:var(--ink2);}
 .list{padding:4px 16px 12px;display:flex;flex-direction:column;gap:12px;}
+.swipe-wrap{position:relative;overflow:hidden;border-radius:var(--r);touch-action:pan-y;}
+.swipe-wrap .delete-btn{position:absolute;right:0;top:0;bottom:0;width:76px;background:var(--red);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;z-index:1;}
+.swipe-content{position:relative;z-index:2;background:var(--card);border-radius:var(--r);
+  transition:transform .15s ease;}
+.swipe-wrap.open .swipe-content{transform:translateX(-76px);}
 .dcard{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);
   display:flex;align-items:center;gap:14px;cursor:pointer;position:relative;}
 .dcard:active{transform:scale(.985);}
-.dcard .emoji{width:50px;height:50px;border-radius:13px;background:#fff4e6;display:flex;align-items:center;
+.dcard .emoji{width:50px;height:50px;border-radius:13px;background:transparent;display:flex;align-items:center;
   justify-content:center;font-size:27px;flex-shrink:0;}
 .dcard .body{flex:1;min-width:0;}
 .dcard .nm{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .dcard .meta{font-size:12px;color:var(--ink2);margin-top:3px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
 .pill{font-size:11px;padding:2px 7px;border-radius:8px;font-weight:600;}
-.pill.meat荤{background:#ffeceb;color:#ff3b30;}
-.pill.meat素{background:#eafaf0;color:#34c759;}
-.pill.cuisine{background:#fff4e6;color:#b76e00;}
-.pill.cost{background:#f2f2f7;color:#636366;}
+.pill.meat荤{background:#FFE5E3;color:#FF3B30;}
+.pill.meat素{background:#E3F8E8;color:#34C759;}
+.pill.cuisine{background:#FFF8E7;color:var(--accent);}
+.pill.cost{background:#F2F2F7;color:var(--ink2);}
 .dcard .arrow{color:var(--gray);font-size:20px;flex-shrink:0;}
 .replace-btn{flex-shrink:0;background:#fff;border:1px solid var(--accent);color:var(--accent);
   border-radius:9px;padding:4px 11px;font-size:12px;font-weight:700;margin-left:4px;}
-.replace-btn:active{background:#fff4e6;}
+.replace-btn:active{background:#FFF8E7;}
 .dcard .prov{font-size:11px;color:var(--gray);margin-top:3px;}
-.cat-edit{flex-shrink:0;background:#f2f2f7;border:1px solid var(--line);color:var(--ink2);
+.cat-edit{flex-shrink:0;background:#F2F2F7;border:1px solid var(--line);color:var(--ink2);
   border-radius:9px;padding:4px 9px;font-size:11px;font-weight:600;margin-left:2px;}
-.cat-edit:active{background:#e0e0e5;}
+.cat-edit:active{background:#E5E5EA;}
 .rep-search{margin-bottom:10px;}
 .rep-hint{font-size:12px;color:var(--ink2);margin-bottom:8px;font-weight:600;}
 #repList{display:flex;flex-direction:column;gap:12px;}
@@ -100,28 +118,29 @@ body{
 .cc-tip{font-size:11px;color:var(--gray);margin:-2px 0 14px;}
 
 /* ---------- 菜库 ---------- */
-.lib{display:flex;height:calc(100vh - 118px);padding-top:2px;}
-.lib-left{width:72px;flex-shrink:0;display:flex;flex-direction:column;gap:4px;
-  padding:6px 5px 60px;border-right:1px solid var(--line);overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.lib-left .cat{flex:1;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 3px;
+.lib{display:flex;height:calc(100dvh - 118px - env(safe-area-inset-top));padding-top:2px;}
+.lib-left{width:72px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;
+  padding:10px 5px 60px;border-right:1px solid var(--line);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.lib-left .cat{flex:1 0 auto;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 3px;
   border-radius:11px;font-size:11.5px;font-weight:600;color:var(--ink2);
   text-align:center;line-height:1.25;cursor:pointer;}
-.lib-left .cat.active{background:linear-gradient(135deg,#fff4e6,#ffe9d6);color:var(--accent2);
+.lib-left .cat.active{background:linear-gradient(135deg,#FFF8E7,#FFEFD6);color:var(--accent2);
   box-shadow:var(--shadow);}
 .lib-right{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px 90px;min-width:0;}
 .lib-right .list{padding:2px 0 12px;}
 .lib-right .dcard{padding:12px 13px;gap:11px;}
-.topcats{display:flex;gap:5px;padding:2px 0 8px;flex-wrap:wrap;}
+.topcats{display:flex;gap:5px;padding:2px 0 8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.topcats::-webkit-scrollbar{display:none;}
 .topcat{font-size:12px;font-weight:600;padding:5px 10px;border-radius:10px;background:#fff;
-  border:1px solid var(--line);color:var(--ink2);}
-.topcat.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  border:1px solid var(--line);color:var(--ink2);flex-shrink:0;white-space:nowrap;}
+.topcat.active{background:var(--accent);color:#fff;border-color:var(--accent);}
 .lib-grid{display:grid;grid-template-columns:1fr;gap:9px;}
 .gcard{background:var(--card2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border:1px solid rgba(255,255,255,.6);border-radius:15px;padding:12px;box-shadow:var(--shadow);
   cursor:pointer;display:flex;flex-direction:column;gap:7px;}
 .gcard:active{transform:scale(.97);}
 .gcard .row{display:flex;align-items:center;gap:9px;}
-.gcard .emoji{width:38px;height:38px;border-radius:10px;background:#fff4e6;display:flex;align-items:center;
+.gcard .emoji{width:38px;height:38px;border-radius:10px;background:transparent;display:flex;align-items:center;
   justify-content:center;font-size:21px;flex-shrink:0;}
 .gcard .nm{font-size:14px;font-weight:700;line-height:1.25;}
 .gcard .meta{font-size:11px;color:var(--ink2);display:flex;gap:5px;flex-wrap:wrap;}
@@ -153,7 +172,7 @@ body{
   background:var(--accent);border:3px solid #fff;box-shadow:0 0 0 1px var(--line);}
 .tl-card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;}
 .tl-head{display:flex;align-items:center;gap:11px;padding:12px 14px;}
-.tl-head .emoji{width:42px;height:42px;border-radius:11px;background:#fff4e6;display:flex;align-items:center;
+.tl-head .emoji{width:42px;height:42px;border-radius:11px;background:transparent;display:flex;align-items:center;
   justify-content:center;font-size:23px;flex-shrink:0;}
 .tl-head .nm{font-size:16px;font-weight:700;}
 .tl-head .dt{font-size:11px;color:var(--gray);margin-top:2px;}
@@ -162,15 +181,15 @@ body{
 .tl-body .cost{font-size:13px;color:var(--ink2);margin-bottom:5px;}
 .tl-body .note{font-size:13px;color:var(--ink2);line-height:1.5;}
 .tl-photos{display:flex;gap:7px;flex-wrap:wrap;padding:0 14px 12px;}
-.tl-photos img{width:84px;height:84px;object-fit:cover;border-radius:11px;background:#f2f2f7;}
+.tl-photos img{width:84px;height:84px;object-fit:cover;border-radius:11px;background:#F2F2F7;}
 .tl-acts{display:flex;gap:9px;padding:0 14px 13px;}
 .tl-acts button{flex:1;border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px;
   font-size:13px;font-weight:700;color:var(--ink2);min-height:40px;touch-action:manipulation;}
-.tl-acts .del{color:var(--red);border-color:#ffd9d6;}
+.tl-acts .del{color:var(--red);border-color:#FFD9D6;}
 
 /* ---------- 底部 Tab ---------- */
 .tabbar{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;
-  display:flex;background:rgba(249,249,249,.92);backdrop-filter:blur(20px);
+  display:flex;background:rgba(245,245,247,.92);backdrop-filter:blur(20px);
   border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:40;}
 .tabbar button{flex:1;background:0;border:0;padding:8px 0 7px;display:flex;flex-direction:column;
   align-items:center;gap:2px;color:var(--gray);font-size:10.5px;font-weight:600;}
@@ -182,7 +201,7 @@ body{
 .mask{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;display:flex;
   align-items:flex-end;justify-content:center;}
 .sheet{background:#fff;width:100%;max-width:480px;border-radius:22px 22px 0 0;max-height:90vh;
-  overflow-y:auto;padding:8px 0 28px;animation:up .25s ease;}
+  overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0 calc(28px + env(safe-area-inset-bottom));animation:up .25s ease;}
 @keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 8px;}
 .sheet-head h3{font-size:18px;font-weight:800;margin:0;}
@@ -193,7 +212,9 @@ body{
 .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:50;display:flex;
   align-items:center;justify-content:center;padding:18px;}
 .modal-card{background:#fff;width:100%;max-width:440px;border-radius:20px;max-height:86vh;
-  overflow-y:auto;padding:6px 0 0;box-shadow:0 24px 70px rgba(0,0,0,.28);animation:pop .2s ease;}
+  overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 0 0;box-shadow:0 24px 70px rgba(0,0,0,.28);animation:pop .2s ease;}
+.modal-card.rep-card{background:#F5F5F7;}
+.modal-card.rep-card .modal-foot{background:#F5F5F7;}
 .modal-foot{position:sticky;bottom:0;background:#fff;padding:12px 18px;border-top:1px solid var(--line);
   display:flex;gap:10px;margin-top:8px;}
 .modal-foot .primary-btn{margin:0;}
@@ -204,20 +225,20 @@ body{
 .confirm-box .confirm-msg{font-size:14px;color:var(--ink2);line-height:1.5;margin-bottom:20px;}
 .confirm-box .confirm-acts{display:flex;gap:10px;}
 .confirm-box .confirm-acts button{flex:1;border:0;border-radius:12px;padding:12px;font-size:15px;font-weight:700;}
-.confirm-box .c-cancel{background:#f2f2f7;color:var(--ink);}
+.confirm-box .c-cancel{background:#F2F2F7;color:var(--ink);}
 .confirm-box .c-ok{background:var(--red);color:#fff;}
 .confirm-box .c-ok:active{opacity:.85;}
 
 /* 详情 */
-.detail-emoji{width:74px;height:74px;border-radius:18px;background:#fff4e6;display:flex;align-items:center;
+.detail-emoji{width:74px;height:74px;border-radius:18px;background:transparent;display:flex;align-items:center;
   justify-content:center;font-size:40px;margin:6px auto 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;
   user-select:none;-webkit-user-select:none;}
 .detail-emoji:active{transform:scale(.96);}
 .detail-name{font-size:22px;font-weight:800;text-align:center;}
 .emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:12px;}
-.emoji-cell{aspect-ratio:1;border:1px solid transparent;border-radius:11px;background:#f7f7f7;font-size:26px;
+.emoji-cell{aspect-ratio:1;border:1px solid transparent;border-radius:11px;background:#F2F2F7;font-size:26px;
   display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;}
-.emoji-cell.on{background:#fff4e6;border-color:var(--accent);}
+.emoji-cell.on{background:#FFF8E7;border-color:var(--accent);}
 .emoji-cell:active{transform:scale(.9);}
 .emoji-custom{display:flex;gap:8px;margin-bottom:10px;}
 .emoji-custom input{flex:1;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;
@@ -227,12 +248,16 @@ body{
 .detail-meta{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:10px 0 14px;}
 .detail-sec{font-size:13px;font-weight:700;color:var(--ink2);margin:14px 0 7px;}
 .ing-list{display:flex;flex-wrap:wrap;gap:7px;}
-.ing-list span{background:#f2f2f7;border-radius:9px;padding:5px 10px;font-size:13px;}
+.ing-list span{background:#F2F2F7;border-radius:9px;padding:5px 10px;font-size:13px;}
+.ing-list .ing-add-btn{background:#F2F2F7;border-radius:9px;padding:5px 10px;font-size:13px;
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);
+  min-width:32px;font-weight:700;-webkit-tap-highlight-color:transparent;}
+.ing-list .ing-add-btn:active{opacity:.7;}
 .videos{display:flex;gap:11px;margin-top:8px;}
 .vcard{flex:1;border-radius:15px;padding:14px;color:#fff;cursor:pointer;position:relative;overflow:hidden;
   min-height:102px;display:flex;flex-direction:column;justify-content:space-between;}
 .vcard.dy{background:linear-gradient(135deg,#161823,#2b2f44);}
-.vcard.xhs{background:linear-gradient(135deg,#ff2741,#ff5b6e);}
+.vcard.xhs{background:linear-gradient(135deg,#FF3B30,#FF6B6B);}
 .vcard .vh{font-size:13px;font-weight:800;opacity:.95;}
 .vcard .vt{font-size:11px;opacity:.8;margin-top:2px;}
 .vcard .vgo{font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px;margin-top:8px;}
@@ -243,36 +268,39 @@ body{
 
 /* 评分 */
 .rates{display:flex;gap:7px;}
-.rate-opt{flex:1;background:#f2f2f7;border-radius:12px;padding:11px 4px;text-align:center;cursor:pointer;
+.rate-opt{flex:1;background:#F2F2F7;border-radius:12px;padding:11px 4px;text-align:center;cursor:pointer;
   border:2px solid transparent;}
 .rate-opt .e{font-size:22px;}
 .rate-opt .l{font-size:12px;font-weight:700;margin-top:3px;}
-.rate-opt.on{border-color:var(--accent);background:#fff4e6;}
+.rate-opt.on{border-color:var(--accent);background:#FFF8E7;}
 .field{margin-bottom:14px;}
 .field label{font-size:13px;font-weight:700;color:var(--ink2);display:block;margin-bottom:6px;}
 .field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:12px;
   padding:11px 13px;font-size:15px;background:#fff;font-family:inherit;color:var(--ink);outline:0;}
+.field select{-webkit-appearance:none;appearance:none;padding-right:40px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23636366' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 26px center;background-size:14px;}
 .field textarea{resize:vertical;min-height:64px;}
 .row2{display:flex;gap:11px;}
 .row2>div{flex:1;}
 .previews{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
-.previews img{width:72px;height:72px;object-fit:cover;border-radius:11px;background:#f2f2f7;}
+.previews img{width:72px;height:72px;object-fit:cover;border-radius:11px;background:#F2F2F7;}
 .previews .rm{position:relative;}
 .primary-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:0;
   border-radius:14px;padding:14px;font-size:16px;font-weight:700;margin-top:6px;box-shadow:var(--shadow);}
 .primary-btn:active{opacity:.85;}
-.ghost-btn{width:100%;background:#f2f2f7;color:var(--ink);border:1px solid var(--line);
+.ghost-btn{width:100%;background:#F2F2F7;color:var(--ink);border:1px solid var(--line);
   border-radius:14px;padding:13px;font-size:15px;font-weight:700;margin-top:9px;}
 .ghost-btn:active{opacity:.7;}
 /* 食材编辑 */
 .mini-edit{display:inline-flex;align-items:center;margin-left:6px;line-height:1;
-  color:#bbb;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  color:var(--gray);cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .mini-edit svg{display:block;}
 .mini-edit:active{opacity:.45;}
 .ing-edit-row{display:flex;gap:8px;align-items:center;margin-bottom:9px;}
 .ing-edit-row .iei{flex:1;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;
   background:#fff;font-family:inherit;color:var(--ink);outline:0;}
-.ing-del{flex:0 0 auto;width:34px;height:34px;border:0;border-radius:10px;background:#ffe9ec;color:var(--red);
+.ing-del{flex:0 0 auto;width:34px;height:34px;border:0;border-radius:10px;background:#FFEBEC;color:var(--red);
   font-size:20px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;}
 .ing-del:active{opacity:.6;}
 .ing-add{display:flex;gap:8px;margin:4px 0 14px;}
@@ -282,9 +310,9 @@ body{
   border:0;border-radius:11px;padding:0 16px;font-size:14px;font-weight:700;}
 .link-btn{background:0;border:0;color:var(--blue);font-size:14px;font-weight:600;padding:10px;width:100%;}
 .seg{display:flex;gap:6px;flex-wrap:wrap;}
-.seg button{flex:1;min-width:64px;background:#f2f2f7;border:1px solid var(--line);border-radius:11px;
+.seg button{flex:1;min-width:64px;background:#F2F2F7;border:1px solid var(--line);border-radius:11px;
   padding:9px 4px;font-size:13px;font-weight:600;color:var(--ink2);}
-.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.seg button.on{background:var(--blue);color:#fff;border-color:var(--blue);}
 .about{font-size:13px;color:var(--ink2);line-height:1.7;}
 .about b{color:var(--ink);}
 .note-line{font-size:11.5px;color:var(--gray);margin-top:8px;line-height:1.5;}
@@ -294,6 +322,7 @@ body{
 <div class="app" id="app"></div>
 <div id="modal"></div>
 <button class="add-dish-btn hide" id="addDishBtn" onclick="openAddDish()">＋</button>
+<button class="add-dish-btn hide" id="addCheckinBtn" onclick="openAddCheckin()">＋</button>
 
 <script>
 const RAW=[
@@ -312,7 +341,7 @@ const RAW=[
 ["钟水饺","中国菜","主食","荤",10,["饺子皮", "猪肉", "红油", "芝麻", "蒜"],1,"川菜",""],
 ["龙抄手","中国菜","主食","荤",11,["馄饨皮", "猪肉", "鸡汤", "紫菜"],0,"川菜",""],
 ["酸辣粉","中国菜","小食","素",7,["红薯粉", "花生", "香菜", "醋", "辣椒油"],0,"川菜",""],
-["赖汤圆","中国菜","甜品","素",6,["糯米粉", "黑芝麻", "猪油", "糖"],0,"川菜",""],
+["赖汤圆","中国菜","甜饮","素",6,["糯米粉", "黑芝麻", "猪油", "糖"],0,"川菜",""],
 ["钵钵鸡","中国菜","小食","荤",16,["鸡肉", "藤椒", "辣椒油", "芝麻", "竹签"],0,"川菜",""],
 ["口水鸡","中国菜","菜","荤",20,["鸡肉", "红油", "花椒", "芝麻", "花生"],1,"川菜",""],
 ["麻辣香锅","中国菜","菜","荤",26,["虾仁", "午餐肉", "藕", "菜花", "火锅底料"],0,"川菜",""],
@@ -323,25 +352,25 @@ const RAW=[
 ["灯影牛肉","中国菜","菜","荤",28,["牛肉", "酱油", "料酒", "葱"],0,"川菜",""],
 ["樟茶鸭","中国菜","菜","荤",26,["鸭肉", "葱", "姜", "酱油"],0,"川菜",""],
 ["怪味鸡","中国菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"川菜",""],
-["甜烧白","中国菜","甜品","荤",14,["面粉", "鸡蛋", "糖", "奶油"],0,"川菜",""],
+["甜烧白","中国菜","甜饮","荤",14,["面粉", "鸡蛋", "糖", "奶油"],0,"川菜",""],
 ["咸烧白","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"川菜",""],
 ["辣子鸡丁","中国菜","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],0,"川菜",""],
 ["蚂蚁上树","中国菜","菜","素",10,["蔬菜", "蒜", "盐", "油"],0,"川菜",""],
-["麻辣烫","中国菜","汤饮","荤",18,["蔬菜", "豆制品", "肉类", "麻辣底料"],0,"川菜",""],
-["冒菜","中国菜","汤饮","荤",20,["蔬菜", "肉类", "豆制品", "麻辣底料"],0,"川菜",""],
+["麻辣烫","中国菜","汤","荤",18,["蔬菜", "豆制品", "肉类", "麻辣底料"],0,"川菜",""],
+["冒菜","中国菜","汤","荤",20,["蔬菜", "肉类", "豆制品", "麻辣底料"],0,"川菜",""],
 ["白切鸡","中国菜","菜","荤",24,["三黄鸡", "姜", "葱", "盐"],0,"粤菜",""],
 ["烧鹅","中国菜","菜","荤",32,["肉类", "酱油", "料酒", "葱", "姜"],0,"粤菜",""],
 ["蜜汁叉烧","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],1,"粤菜",""],
 ["清蒸鲈鱼","中国菜","菜","荤",28,["鲈鱼", "葱", "姜", "蒸鱼豉油"],0,"粤菜",""],
-["老火靓汤","中国菜","汤饮","荤",20,["鸡肉", "猪骨", "药材", "葱", "姜"],0,"粤菜",""],
+["老火靓汤","中国菜","汤","荤",20,["鸡肉", "猪骨", "药材", "葱", "姜"],0,"粤菜",""],
 ["艇仔粥","中国菜","主食","荤",12,["米", "水", "糖"],0,"粤菜",""],
 ["肠粉","中国菜","主食","素",8,["米粉", "汤", "香菜", "辣油"],0,"粤菜",""],
 ["虾饺","中国菜","主食","荤",14,["虾仁", "蒜", "盐", "料酒"],0,"粤菜",""],
 ["干炒牛河","中国菜","主食","荤",18,["牛肉", "酱油", "料酒", "葱"],0,"粤菜",""],
 ["煲仔饭","中国菜","主食","荤",16,["大米", "配菜", "酱油", "油"],0,"粤菜",""],
-["双皮奶","中国菜","甜品","素",7,["牛奶", "蛋白", "糖", "香草"],1,"粤菜",""],
-["杨枝甘露","中国菜","甜品","素",12,["芒果", "西柚", "西米", "椰浆", "糖"],1,"粤菜",""],
-["芒果布丁","中国菜","甜品","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"粤菜",""],
+["双皮奶","中国菜","甜饮","素",7,["牛奶", "蛋白", "糖", "香草"],1,"粤菜",""],
+["杨枝甘露","中国菜","甜饮","素",12,["芒果", "西柚", "西米", "椰浆", "糖"],1,"粤菜",""],
+["芒果布丁","中国菜","甜饮","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"粤菜",""],
 ["豉汁排骨","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"粤菜",""],
 ["盐焗鸡","中国菜","菜","荤",24,["鸡肉", "葱", "姜", "酱油"],0,"粤菜",""],
 ["脆皮乳鸽","中国菜","菜","荤",30,["肉类", "酱油", "料酒", "葱", "姜"],0,"粤菜",""],
@@ -351,13 +380,13 @@ const RAW=[
 ["萝卜牛腩","中国菜","菜","荤",22,["牛肉", "酱油", "料酒", "葱"],0,"粤菜",""],
 ["及第粥","中国菜","主食","荤",13,["猪杂", "大米", "葱", "姜"],1,"粤菜",""],
 ["流沙包","中国菜","主食","荤",10,["面粉", "馅料", "酵母"],0,"粤菜",""],
-["马蹄糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
-["椰汁糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"粤菜",""],
-["姜撞奶","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"粤菜",""],
-["绿豆沙","中国菜","汤饮","素",6,["糖", "水", "配料"],1,"粤菜",""],
+["马蹄糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
+["椰汁糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"粤菜",""],
+["姜撞奶","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"粤菜",""],
+["绿豆沙","中国菜","甜饮","素",6,["糖", "水", "配料"],1,"粤菜",""],
 ["皮蛋瘦肉粥","中国菜","主食","荤",12,["皮蛋", "瘦肉", "大米", "葱", "姜"],1,"粤菜",""],
-["煎堆","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
-["蛋挞","中国菜","甜品","荤",8,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
+["煎堆","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
+["蛋挞","中国菜","甜饮","荤",8,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
 ["陈皮骨","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"粤菜",""],
 ["剁椒鱼头","中国菜","菜","荤",30,["鱼", "姜", "葱", "蒸鱼豉油"],0,"湘菜",""],
 ["辣椒炒肉","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"湘菜",""],
@@ -370,8 +399,8 @@ const RAW=[
 ["毛氏红烧肉","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"湘菜",""],
 ["小炒黄牛肉","中国菜","菜","荤",30,["牛肉", "酱油", "料酒", "葱"],0,"湘菜",""],
 ["擂辣椒","中国菜","菜","素",8,["蔬菜", "蒜", "盐", "油"],0,"湘菜",""],
-["糖油粑粑","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"湘菜",""],
-["姊妹团子","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"湘菜",""],
+["糖油粑粑","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"湘菜",""],
+["姊妹团子","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"湘菜",""],
 ["刮凉粉","中国菜","小食","素",6,["米粉", "汤", "香菜", "辣油"],0,"湘菜",""],
 ["茶树菇炒肉","中国菜","菜","荤",18,["茶叶", "水", "糖"],0,"湘菜",""],
 ["剁椒芋头","中国菜","菜","素",9,["芋头", "糖", "椰浆"],0,"湘菜",""],
@@ -385,7 +414,7 @@ const RAW=[
 ["四喜丸子","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["木须肉","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["糟溜鱼片","中国菜","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],0,"鲁菜",""],
-["奶汤蒲菜","中国菜","汤饮","素",14,["蒲菜", "奶汤", "葱", "姜"],0,"鲁菜",""],
+["奶汤蒲菜","中国菜","汤","素",14,["蒲菜", "奶汤", "葱", "姜"],0,"鲁菜",""],
 ["糖醋里脊","中国菜","菜","荤",20,["猪里脊", "番茄酱", "糖", "醋", "鸡蛋"],0,"鲁菜",""],
 ["煎饼","中国菜","主食","素",4,["面粉", "油", "盐"],0,"鲁菜",""],
 ["油旋","中国菜","主食","素",5,["蔬菜", "蒜", "盐", "油"],0,"鲁菜",""],
@@ -402,35 +431,35 @@ const RAW=[
 ["蜜汁火方","中国菜","菜","荤",34,["肉类", "酱油", "料酒", "葱", "姜"],1,"苏菜",""],
 ["清蒸鲥鱼","中国菜","菜","荤",40,["鱼", "姜", "葱", "蒸鱼豉油"],0,"苏菜",""],
 ["银鱼炒蛋","中国菜","菜","荤",18,["鱼", "姜", "葱", "蒸鱼豉油"],0,"苏菜",""],
-["桂花糖藕","中国菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"苏菜",""],
-["酒酿圆子","中国菜","甜品","素",7,["糯米", "酒曲", "糖"],1,"苏菜",""],
-["梅花糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"苏菜",""],
-["鸭血粉丝汤","中国菜","汤饮","荤",12,["鸭血", "粉丝", "鸭胗", "葱", "姜", "香菜"],0,"苏菜",""],
-["千层油糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"苏菜",""],
+["桂花糖藕","中国菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"苏菜",""],
+["酒酿圆子","中国菜","甜饮","素",7,["糯米", "酒曲", "糖"],1,"苏菜",""],
+["梅花糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"苏菜",""],
+["鸭血粉丝汤","中国菜","汤","荤",12,["鸭血", "粉丝", "鸭胗", "葱", "姜", "香菜"],0,"苏菜",""],
+["千层油糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"苏菜",""],
 ["清炒虾仁","中国菜","菜","荤",30,["虾仁", "蒜", "盐", "料酒"],0,"苏菜",""],
 ["酱方","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"苏菜",""],
 ["西湖醋鱼","中国菜","菜","荤",30,["草鱼", "醋", "酱油", "姜", "糖"],0,"浙菜",""],
 ["东坡肉","中国菜","菜","荤",22,["五花肉", "冰糖", "酱油", "黄酒", "八角"],0,"浙菜",""],
 ["龙井虾仁","中国菜","菜","荤",32,["虾仁", "蒜", "盐", "料酒"],0,"浙菜",""],
 ["干炸响铃","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"浙菜",""],
-["宋嫂鱼羹","中国菜","汤饮","荤",20,["鱼", "豆腐", "葱", "姜", "香菜"],0,"浙菜",""],
+["宋嫂鱼羹","中国菜","汤","荤",20,["鱼", "豆腐", "葱", "姜", "香菜"],0,"浙菜",""],
 ["雪菜黄鱼","中国菜","菜","荤",30,["鱼", "姜", "葱", "蒸鱼豉油"],0,"浙菜",""],
-["宁波汤圆","中国菜","甜品","素",7,["糯米", "糖", "配料"],0,"浙菜",""],
-["定胜糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
+["宁波汤圆","中国菜","甜饮","素",7,["糯米", "糖", "配料"],0,"浙菜",""],
+["定胜糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
 ["片儿川","中国菜","主食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"浙菜",""],
 ["猫耳朵","中国菜","主食","素",8,["蔬菜", "蒜", "盐", "油"],0,"浙菜",""],
-["八宝饭","中国菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
+["八宝饭","中国菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
 ["酱鸭","中国菜","菜","荤",20,["鸭肉", "葱", "姜", "酱油"],0,"浙菜",""],
 ["醉鸡","中国菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"浙菜",""],
-["腌笃鲜","中国菜","汤饮","荤",22,["咸肉", "鲜肉", "春笋", "百叶", "葱"],0,"浙菜",""],
+["腌笃鲜","中国菜","汤","荤",22,["咸肉", "鲜肉", "春笋", "百叶", "葱"],0,"浙菜",""],
 ["佛跳墙","中国菜","菜","荤",60,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
 ["荔枝肉","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
 ["醉糟鸡","中国菜","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"闽菜",""],
 ["海蛎煎","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
-["鱼丸汤","中国菜","汤饮","荤",14,["鱼", "豆腐", "葱", "姜", "香菜"],0,"闽菜",""],
+["鱼丸汤","中国菜","汤","荤",14,["鱼", "豆腐", "葱", "姜", "香菜"],0,"闽菜",""],
 ["沙茶面","中国菜","主食","荤",14,["面条", "葱", "酱油", "油"],0,"闽菜",""],
 ["土笋冻","中国菜","小食","荤",16,["笋", "肉", "酱油", "盐"],0,"闽菜",""],
-["芋泥","中国菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"闽菜",""],
+["芋泥","中国菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"闽菜",""],
 ["肉燕","中国菜","主食","荤",13,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
 ["扁肉","中国菜","主食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
 ["海蛎饼","中国菜","小食","素",8,["面粉", "油", "盐"],0,"闽菜",""],
@@ -440,7 +469,7 @@ const RAW=[
 ["毛豆腐","中国菜","菜","素",10,["豆腐", "葱", "酱油", "盐"],0,"徽菜",""],
 ["一品锅","中国菜","菜","荤",26,["肉类", "酱油", "料酒", "葱", "姜"],0,"徽菜",""],
 ["黄山炖鸽","中国菜","菜","荤",30,["肉类", "酱油", "料酒", "葱", "姜"],0,"徽菜",""],
-["中和汤","中国菜","汤饮","荤",18,["虾", "肉丝", "笋", "菇", "高汤"],0,"徽菜",""],
+["中和汤","中国菜","汤","荤",18,["虾", "肉丝", "笋", "菇", "高汤"],0,"徽菜",""],
 ["苞芦馃","中国菜","主食","素",6,["玉米面", "馅料", "盐"],0,"徽菜",""],
 ["胡适一品锅","中国菜","菜","荤",28,["肉类", "酱油", "料酒", "葱", "姜"],0,"徽菜",""],
 ["北京烤鸭","中国菜","菜","荤",48,["填鸭", "甜面酱", "葱", "黄瓜", "薄饼"],0,"京菜",""],
@@ -449,15 +478,15 @@ const RAW=[
 ["卤煮","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"京菜",""],
 ["炒肝","中国菜","菜","荤",14,["肉类", "酱油", "料酒", "葱", "姜"],0,"京菜",""],
 ["豆汁焦圈","中国菜","小食","素",6,["蔬菜", "蒜", "盐", "油"],1,"京菜",""],
-["艾窝窝","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
-["驴打滚","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
-["豌豆黄","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
-["冰糖葫芦","中国菜","甜品","素",5,["面粉", "鸡蛋", "糖", "奶油"],1,"京菜",""],
+["艾窝窝","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["驴打滚","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["豌豆黄","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["冰糖葫芦","中国菜","甜饮","素",5,["面粉", "鸡蛋", "糖", "奶油"],1,"京菜",""],
 ["门钉肉饼","中国菜","主食","荤",12,["面粉", "油", "盐"],0,"京菜",""],
 ["褡裢火烧","中国菜","主食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"京菜",""],
 ["京酱肉丝","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"京菜",""],
-["三不粘","中国菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
-["栗子糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["三不粘","中国菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["栗子糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
 ["芥末墩","中国菜","菜","素",8,["蔬菜", "蒜", "盐", "油"],0,"京菜",""],
 ["锅包肉","中国菜","菜","荤",18,["猪里脊", "淀粉", "醋", "糖", "胡萝卜"],0,"东北菜",""],
 ["地三鲜","中国菜","菜","素",9,["土豆", "茄子", "青椒", "蒜", "酱油"],0,"东北菜",""],
@@ -467,7 +496,7 @@ const RAW=[
 ["酸菜白肉","中国菜","菜","荤",18,["五花肉", "酸菜", "粉条", "姜"],0,"东北菜",""],
 ["杀猪菜","中国菜","菜","荤",20,["猪肉", "酱油", "料酒", "葱"],0,"东北菜",""],
 ["酱骨头","中国菜","菜","荤",24,["肉类", "酱油", "料酒", "葱", "姜"],0,"东北菜",""],
-["拔丝地瓜","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"东北菜",""],
+["拔丝地瓜","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"东北菜",""],
 ["东北大拉皮","中国菜","菜","素",10,["蔬菜", "蒜", "盐", "油"],0,"东北菜",""],
 ["烤冷面","中国菜","小食","素",7,["面条", "葱", "酱油", "油"],0,"东北菜",""],
 ["冷面","中国菜","主食","素",9,["荞麦面", "牛肉", "梨", "泡菜", "醋"],0,"东北菜",""],
@@ -485,19 +514,19 @@ const RAW=[
 ["羊肉串","中国菜","小食","荤",14,["羊肉", "孜然", "辣椒面", "盐"],0,"新疆菜",""],
 ["手抓羊肉","中国菜","菜","荤",34,["羊肉", "孜然", "洋葱", "盐"],0,"鲁菜",""],
 ["兰州拉面","中国菜","主食","荤",12,["拉面", "牛肉", "萝卜", "香菜", "辣油"],0,"西北菜",""],
-["灰豆子","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"西北菜",""],
-["甑糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"西北菜",""],
+["灰豆子","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"西北菜",""],
+["甑糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"西北菜",""],
 ["莜面栲栳栳","中国菜","主食","素",9,["面条", "葱", "酱油", "油"],0,"西北菜",""],
 ["过油肉","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"西北菜",""],
 ["拨烂子","中国菜","菜","素",8,["蔬菜", "蒜", "盐", "油"],0,"西北菜",""],
 ["饸饹面","中国菜","主食","素",10,["面条", "葱", "酱油", "油"],0,"西北菜",""],
-["肉丸糊辣汤","中国菜","汤饮","荤",10,["肉丸", "葱", "姜", "香菜"],0,"西北菜",""],
-["羊杂汤","中国菜","汤饮","荤",12,["羊杂", "羊骨", "葱", "姜", "香菜", "辣椒油"],0,"西北菜",""],
+["肉丸糊辣汤","中国菜","汤","荤",10,["肉丸", "葱", "姜", "香菜"],0,"西北菜",""],
+["羊杂汤","中国菜","汤","荤",12,["羊杂", "羊骨", "葱", "姜", "香菜", "辣椒油"],0,"西北菜",""],
 ["过桥米线","中国菜","主食","荤",14,["米线", "鸡汤", "肉片", "蔬菜", "鹌鹑蛋"],0,"云贵菜",""],
-["汽锅鸡","中国菜","汤饮","荤",22,["鸡肉", "虫草花", "葱", "姜", "枸杞"],0,"云贵菜",""],
-["酸汤鱼","中国菜","汤饮","荤",28,["鱼", "番茄", "木姜子", "辣椒", "酸汤"],0,"云贵菜",""],
+["汽锅鸡","中国菜","汤","荤",22,["鸡肉", "虫草花", "葱", "姜", "枸杞"],0,"云贵菜",""],
+["酸汤鱼","中国菜","汤","荤",28,["鱼", "番茄", "木姜子", "辣椒", "酸汤"],0,"云贵菜",""],
 ["宣威火腿","中国菜","菜","荤",28,["肉类", "酱油", "料酒", "葱", "姜"],0,"云贵菜",""],
-["野生菌火锅","中国菜","汤饮","荤",36,["牛肝菌", "鸡枞", "松茸", "葱", "姜"],0,"云贵菜",""],
+["野生菌火锅","中国菜","汤","荤",36,["牛肝菌", "鸡枞", "松茸", "葱", "姜"],0,"云贵菜",""],
 ["折耳根","中国菜","菜","素",6,["蔬菜", "蒜", "盐", "油"],0,"云贵菜",""],
 ["恋爱豆腐果","中国菜","菜","素",8,["豆腐", "葱", "酱油", "盐"],1,"云贵菜",""],
 ["丝娃娃","中国菜","小食","素",9,["蔬菜", "蒜", "盐", "油"],0,"云贵菜",""],
@@ -505,9 +534,9 @@ const RAW=[
 ["糯米饭","中国菜","主食","素",7,["大米", "水"],0,"云贵菜",""],
 ["花溪牛肉粉","中国菜","主食","荤",13,["米粉", "牛肉", "香菜", "酸菜", "辣油"],0,"云贵菜",""],
 ["怪噜饭","中国菜","主食","荤",11,["大米", "配菜", "酱油", "油"],0,"云贵菜",""],
-["玫瑰糖","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"云贵菜",""],
+["玫瑰糖","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"云贵菜",""],
 ["耳块粑","中国菜","主食","素",8,["糯米", "腊肉", "油", "盐"],0,"云贵菜",""],
-["酸汤猪脚","中国菜","汤饮","荤",24,["鱼", "番茄", "木姜子", "辣椒", "酸汤"],0,"云贵菜",""],
+["酸汤猪脚","中国菜","汤","荤",24,["鱼", "番茄", "木姜子", "辣椒", "酸汤"],0,"云贵菜",""],
 ["大盘鸡","中国菜","菜","荤",26,["鸡", "土豆", "青椒", "皮带面", "辣椒"],0,"新疆菜",""],
 ["手抓饭","中国菜","主食","荤",14,["大米", "羊肉", "胡萝卜", "洋葱", "孜然"],0,"新疆菜",""],
 ["烤包子","中国菜","主食","荤",12,["面粉", "馅料", "酵母"],0,"新疆菜",""],
@@ -515,33 +544,33 @@ const RAW=[
 ["烤全羊","中国菜","菜","荤",80,["整羊", "孜然", "辣椒面", "盐"],0,"新疆菜",""],
 ["拉条子","中国菜","主食","素",10,["面粉", "番茄", "蔬菜", "肉"],0,"新疆菜",""],
 ["丁丁炒面","中国菜","主食","荤",13,["面条", "葱", "酱油", "油"],0,"新疆菜",""],
-["酸奶","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],1,"新疆菜",""],
-["娜帕里勇","中国菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"新疆菜",""],
+["酸奶","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],1,"新疆菜",""],
+["娜帕里勇","中国菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"新疆菜",""],
 ["薄皮包子","中国菜","主食","荤",12,["面粉", "馅料", "酵母"],0,"新疆菜",""],
 ["椒麻鸡","中国菜","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"新疆菜",""],
 ["抓饭","中国菜","主食","荤",14,["大米", "配菜", "酱油", "油"],0,"新疆菜",""],
 ["烤馕披萨","中国菜","主食","荤",14,["面粉", "酵母", "盐", "芝麻"],0,"新疆菜",""],
 ["热干面","中国菜","主食","素",7,["碱面", "芝麻酱", "萝卜丁", "葱", "辣油"],0,"湖北菜",""],
-["排骨藕汤","中国菜","汤饮","荤",18,["排骨", "莲藕", "姜", "盐"],0,"湖北菜",""],
+["排骨藕汤","中国菜","汤","荤",18,["排骨", "莲藕", "姜", "盐"],0,"湖北菜",""],
 ["清蒸武昌鱼","中国菜","菜","荤",28,["武昌鱼", "葱", "姜", "蒸鱼豉油"],0,"湖北菜",""],
 ["珍珠丸子","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],1,"湖北菜",""],
 ["豆皮","中国菜","主食","荤",10,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["鸭脖","中国菜","小食","荤",12,["鸭脖", "卤料", "辣椒", "花椒"],0,"湖北菜",""],
 ["面窝","中国菜","小食","素",6,["面条", "葱", "酱油", "油"],0,"湖北菜",""],
 ["糊汤粉","中国菜","主食","素",8,["米粉", "汤", "香菜", "辣油"],0,"湖北菜",""],
-["莲藕排骨汤","中国菜","汤饮","荤",18,["排骨", "莲藕", "姜", "盐"],0,"湖北菜",""],
+["莲藕排骨汤","中国菜","汤","荤",18,["排骨", "莲藕", "姜", "盐"],0,"湖北菜",""],
 ["沔阳三蒸","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["黄陂三鲜","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["油焖小龙虾","中国菜","菜","荤",40,["小龙虾", "啤酒", "蒜", "辣椒", "花椒"],0,"湖北菜",""],
 ["鱼糕","中国菜","菜","荤",22,["鱼", "姜", "葱", "蒸鱼豉油"],0,"湖北菜",""],
-["欢喜坨","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
+["欢喜坨","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
 ["藜蒿炒腊肉","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"赣菜",""],
 ["南昌拌粉","中国菜","主食","素",8,["米粉", "汤", "香菜", "辣油"],0,"赣菜",""],
-["瓦罐汤","中国菜","汤饮","荤",12,["禽肉", "药材", "葱", "姜"],0,"赣菜",""],
+["瓦罐汤","中国菜","汤","荤",12,["禽肉", "药材", "葱", "姜"],0,"赣菜",""],
 ["三杯鸡","中国菜","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"赣菜",""],
 ["余干椒炒肉","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"赣菜",""],
 ["井冈山烟笋","中国菜","菜","素",12,["笋", "肉", "酱油", "盐"],0,"赣菜",""],
-["胡辣汤","中国菜","汤饮","荤",10,["牛肉", "面筋", "木耳", "黄花菜", "胡椒", "香料"],0,"豫菜",""],
+["胡辣汤","中国菜","汤","荤",10,["牛肉", "面筋", "木耳", "黄花菜", "胡椒", "香料"],0,"豫菜",""],
 ["烩面","中国菜","主食","荤",12,["面条", "葱", "酱油", "油"],0,"豫菜",""],
 ["灌汤包","中国菜","主食","荤",12,["高汤", "盐", "葱", "姜"],0,"豫菜",""],
 ["红烧黄河鲤鱼","中国菜","菜","荤",30,["鱼", "姜", "葱", "蒸鱼豉油"],0,"豫菜",""],
@@ -550,55 +579,55 @@ const RAW=[
 ["脆皮五花肉","网红菜","菜","荤",24,["肉类", "酱油", "料酒", "葱", "姜"],0,"",""],
 ["空气炸锅薯条","网红菜","小食","素",6,["土豆", "油", "盐", "辣椒面"],0,"",""],
 ["爆浆芝士年糕","网红菜","小食","素",9,["年糕", "蔬菜", "酱油", "糖"],0,"",""],
-["无水蛋糕","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["无水蛋糕","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
 ["蒜香面包","网红菜","小食","素",7,["面条", "葱", "酱油", "油"],0,"",""],
 ["芝士玉米","网红菜","小食","素",10,["芝士", "奶油", "面粉", "鸡蛋"],0,"",""],
 ["火鸡面","网红菜","主食","荤",9,["鸡肉", "葱", "姜", "酱油"],0,"",""],
-["草莓大福","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["提拉米苏","网红菜","甜品","素",12,["马斯卡彭", "手指饼干", "咖啡", "可可粉", "蛋"],1,"",""],
-["脏脏包","网红菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["舒芙蕾松饼","网红菜","甜品","素",12,["鸡蛋", "面粉", "牛奶", "糖", "黄油"],1,"",""],
+["草莓大福","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["提拉米苏","网红菜","甜饮","素",12,["马斯卡彭", "手指饼干", "咖啡", "可可粉", "蛋"],1,"",""],
+["脏脏包","网红菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["舒芙蕾松饼","网红菜","甜饮","素",12,["鸡蛋", "面粉", "牛奶", "糖", "黄油"],1,"",""],
 ["辣条","网红菜","小食","素",5,["蔬菜", "蒜", "盐", "油"],0,"",""],
-["钵仔糕","网红菜","甜品","素",6,["粘米粉", "糖", "红豆", "水"],1,"",""],
-["麻薯","网红菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["冰粉","网红菜","甜品","素",7,["冰粉", "红糖", "山楂", "花生", "葡萄干"],1,"",""],
-["烧仙草","网红菜","甜品","素",8,["仙草", "芋圆", "红豆", "花生", "糖"],1,"",""],
+["钵仔糕","网红菜","甜饮","素",6,["粘米粉", "糖", "红豆", "水"],1,"",""],
+["麻薯","网红菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["冰粉","网红菜","甜饮","素",7,["冰粉", "红糖", "山楂", "花生", "葡萄干"],1,"",""],
+["烧仙草","网红菜","甜饮","素",8,["仙草", "芋圆", "红豆", "花生", "糖"],1,"",""],
 ["生腌","网红菜","小食","荤",28,["肉类", "酱油", "料酒", "葱", "姜"],0,"",""],
 ["油焖小龙虾","网红菜","菜","荤",40,["小龙虾", "啤酒", "蒜", "辣椒", "花椒"],0,"",""],
 ["麻辣拌","网红菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"",""],
 ["烤冷面","网红菜","小食","素",7,["面条", "葱", "酱油", "油"],0,"",""],
 ["手抓饼","网红菜","主食","素",6,["面粉", "油", "盐"],0,"",""],
 ["鸡蛋灌饼","网红菜","主食","素",7,["鸡肉", "葱", "姜", "酱油"],0,"",""],
-["关东煮","网红菜","汤饮","荤",14,["萝卜", "鱼丸", "海带", "魔芋", "高汤"],0,"",""],
+["关东煮","网红菜","汤","荤",14,["萝卜", "鱼丸", "海带", "魔芋", "高汤"],0,"",""],
 ["章鱼小丸子","网红菜","小食","荤",12,["鱼", "姜", "葱", "蒸鱼豉油"],0,"",""],
 ["煎饼果子","网红菜","主食","荤",9,["面粉", "油", "盐"],1,"",""],
-["仙豆糕","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["雪花酥","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["仙豆糕","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["雪花酥","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
 ["芝士棒","网红菜","小食","素",10,["芝士", "奶油", "面粉", "鸡蛋"],0,"",""],
 ["脆皮鸡","网红菜","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"",""],
-["可丽饼","网红菜","甜品","素",10,["面粉", "黄油", "糖"],1,"",""],
-["芋圆","网红菜","甜品","素",7,["糯米", "糖", "配料"],1,"",""],
-["脏脏奶茶","网红菜","汤饮","素",12,["红茶", "牛奶", "黑糖", "珍珠", "奶盖"],1,"",""],
-["厚乳拿铁","网红菜","汤饮","素",13,["浓缩咖啡", "厚乳", "牛奶", "冰"],1,"",""],
-["生椰拿铁","网红菜","汤饮","素",14,["浓缩咖啡", "椰浆", "牛奶", "冰"],1,"",""],
-["杨枝甘露","网红菜","甜品","素",12,["芒果", "西柚", "西米", "椰浆", "糖"],1,"",""],
-["芒果班戟","网红菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["抹茶千层","网红菜","甜品","素",15,["可丽饼皮", "奶油", "抹茶粉", "糖"],1,"",""],
-["半熟芝士","网红菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["熔岩蛋糕","网红菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["绿豆糕","网红菜","甜品","素",7,["糯米", "糖", "配料"],1,"",""],
-["蛋黄酥","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["青团","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["桂花酒酿","网红菜","甜品","素",7,["糯米", "酒曲", "糖"],1,"",""],
-["酒酿圆子","网红菜","甜品","素",7,["糯米", "酒曲", "糖"],1,"",""],
-["冰糖雪梨","网红菜","汤饮","素",8,["梨", "糖", "水", "冰"],1,"",""],
-["桃胶羹","网红菜","汤饮","素",12,["桃", "糖", "水", "冰"],1,"",""],
-["木瓜炖雪蛤","网红菜","甜品","荤",28,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["焦糖布丁","网红菜","甜品","素",9,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"",""],
-["酸奶杯","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["水果捞","网红菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["刨冰","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["炒酸奶","网红菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["可丽饼","网红菜","甜饮","素",10,["面粉", "黄油", "糖"],1,"",""],
+["芋圆","网红菜","甜饮","素",7,["糯米", "糖", "配料"],1,"",""],
+["脏脏奶茶","网红菜","甜饮","素",12,["红茶", "牛奶", "黑糖", "珍珠", "奶盖"],1,"",""],
+["厚乳拿铁","网红菜","甜饮","素",13,["浓缩咖啡", "厚乳", "牛奶", "冰"],1,"",""],
+["生椰拿铁","网红菜","甜饮","素",14,["浓缩咖啡", "椰浆", "牛奶", "冰"],1,"",""],
+["杨枝甘露","网红菜","甜饮","素",12,["芒果", "西柚", "西米", "椰浆", "糖"],1,"",""],
+["芒果班戟","网红菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["抹茶千层","网红菜","甜饮","素",15,["可丽饼皮", "奶油", "抹茶粉", "糖"],1,"",""],
+["半熟芝士","网红菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["熔岩蛋糕","网红菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["绿豆糕","网红菜","甜饮","素",7,["糯米", "糖", "配料"],1,"",""],
+["蛋黄酥","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["青团","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["桂花酒酿","网红菜","甜饮","素",7,["糯米", "酒曲", "糖"],1,"",""],
+["酒酿圆子","网红菜","甜饮","素",7,["糯米", "酒曲", "糖"],1,"",""],
+["冰糖雪梨","网红菜","甜饮","素",8,["梨", "糖", "水", "冰"],1,"",""],
+["桃胶羹","网红菜","甜饮","素",12,["桃", "糖", "水", "冰"],1,"",""],
+["木瓜炖雪蛤","网红菜","甜饮","荤",28,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["焦糖布丁","网红菜","甜饮","素",9,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"",""],
+["酸奶杯","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["水果捞","网红菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["刨冰","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["炒酸奶","网红菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
 ["芝士焗红薯","网红菜","菜","素",9,["芝士", "奶油", "面粉", "鸡蛋"],1,"",""],
 ["蒜蓉粉丝虾","网红菜","菜","荤",28,["虾仁", "蒜", "盐", "料酒"],0,"",""],
 ["柠檬无骨鸡爪","网红菜","小食","荤",16,["鸡肉", "葱", "姜", "酱油"],1,"",""],
@@ -615,36 +644,36 @@ const RAW=[
 ["咖喱饭","网红菜","主食","荤",14,["大米", "配菜", "酱油", "油"],0,"",""],
 ["卤肉饭","网红菜","主食","荤",13,["大米", "配菜", "酱油", "油"],0,"",""],
 ["牛油果吐司","网红菜","主食","素",12,["牛肉", "酱油", "料酒", "葱"],1,"",""],
-["隔夜燕麦","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["香蕉松饼","网红菜","甜品","素",10,["面粉", "黄油", "糖"],0,"",""],
-["华夫饼","网红菜","甜品","素",10,["面粉", "黄油", "糖"],0,"",""],
-["可颂","网红菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["隔夜燕麦","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["香蕉松饼","网红菜","甜饮","素",10,["面粉", "黄油", "糖"],0,"",""],
+["华夫饼","网红菜","甜饮","素",10,["面粉", "黄油", "糖"],0,"",""],
+["可颂","网红菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
 ["贝果","网红菜","主食","素",8,["蔬菜", "蒜", "盐", "油"],1,"",""],
-["巴斯克蛋糕","网红菜","甜品","素",14,["奶油芝士", "鸡蛋", "淡奶油", "糖"],1,"",""],
-["慕斯蛋糕","网红菜","甜品","素",13,["奶油", "巧克力", "糖", "吉利丁"],1,"",""],
-["千层蛋糕","网红菜","甜品","素",15,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["雪媚娘","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["麻薯面包","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["岩烧乳酪","网红菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["奶盖茶","网红菜","汤饮","素",12,["茶基底", "牛奶", "糖"],1,"",""],
-["水果茶","网红菜","汤饮","素",12,["红茶", "水果", "糖", "冰"],1,"",""],
-["柠檬茶","网红菜","汤饮","素",10,["红茶", "柠檬", "糖", "冰"],1,"",""],
-["百香果茶","网红菜","汤饮","素",12,["百香果", "茶", "糖", "水", "冰"],1,"",""],
-["葡萄柚茶","网红菜","汤饮","素",13,["葡萄柚", "茶", "糖", "水", "冰"],1,"",""],
-["芋泥啵啵","网红菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["麻薯奶茶","网红菜","汤饮","素",13,["茶基底", "牛奶", "糖"],1,"",""],
-["烧仙草奶茶","网红菜","汤饮","素",12,["茶基底", "牛奶", "糖"],1,"",""],
-["黑糖珍珠","网红菜","汤饮","素",12,["茶基底", "牛奶", "糖", "珍珠", "黑糖"],1,"",""],
-["脏脏茶","网红菜","汤饮","素",13,["茶基底", "牛奶", "糖"],1,"",""],
+["巴斯克蛋糕","网红菜","甜饮","素",14,["奶油芝士", "鸡蛋", "淡奶油", "糖"],1,"",""],
+["慕斯蛋糕","网红菜","甜饮","素",13,["奶油", "巧克力", "糖", "吉利丁"],1,"",""],
+["千层蛋糕","网红菜","甜饮","素",15,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["雪媚娘","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["麻薯面包","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["岩烧乳酪","网红菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["奶盖茶","网红菜","甜饮","素",12,["茶基底", "牛奶", "糖"],1,"",""],
+["水果茶","网红菜","甜饮","素",12,["红茶", "水果", "糖", "冰"],1,"",""],
+["柠檬茶","网红菜","甜饮","素",10,["红茶", "柠檬", "糖", "冰"],1,"",""],
+["百香果茶","网红菜","甜饮","素",12,["百香果", "茶", "糖", "水", "冰"],1,"",""],
+["葡萄柚茶","网红菜","甜饮","素",13,["葡萄柚", "茶", "糖", "水", "冰"],1,"",""],
+["芋泥啵啵","网红菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["麻薯奶茶","网红菜","甜饮","素",13,["茶基底", "牛奶", "糖"],1,"",""],
+["烧仙草奶茶","网红菜","甜饮","素",12,["茶基底", "牛奶", "糖"],1,"",""],
+["黑糖珍珠","网红菜","甜饮","素",12,["茶基底", "牛奶", "糖", "珍珠", "黑糖"],1,"",""],
+["脏脏茶","网红菜","甜饮","素",13,["茶基底", "牛奶", "糖"],1,"",""],
 ["芝士薯泥","网红菜","菜","素",8,["芝士", "奶油", "面粉", "鸡蛋"],0,"",""],
 ["爆浆鸡排","网红菜","菜","荤",16,["鸡肉", "葱", "姜", "酱油"],0,"",""],
 ["火山飘雪","网红菜","小食","素",7,["皮蛋", "辣椒", "醋", "酱油"],0,"",""],
 ["凉拌木耳","网红菜","小食","素",7,["木耳", "蒜", "醋", "辣椒油", "香菜"],0,"",""],
 ["无骨鸭掌","网红菜","小食","荤",16,["鸭肉", "葱", "姜", "酱油"],0,"",""],
 ["脆皮肠","网红菜","小食","荤",10,["香肠", "油", "孜然", "辣椒面"],0,"",""],
-["芝士年糕火锅","网红菜","汤饮","荤",22,["年糕", "芝士", "辣酱", "葱"],0,"",""],
-["寿喜锅","网红菜","汤饮","荤",30,["牛肉", "豆腐", "青菜", "洋葱", "酱油"],0,"",""],
-["部队锅","网红菜","汤饮","荤",28,["午餐肉", "芝士", "年糕", "泡菜", "拉面"],0,"",""],
+["芝士年糕火锅","网红菜","汤","荤",22,["年糕", "芝士", "辣酱", "葱"],0,"",""],
+["寿喜锅","网红菜","汤","荤",30,["牛肉", "豆腐", "青菜", "洋葱", "酱油"],0,"",""],
+["部队锅","网红菜","汤","荤",28,["午餐肉", "芝士", "年糕", "泡菜", "拉面"],0,"",""],
 ["牛排","美洲菜","菜","荤",48,["牛排", "黑胡椒", "黄油", "盐", "迷迭香"],0,"","美国"],
 ["惠灵顿牛排","欧洲菜","菜","荤",88,["牛肉", "酱油", "料酒", "葱"],0,"","英国"],
 ["红酒炖牛肉","欧洲菜","菜","荤",40,["牛肉", "酱油", "料酒", "葱"],1,"","法国"],
@@ -668,11 +697,11 @@ const RAW=[
 ["烤三文鱼","美洲菜","菜","荤",38,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","美国"],
 ["香煎鳕鱼","欧洲菜","菜","荤",36,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","法国"],
 ["煎带子","欧洲菜","菜","荤",40,["肉类", "酱油", "料酒", "葱", "姜"],0,"","法国"],
-["法式洋葱汤","欧洲菜","汤饮","素",14,["洋葱", "面包", "芝士", "牛肉高汤"],0,"","法国"],
-["奶油蘑菇汤","欧洲菜","汤饮","素",12,["蘑菇", "奶油", "洋葱", "面粉", "高汤"],0,"","法国"],
-["南瓜浓汤","美洲菜","汤饮","素",12,["南瓜", "奶油", "洋葱", "高汤"],0,"","美国"],
-["罗宋汤","欧洲菜","汤饮","荤",16,["牛肉", "番茄", "土豆", "洋葱", "卷心菜"],0,"","俄罗斯"],
-["番茄汤","美洲菜","汤饮","素",10,["番茄", "奶油", "高汤"],0,"","美国"],
+["法式洋葱汤","欧洲菜","汤","素",14,["洋葱", "面包", "芝士", "牛肉高汤"],0,"","法国"],
+["奶油蘑菇汤","欧洲菜","汤","素",12,["蘑菇", "奶油", "洋葱", "面粉", "高汤"],0,"","法国"],
+["南瓜浓汤","美洲菜","汤","素",12,["南瓜", "奶油", "洋葱", "高汤"],0,"","美国"],
+["罗宋汤","欧洲菜","汤","荤",16,["牛肉", "番茄", "土豆", "洋葱", "卷心菜"],0,"","俄罗斯"],
+["番茄汤","美洲菜","汤","素",10,["番茄", "奶油", "高汤"],0,"","美国"],
 ["烤鸡","美洲菜","菜","荤",24,["鸡肉", "葱", "姜", "酱油"],0,"","美国"],
 ["香草羊排","欧洲菜","菜","荤",56,["羊肉", "孜然", "洋葱", "盐"],0,"","法国"],
 ["猪肋排","美洲菜","菜","荤",36,["猪肉", "酱油", "料酒", "葱"],0,"","美国"],
@@ -680,23 +709,23 @@ const RAW=[
 ["牛油果虾塔","美洲菜","菜","荤",30,["虾仁", "蒜", "盐", "料酒"],1,"","墨西哥"],
 ["布拉塔沙拉","欧洲菜","菜","素",22,["生菜", "番茄", "橄榄油", "盐"],0,"","意大利"],
 ["卡普雷塞","欧洲菜","菜","素",16,["蔬菜", "蒜", "盐", "油"],0,"","意大利"],
-["提拉米苏","欧洲菜","甜品","素",12,["马斯卡彭", "手指饼干", "咖啡", "可可粉", "蛋"],1,"","意大利"],
-["芝士蛋糕","美洲菜","甜品","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
-["纽约芝士蛋糕","美洲菜","甜品","素",16,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
-["熔岩巧克力","欧洲菜","甜品","素",12,["巧克力", "奶油", "糖"],1,"","法国"],
-["舒芙蕾","欧洲菜","甜品","素",15,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
-["可丽露","欧洲菜","甜品","素",10,["糖", "水", "配料"],1,"","法国"],
-["马卡龙","欧洲菜","甜品","素",14,["面粉", "黄油", "糖"],0,"","法国"],
-["泡芙","欧洲菜","甜品","素",9,["面粉", "黄油", "鸡蛋", "奶油"],0,"","法国"],
-["闪电泡芙","欧洲菜","甜品","素",12,["面粉", "黄油", "鸡蛋", "奶油"],0,"","法国"],
-["歌剧院蛋糕","欧洲菜","甜品","素",16,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
-["黑森林","欧洲菜","甜品","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"","德国"],
-["红丝绒蛋糕","美洲菜","甜品","素",15,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
-["肉桂卷","美洲菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
-["司康","欧洲菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","英国"],
+["提拉米苏","欧洲菜","甜饮","素",12,["马斯卡彭", "手指饼干", "咖啡", "可可粉", "蛋"],1,"","意大利"],
+["芝士蛋糕","美洲菜","甜饮","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
+["纽约芝士蛋糕","美洲菜","甜饮","素",16,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
+["熔岩巧克力","欧洲菜","甜饮","素",12,["巧克力", "奶油", "糖"],1,"","法国"],
+["舒芙蕾","欧洲菜","甜饮","素",15,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["可丽露","欧洲菜","甜饮","素",10,["糖", "水", "配料"],1,"","法国"],
+["马卡龙","欧洲菜","甜饮","素",14,["面粉", "黄油", "糖"],0,"","法国"],
+["泡芙","欧洲菜","甜饮","素",9,["面粉", "黄油", "鸡蛋", "奶油"],0,"","法国"],
+["闪电泡芙","欧洲菜","甜饮","素",12,["面粉", "黄油", "鸡蛋", "奶油"],0,"","法国"],
+["歌剧院蛋糕","欧洲菜","甜饮","素",16,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["黑森林","欧洲菜","甜饮","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"","德国"],
+["红丝绒蛋糕","美洲菜","甜饮","素",15,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
+["肉桂卷","美洲菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
+["司康","欧洲菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","英国"],
 ["法棍","欧洲菜","主食","素",8,["蔬菜", "蒜", "盐", "油"],0,"","法国"],
-["牛角包","欧洲菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
-["法式吐司","欧洲菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["牛角包","欧洲菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["法式吐司","欧洲菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
 ["班尼迪克蛋","美洲菜","菜","荤",20,["鸡蛋", "盐", "葱"],0,"","美国"],
 ["欧姆蛋","欧洲菜","菜","荤",16,["鸡蛋", "盐", "葱"],0,"","法国"],
 ["煎蛋卷","美洲菜","菜","荤",14,["鸡蛋", "盐", "葱"],0,"","美国"],
@@ -717,7 +746,7 @@ const RAW=[
 ["龙虾意面","欧洲菜","主食","荤",58,["虾仁", "蒜", "盐", "料酒"],0,"","意大利"],
 ["蟹肉意面","欧洲菜","主食","荤",46,["螃蟹", "姜", "醋", "葱"],0,"","意大利"],
 ["蛤蜊意面","欧洲菜","主食","荤",38,["面条", "葱", "酱油", "油"],0,"","意大利"],
-["芦笋汤","欧洲菜","汤饮","素",12,["芦笋", "奶油", "高汤"],0,"","法国"],
+["芦笋汤","欧洲菜","汤","素",12,["芦笋", "奶油", "高汤"],0,"","法国"],
 ["番茄面包","欧洲菜","小食","素",8,["番茄", "鸡蛋", "糖", "盐"],0,"","西班牙"],
 ["蒜香面包","欧洲菜","小食","素",7,["面条", "葱", "酱油", "油"],0,"","意大利"],
 ["芝士棒","美洲菜","小食","素",9,["芝士", "奶油", "面粉", "鸡蛋"],0,"","美国"],
@@ -731,24 +760,24 @@ const RAW=[
 ["波奇碗","美洲菜","菜","素",18,["蔬菜", "蒜", "盐", "油"],0,"","美国"],
 ["牛排沙拉","美洲菜","菜","荤",42,["牛肉", "酱油", "料酒", "葱"],0,"","美国"],
 ["鸡肉凯撒","美洲菜","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"","美国"],
-["焦糖布丁","欧洲菜","甜品","素",9,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"","法国"],
-["意式奶冻","欧洲菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"","意大利"],
-["杏仁饼干","欧洲菜","甜品","素",8,["面粉", "黄油", "糖"],1,"","法国"],
-["巧克力慕斯","欧洲菜","甜品","素",12,["奶油", "巧克力", "糖", "吉利丁"],1,"","法国"],
-["香草慕斯","欧洲菜","甜品","素",12,["奶油", "巧克力", "糖", "吉利丁"],1,"","法国"],
-["水果塔","欧洲菜","甜品","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","法国"],
-["柠檬塔","欧洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","法国"],
-["苹果派","美洲菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["香蕉面包","美洲菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["葡萄干司康","欧洲菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","英国"],
-["冬阴功汤","东南亚","汤饮","荤",24,["虾", "香茅", "柠檬叶", "椰浆", "辣椒"],0,"","泰国"],
+["焦糖布丁","欧洲菜","甜饮","素",9,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"","法国"],
+["意式奶冻","欧洲菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"","意大利"],
+["杏仁饼干","欧洲菜","甜饮","素",8,["面粉", "黄油", "糖"],1,"","法国"],
+["巧克力慕斯","欧洲菜","甜饮","素",12,["奶油", "巧克力", "糖", "吉利丁"],1,"","法国"],
+["香草慕斯","欧洲菜","甜饮","素",12,["奶油", "巧克力", "糖", "吉利丁"],1,"","法国"],
+["水果塔","欧洲菜","甜饮","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","法国"],
+["柠檬塔","欧洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","法国"],
+["苹果派","美洲菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["香蕉面包","美洲菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["葡萄干司康","欧洲菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","英国"],
+["冬阴功汤","东南亚","汤","荤",24,["虾", "香茅", "柠檬叶", "椰浆", "辣椒"],0,"","泰国"],
 ["泰式炒河粉","东南亚","主食","荤",18,["河粉", "虾", "鸡蛋", "花生", "豆芽"],0,"","越南"],
 ["青木瓜沙拉","东南亚","菜","素",12,["青木瓜", "辣椒", "柠檬", "花生", "番茄"],0,"","泰国"],
-["芒果糯米饭","东南亚","甜品","素",12,["糯米", "芒果", "椰浆", "糖"],1,"","泰国"],
+["芒果糯米饭","东南亚","甜饮","素",12,["糯米", "芒果", "椰浆", "糖"],1,"","泰国"],
 ["绿咖喱鸡","东南亚","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],0,"","泰国"],
 ["红咖喱牛肉","东南亚","菜","荤",30,["牛肉", "酱油", "料酒", "葱"],0,"","泰国"],
 ["黄咖喱虾","东南亚","菜","荤",32,["虾仁", "蒜", "盐", "料酒"],0,"","泰国"],
-["椰汁鸡汤","东南亚","汤饮","荤",18,["鸡肉", "椰肉", "椰汁", "葱", "姜"],0,"","泰国"],
+["椰汁鸡汤","东南亚","汤","荤",18,["鸡肉", "椰肉", "椰汁", "葱", "姜"],0,"","泰国"],
 ["泰式柠檬鱼","东南亚","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],1,"","泰国"],
 ["烤猪颈肉","东南亚","菜","荤",24,["猪肉", "酱油", "料酒", "葱"],0,"","泰国"],
 ["猪脚饭","东南亚","主食","荤",16,["猪肉", "酱油", "料酒", "葱"],0,"","泰国"],
@@ -758,39 +787,39 @@ const RAW=[
 ["越南河粉","东南亚","主食","荤",18,["河粉", "牛肉", "八角", "洋葱", "豆芽"],0,"","越南"],
 ["越南春卷","东南亚","小食","荤",12,["米纸", "虾", "蔬菜", "米粉"],0,"","越南"],
 ["越南三明治","东南亚","主食","荤",14,["法棍", "肉", "蔬菜", "酱"],0,"","越南"],
-["越南咖啡","东南亚","汤饮","素",12,["咖啡豆", "水", "糖", "热"],1,"","越南"],
+["越南咖啡","东南亚","甜饮","素",12,["咖啡豆", "水", "糖", "热"],1,"","越南"],
 ["新加坡海南鸡饭","东南亚","主食","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"","新加坡"],
 ["辣椒螃蟹","东南亚","菜","荤",58,["螃蟹", "姜", "醋", "葱"],0,"","泰国"],
 ["椰浆饭","东南亚","主食","素",10,["大米", "配菜", "酱油", "油"],1,"","马来西亚"],
-["叻沙","东南亚","汤饮","荤",18,["米线", "椰浆", "虾", "鱼饼", "辣椒"],0,"","新加坡"],
-["肉骨茶","东南亚","汤饮","荤",20,["排骨", "蒜", "药材", "酱油"],0,"","泰国"],
+["叻沙","东南亚","汤","荤",18,["米线", "椰浆", "虾", "鱼饼", "辣椒"],0,"","新加坡"],
+["肉骨茶","东南亚","汤","荤",20,["排骨", "蒜", "药材", "酱油"],0,"","泰国"],
 ["沙爹串","东南亚","小食","荤",14,["鸡肉", "沙爹酱", "竹签"],0,"","马来西亚"],
 ["印尼炒饭","东南亚","主食","荤",14,["大米", "配菜", "酱油", "油"],0,"","印尼"],
 ["沙爹","东南亚","小食","荤",14,["肉", "沙爹酱", "花生"],0,"","马来西亚"],
 ["菲律宾烤乳猪","东南亚","菜","荤",60,["猪肉", "酱油", "料酒", "葱"],0,"","菲律宾"],
 ["阿多波","东南亚","菜","荤",20,["猪肉", "酱油", "醋", "蒜"],0,"","菲律宾"],
-["西米露","东南亚","甜品","素",8,["糖", "水", "配料"],1,"","泰国"],
-["摩摩喳喳","东南亚","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","缅甸"],
-["椰奶冻","东南亚","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["斑兰蛋糕","东南亚","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["咖椰吐司","东南亚","主食","甜品",9,["椰浆", "糖", "西米"],1,"","泰国"],
-["啰喏","东南亚","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["炸香蕉","东南亚","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["泰式奶茶","东南亚","汤饮","素",10,["红茶", "牛奶", "糖"],1,"","泰国"],
-["越南奶茶","东南亚","汤饮","素",10,["茶基底", "牛奶", "糖"],1,"","越南"],
+["西米露","东南亚","甜饮","素",8,["糖", "水", "配料"],1,"","泰国"],
+["摩摩喳喳","东南亚","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","缅甸"],
+["椰奶冻","东南亚","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["斑兰蛋糕","东南亚","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["咖椰吐司","东南亚","甜饮","素",9,["椰浆", "糖", "西米"],1,"","泰国"],
+["啰喏","东南亚","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["炸香蕉","东南亚","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["泰式奶茶","东南亚","甜饮","素",10,["红茶", "牛奶", "糖"],1,"","泰国"],
+["越南奶茶","东南亚","甜饮","素",10,["茶基底", "牛奶", "糖"],1,"","越南"],
 ["老挝糯米饭","东南亚","主食","素",8,["大米", "水"],0,"","泰国"],
 ["柬埔寨阿莫克","东南亚","菜","荤",26,["鱼", "椰浆", "香料", "叶"],0,"","泰国"],
 ["缅甸茶叶沙拉","东南亚","菜","素",12,["茶叶", "水", "糖"],0,"","缅甸"],
-["椰糖糕","东南亚","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","马来西亚"],
-["木薯糕","东南亚","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["椰糖糕","东南亚","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","马来西亚"],
+["木薯糕","东南亚","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
 ["泰式绿咖喱","东南亚","菜","荤",22,["鸡肉", "绿咖喱", "椰浆", "茄子"],0,"","泰国"],
 ["菠萝饭","东南亚","主食","荤",16,["大米", "配菜", "酱油", "油"],1,"","泰国"],
-["新加坡喇沙","东南亚","汤饮","荤",18,["米线", "椰浆", "虾", "鱼饼", "辣椒"],0,"","新加坡"],
+["新加坡喇沙","东南亚","汤","荤",18,["米线", "椰浆", "虾", "鱼饼", "辣椒"],0,"","新加坡"],
 ["印尼沙爹饭","东南亚","主食","荤",16,["大米", "配菜", "酱油", "油"],0,"","马来西亚"],
-["泰式椰汁西米糕","东南亚","甜品","素",8,["糖", "水", "配料"],1,"","缅甸"],
+["泰式椰汁西米糕","东南亚","甜饮","素",8,["糖", "水", "配料"],1,"","缅甸"],
 ["香茅烤鱼","东南亚","菜","荤",26,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","泰国"],
-["木瓜炖雪蛤","东南亚","甜品","荤",28,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["椰香紫薯糖水","东南亚","汤饮","素",8,["椰肉", "糖", "水", "冰"],1,"","泰国"],
+["木瓜炖雪蛤","东南亚","甜饮","荤",28,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["椰香紫薯糖水","东南亚","甜饮","素",8,["椰肉", "糖", "水", "冰"],1,"","泰国"],
 ["越南虾饼","东南亚","小食","荤",14,["虾仁", "蒜", "盐", "料酒"],0,"","越南"],
 ["泰式炒河粉（素）","东南亚","主食","素",14,["米粉", "汤", "香菜", "辣油"],0,"","越南"],
 ["沙威玛","中东菜","主食","荤",16,["鸡肉", "皮塔饼", "酸奶酱", "番茄", "黄瓜"],0,"","以色列"],
@@ -804,12 +833,12 @@ const RAW=[
 ["伊朗烤肉","中东菜","菜","荤",26,["羊肉", "酸奶", "藏红花", "盐"],0,"","伊朗"],
 ["土耳其烤肉","中东菜","菜","荤",24,["羊肉", "香料", "盐"],0,"","土耳其"],
 ["伊斯坎达尔烤肉","中东菜","菜","荤",28,["羊肉", "番茄", "酸奶", "饼"],0,"","土耳其"],
-["库纳法","中东菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
-["巴克拉瓦","中东菜","甜品","素",13,["酥皮", "坚果", "蜂蜜", "糖"],0,"","土耳其"],
-["土耳其软糖","中东菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
-["米布丁","中东菜","甜品","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"","土耳其"],
-["牛奶布丁","中东菜","甜品","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"","土耳其"],
-["哈尔瓦","中东菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
+["库纳法","中东菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
+["巴克拉瓦","中东菜","甜饮","素",13,["酥皮", "坚果", "蜂蜜", "糖"],0,"","土耳其"],
+["土耳其软糖","中东菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
+["米布丁","中东菜","甜饮","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"","土耳其"],
+["牛奶布丁","中东菜","甜饮","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],1,"","土耳其"],
+["哈尔瓦","中东菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
 ["塔布勒","中东菜","菜","素",10,["香菜", "番茄", "洋葱", "柠檬"],0,"","黎巴嫩"],
 ["法拉费卷","中东菜","主食","素",10,["鹰嘴豆", "香菜", "孜然", "面粉"],0,"","黎巴嫩"],
 ["羊肉抓饭","中东菜","主食","荤",16,["羊肉", "孜然", "洋葱", "盐"],0,"","土耳其"],
@@ -817,7 +846,7 @@ const RAW=[
 ["土耳其披萨","中东菜","主食","荤",16,["面饼", "肉", "番茄", "芝士"],0,"","土耳其"],
 ["拉赫马吉","中东菜","主食","荤",16,["面饼", "肉", "番茄", "洋葱"],0,"","土耳其"],
 ["什锦烤肉","中东菜","菜","荤",30,["羊肉", "鸡肉", "蔬菜", "香料"],0,"","土耳其"],
-["扁豆汤","中东菜","汤饮","素",9,["扁豆", "蔬菜", "高汤"],0,"","土耳其"],
+["扁豆汤","中东菜","汤","素",9,["扁豆", "蔬菜", "高汤"],0,"","土耳其"],
 ["鹰嘴豆炖菜","中东菜","菜","素",11,["时令蔬菜", "蒜", "盐", "油"],0,"","土耳其"],
 ["茄子泥","中东菜","小食","素",8,["茄子", "蒜", "酱油", "盐"],0,"","土耳其"],
 ["芝麻酱","中东菜","小食","素",7,["芝麻", "油", "盐"],0,"","土耳其"],
@@ -827,13 +856,13 @@ const RAW=[
 ["黎巴嫩烤肉","中东菜","菜","荤",26,["羊肉", "香料", "盐"],0,"","黎巴嫩"],
 ["库夫塔","中东菜","小食","荤",14,["肉", "香料", "洋葱", "蛋"],0,"","土耳其"],
 ["黎巴嫩沙拉","中东菜","菜","素",10,["生菜", "番茄", "橄榄油", "盐"],0,"","黎巴嫩"],
-["酸奶汤","中东菜","汤饮","荤",10,["酸奶", "水", "盐", "薄荷"],0,"","土耳其"],
-["羊肉丸子汤","中东菜","汤饮","荤",12,["羊肉丸", "葱", "姜", "香菜"],0,"","土耳其"],
+["酸奶汤","中东菜","汤","荤",10,["酸奶", "水", "盐", "薄荷"],0,"","土耳其"],
+["羊肉丸子汤","中东菜","汤","荤",12,["羊肉丸", "葱", "姜", "香菜"],0,"","土耳其"],
 ["叙利亚 Shakshuka","中东菜","菜","荤",16,["蛋", "番茄", "辣椒", "洋葱"],0,"","叙利亚"],
 ["伊拉克土豆炖肉","中东菜","菜","荤",18,["土豆", "油", "盐", "葱"],0,"","伊拉克"],
 ["伊朗石榴核桃炖鸡","中东菜","菜","荤",26,["鸡肉", "葱", "姜", "酱油"],1,"","伊朗"],
-["土耳其石榴汁","中东菜","汤饮","素",8,["水", "糖", "风味配料"],1,"","土耳其"],
-["部队锅","韩料","汤饮","荤",28,["午餐肉", "芝士", "年糕", "泡菜", "拉面"],0,"","韩国"],
+["土耳其石榴汁","中东菜","甜饮","素",8,["水", "糖", "风味配料"],1,"","土耳其"],
+["部队锅","韩料","汤","荤",28,["午餐肉", "芝士", "年糕", "泡菜", "拉面"],0,"","韩国"],
 ["韩式炸鸡","韩料","菜","荤",26,["鸡翅", "辣椒酱", "蜂蜜", "蒜", "酱油"],0,"","韩国"],
 ["炸鸡啤酒","韩料","菜","荤",28,["鸡肉", "葱", "姜", "酱油"],1,"","韩国"],
 ["辣炒年糕","韩料","小食","素",10,["年糕", "辣椒酱", "鱼饼", "洋葱", "糖"],0,"","韩国"],
@@ -848,10 +877,10 @@ const RAW=[
 ["紫菜卷","韩料","主食","素",9,["时令蔬菜", "蒜", "盐", "油"],0,"","韩国"],
 ["炒码面","韩料","主食","荤",14,["面条", "葱", "酱油", "油"],0,"","韩国"],
 ["海鲜葱饼","韩料","主食","荤",14,["面粉", "油", "盐"],0,"","韩国"],
-["辣豆腐汤","韩料","汤饮","荤",14,["豆腐", "虾仁", "葱", "香油"],0,"","韩国"],
-["大酱汤","韩料","汤饮","荤",12,["大酱", "豆腐", "西葫芦", "葱"],0,"","韩国"],
-["参鸡汤","韩料","汤饮","荤",26,["鸡", "人参", "糯米", "红枣", "蒜"],0,"","韩国"],
-["雪浓汤","韩料","汤饮","荤",22,["牛骨", "牛肉", "葱", "姜", "蒜"],0,"","韩国"],
+["辣豆腐汤","韩料","汤","荤",14,["豆腐", "虾仁", "葱", "香油"],0,"","韩国"],
+["大酱汤","韩料","汤","荤",12,["大酱", "豆腐", "西葫芦", "葱"],0,"","韩国"],
+["参鸡汤","韩料","汤","荤",26,["鸡", "人参", "糯米", "红枣", "蒜"],0,"","韩国"],
+["雪浓汤","韩料","汤","荤",22,["牛骨", "牛肉", "葱", "姜", "蒜"],0,"","韩国"],
 ["烤肉","韩料","菜","荤",38,["五花肉", "生菜", "蒜", "辣酱", "盐"],0,"","韩国"],
 ["烤五花肉","韩料","菜","荤",28,["肉类", "酱油", "料酒", "葱", "姜"],0,"","韩国"],
 ["烤牛排","韩料","菜","荤",48,["牛肉", "酱油", "料酒", "葱"],0,"","韩国"],
@@ -860,25 +889,25 @@ const RAW=[
 ["炒粉丝","韩料","菜","素",11,["米粉", "汤", "香菜", "辣油"],0,"","韩国"],
 ["杂菜","韩料","菜","素",11,["时令蔬菜", "蒜", "盐", "油"],0,"","韩国"],
 ["安东炖鸡","韩料","菜","荤",24,["鸡肉", "葱", "姜", "酱油"],0,"","韩国"],
-["神仙炉","韩料","汤饮","荤",30,["牛肉", "蔬菜", "粉丝", "鸡蛋", "高汤"],0,"","韩国"],
+["神仙炉","韩料","汤","荤",30,["牛肉", "蔬菜", "粉丝", "鸡蛋", "高汤"],0,"","韩国"],
 ["韩国炸酱面","韩料","主食","荤",13,["面条", "葱", "酱油", "油"],0,"","韩国"],
 ["糖醋肉","韩料","菜","荤",24,["猪肉", "番茄酱", "醋", "糖", "淀粉"],0,"","韩国"],
 ["酱蟹","韩料","菜","荤",40,["螃蟹", "姜", "醋", "葱"],0,"","韩国"],
 ["辣炒八爪鱼","韩料","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
 ["炒年糕条","韩料","小食","素",10,["年糕", "蔬菜", "酱油", "糖"],0,"","韩国"],
 ["米肠","韩料","小食","荤",12,["糯米", "猪血", "肠衣", "葱"],0,"","韩国"],
-["鱼饼汤","韩料","汤饮","荤",12,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
+["鱼饼汤","韩料","汤","荤",12,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
 ["鱼饼串","韩料","小食","荤",10,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
 ["炒乌冬","韩料","主食","荤",14,["乌冬面", "蔬菜", "肉", "酱油"],0,"","韩国"],
 ["辣炒虾","韩料","菜","荤",26,["虾仁", "蒜", "盐", "料酒"],0,"","韩国"],
 ["辣炖鸡","韩料","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],0,"","韩国"],
 ["鸡蛋卷","韩料","小食","荤",10,["鸡肉", "葱", "姜", "酱油"],0,"","韩国"],
 ["土豆饼","韩料","小食","素",7,["土豆", "油", "盐", "葱"],0,"","韩国"],
-["南瓜粥","韩料","汤饮","素",8,["南瓜", "大米", "水", "糖"],1,"","韩国"],
-["红豆刨冰","韩料","甜品","素",12,["糯米", "糖", "配料"],1,"","韩国"],
-["刨冰","韩料","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"","韩国"],
-["华夫饼","韩料","甜品","素",10,["面粉", "黄油", "糖"],0,"","韩国"],
-["蜂蜜面包","韩料","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"","韩国"],
+["南瓜粥","韩料","甜饮","素",8,["南瓜", "大米", "水", "糖"],1,"","韩国"],
+["红豆刨冰","韩料","甜饮","素",12,["糯米", "糖", "配料"],1,"","韩国"],
+["刨冰","韩料","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],1,"","韩国"],
+["华夫饼","韩料","甜饮","素",10,["面粉", "黄油", "糖"],0,"","韩国"],
+["蜂蜜面包","韩料","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"","韩国"],
 ["芝士球","韩料","小食","素",9,["芝士", "奶油", "面粉", "鸡蛋"],1,"","韩国"],
 ["辣白菜炒饭","韩料","主食","荤",12,["大米", "配菜", "酱油", "油"],0,"","韩国"],
 ["金枪鱼饭团","韩料","主食","素",9,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
@@ -913,9 +942,9 @@ const RAW=[
 ["盐烤秋刀鱼","日料","菜","荤",18,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["烤鳗鱼","日料","菜","荤",46,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["鳗鱼饭","日料","主食","荤",42,["米饭", "鳗鱼", "酱汁", "海苔", "芝麻"],0,"","日本"],
-["寿喜锅","日料","汤饮","荤",30,["牛肉", "豆腐", "青菜", "洋葱", "酱油"],0,"","日本"],
-["涮锅","日料","汤饮","荤",32,["羊肉", "蔬菜", "蘸料", "高汤"],0,"","日本"],
-["关东煮","日料","汤饮","荤",14,["萝卜", "鱼丸", "海带", "魔芋", "高汤"],0,"","日本"],
+["寿喜锅","日料","汤","荤",30,["牛肉", "豆腐", "青菜", "洋葱", "酱油"],0,"","日本"],
+["涮锅","日料","汤","荤",32,["羊肉", "蔬菜", "蘸料", "高汤"],0,"","日本"],
+["关东煮","日料","汤","荤",14,["萝卜", "鱼丸", "海带", "魔芋", "高汤"],0,"","日本"],
 ["日式炸鸡","日料","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"","日本"],
 ["唐扬鸡","日料","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"","日本"],
 ["饭团","日料","主食","素",5,["大米", "配菜", "酱油", "油"],0,"","日本"],
@@ -923,8 +952,8 @@ const RAW=[
 ["鲑鱼饭团","日料","主食","荤",7,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["玉子烧","日料","小食","荤",9,["鸡蛋", "糖", "盐", "牛奶"],0,"","日本"],
 ["厚蛋烧","日料","菜","荤",10,["鸡蛋", "盐", "葱"],0,"","日本"],
-["茶碗蒸","日料","汤饮","荤",12,["鸡蛋", "高汤", "虾仁", "香菇"],0,"","日本"],
-["味噌汤","日料","汤饮","素",6,["味噌", "豆腐", "海带", "葱"],0,"","日本"],
+["茶碗蒸","日料","汤","荤",12,["鸡蛋", "高汤", "虾仁", "香菇"],0,"","日本"],
+["味噌汤","日料","汤","素",6,["味噌", "豆腐", "海带", "葱"],0,"","日本"],
 ["日式冷豆腐","日料","小食","素",7,["豆腐", "葱", "酱油", "盐"],0,"","日本"],
 ["毛豆","日料","小食","素",5,["毛豆", "盐", "水"],0,"","日本"],
 ["日式沙拉","日料","菜","素",12,["生菜", "番茄", "橄榄油", "盐"],0,"","日本"],
@@ -940,26 +969,26 @@ const RAW=[
 ["金枪鱼刺身","日料","菜","荤",46,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["鲷鱼刺身","日料","菜","荤",42,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["北极贝","日料","菜","荤",38,["北极贝", "芥末", "酱油"],0,"","日本"],
-["草莓大福","日料","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["抹茶大福","日料","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["铜锣烧","日料","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["鲷鱼烧","日料","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["日式芝士蛋糕","日料","甜品","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["舒芙蕾芝士","日料","甜品","素",14,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["抹茶冰淇淋","日料","甜品","素",10,["牛奶", "奶油", "糖"],1,"","日本"],
-["抹茶拿铁","日料","汤饮","素",12,["咖啡豆", "水", "牛奶", "糖", "热"],1,"","日本"],
-["焙茶拿铁","日料","汤饮","素",12,["咖啡豆", "水", "牛奶", "糖", "热"],1,"","日本"],
-["抹茶芭菲","日料","甜品","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["白玉团子","日料","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["蕨饼","日料","甜品","素",7,["面粉", "黄油", "糖"],1,"","日本"],
-["水信玄饼","日料","甜品","素",8,["面粉", "黄油", "糖"],1,"","日本"],
-["羊羹","日料","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["草莓大福","日料","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["抹茶大福","日料","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["铜锣烧","日料","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["鲷鱼烧","日料","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["日式芝士蛋糕","日料","甜饮","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["舒芙蕾芝士","日料","甜饮","素",14,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["抹茶冰淇淋","日料","甜饮","素",10,["牛奶", "奶油", "糖"],1,"","日本"],
+["抹茶拿铁","日料","甜饮","素",12,["咖啡豆", "水", "牛奶", "糖", "热"],1,"","日本"],
+["焙茶拿铁","日料","甜饮","素",12,["咖啡豆", "水", "牛奶", "糖", "热"],1,"","日本"],
+["抹茶芭菲","日料","甜饮","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["白玉团子","日料","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["蕨饼","日料","甜饮","素",7,["面粉", "黄油", "糖"],1,"","日本"],
+["水信玄饼","日料","甜饮","素",8,["面粉", "黄油", "糖"],1,"","日本"],
+["羊羹","日料","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
 ["仙贝","日料","小食","素",6,["糯米", "酱油", "海苔"],0,"","日本"],
 ["米果","日料","小食","素",6,["大米", "酱油", "糖"],1,"","日本"],
 ["日式咖喱乌冬","日料","主食","荤",16,["乌冬面", "咖喱", "肉", "葱"],0,"","日本"],
-["牛肉寿喜烧","日料","汤饮","荤",32,["牛肉", "牛骨", "葱", "姜", "香料"],0,"","日本"],
+["牛肉寿喜烧","日料","汤","荤",32,["牛肉", "牛骨", "葱", "姜", "香料"],0,"","日本"],
 ["天妇罗荞麦面","日料","主食","荤",18,["面条", "葱", "酱油", "油"],0,"","日本"],
-["日式茶碗蒸蛋","日料","汤饮","荤",12,["鸡蛋", "高汤", "虾仁", "香菇"],0,"","日本"],
+["日式茶碗蒸蛋","日料","汤","荤",12,["鸡蛋", "高汤", "虾仁", "香菇"],0,"","日本"],
 ["照烧汉堡排","日料","菜","荤",18,["牛肉", "照烧酱", "面包糠"],0,"","日本"],
 ["本帮红烧肉","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"本帮菜",""],
 ["油爆虾","中国菜","菜","荤",26,["虾仁", "蒜", "盐", "料酒"],0,"本帮菜",""],
@@ -973,7 +1002,7 @@ const RAW=[
 ["油墩子","中国菜","小食","素",6,["蔬菜", "蒜", "盐", "油"],0,"本帮菜",""],
 ["粢饭团","中国菜","主食","素",6,["大米", "配菜", "酱油", "油"],0,"本帮菜",""],
 ["蟹壳黄","中国菜","主食","素",7,["螃蟹", "姜", "醋", "葱"],0,"本帮菜",""],
-["海棠糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"本帮菜",""],
+["海棠糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"本帮菜",""],
 ["糟钵头","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"本帮菜",""],
 ["白斩鸡","中国菜","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"本帮菜",""],
 ["大煮干丝","中国菜","菜","素",14,["蔬菜", "蒜", "盐", "油"],0,"本帮菜",""],
@@ -981,15 +1010,15 @@ const RAW=[
 ["三套鸭","中国菜","菜","荤",28,["鸭肉", "葱", "姜", "酱油"],0,"本帮菜",""],
 ["梁溪脆鳝","中国菜","菜","荤",26,["肉类", "酱油", "料酒", "葱", "姜"],0,"本帮菜",""],
 ["南京盐水鸭","中国菜","菜","荤",22,["鸭肉", "葱", "姜", "酱油"],1,"本帮菜",""],
-["鸡头米羹","中国菜","汤饮","素",14,["鸡肉", "鸡骨", "葱", "姜"],0,"本帮菜",""],
-["西湖莼菜汤","中国菜","汤饮","素",12,["莼菜", "鸡汤", "火腿", "盐"],0,"本帮菜",""],
+["鸡头米羹","中国菜","汤","素",14,["鸡肉", "鸡骨", "葱", "姜"],0,"本帮菜",""],
+["西湖莼菜汤","中国菜","汤","素",12,["莼菜", "鸡汤", "火腿", "盐"],0,"本帮菜",""],
 ["绍兴醉鸡","中国菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"本帮菜",""],
 ["霉干菜扣肉","中国菜","菜","荤",20,["时令蔬菜", "蒜", "盐", "油"],0,"本帮菜",""],
 ["温州鱼饼","中国菜","小食","荤",14,["鱼", "姜", "葱", "蒸鱼豉油"],0,"本帮菜",""],
 ["江蟹生","中国菜","菜","荤",36,["螃蟹", "姜", "醋", "葱"],0,"本帮菜",""],
 ["苔菜小方烤","中国菜","菜","荤",20,["时令蔬菜", "蒜", "盐", "油"],0,"本帮菜",""],
 ["狗不理包子","中国菜","主食","荤",12,["面粉", "馅料", "酵母"],0,"津冀菜",""],
-["耳朵眼炸糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
+["耳朵眼炸糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
 ["十八街麻花","中国菜","小食","素",6,["蔬菜", "蒜", "盐", "油"],0,"津冀菜",""],
 ["锅巴菜","中国菜","主食","素",7,["时令蔬菜", "蒜", "盐", "油"],0,"津冀菜",""],
 ["老爆三","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"津冀菜",""],
@@ -1007,13 +1036,13 @@ const RAW=[
 ["重庆小面","中国菜","主食","素",8,["面条", "葱", "酱油", "油"],0,"重庆菜",""],
 ["黔江鸡杂","中国菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"重庆菜",""],
 ["万州烤鱼","中国菜","菜","荤",30,["鱼", "姜", "葱", "蒸鱼豉油"],0,"重庆菜",""],
-["潮汕牛肉火锅","中国菜","汤饮","荤",38,["牛肉", "牛骨", "葱", "姜", "香料"],0,"潮汕菜",""],
+["潮汕牛肉火锅","中国菜","汤","荤",38,["牛肉", "牛骨", "葱", "姜", "香料"],0,"潮汕菜",""],
 ["潮州卤水","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],1,"潮汕菜",""],
 ["生滚粥","中国菜","主食","荤",12,["米", "水", "糖"],0,"粤菜",""],
 ["砂锅粥","中国菜","主食","荤",16,["米", "水", "糖"],0,"粤菜",""],
 ["牛杂","中国菜","小食","荤",12,["牛肉", "酱油", "料酒", "葱"],0,"粤菜",""],
-["凤凰奶糊","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
-["马蹄爽","中国菜","汤饮","素",6,["马蹄", "甘蔗", "水", "糖"],0,"粤菜",""],
+["凤凰奶糊","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
+["马蹄爽","中国菜","汤","素",6,["马蹄", "甘蔗", "水", "糖"],0,"粤菜",""],
 ["客家酿豆腐","中国菜","菜","素",12,["豆腐", "葱", "酱油", "盐"],0,"潮汕菜",""],
 ["白灼菜心","中国菜","菜","素",8,["时令蔬菜", "蒜", "盐", "油"],0,"粤菜",""],
 ["烧乳鸽","中国菜","菜","荤",28,["肉类", "酱油", "料酒", "葱", "姜"],0,"粤菜",""],
@@ -1024,9 +1053,9 @@ const RAW=[
 ["湘西腊肉","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"湘菜",""],
 ["萍乡莲花血鸭","中国菜","菜","荤",22,["鸭肉", "葱", "姜", "酱油"],0,"赣菜",""],
 ["赣州小炒鱼","中国菜","菜","荤",24,["鱼", "姜", "葱", "蒸鱼豉油"],0,"赣菜",""],
-["瑞金牛肉汤","中国菜","汤饮","荤",14,["牛肉", "牛骨", "葱", "姜", "香料"],0,"赣菜",""],
+["瑞金牛肉汤","中国菜","汤","荤",14,["牛肉", "牛骨", "葱", "姜", "香料"],0,"赣菜",""],
 ["景德板鸡","中国菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"赣菜",""],
-["九江茶饼","中国菜","甜品","素",6,["面粉", "黄油", "糖"],0,"赣菜",""],
+["九江茶饼","中国菜","甜饮","素",6,["面粉", "黄油", "糖"],0,"赣菜",""],
 ["油爆双脆","中国菜","菜","荤",26,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["扒原壳鲍鱼","中国菜","菜","荤",52,["鱼", "姜", "葱", "蒸鱼豉油"],0,"鲁菜",""],
 ["清蒸加吉鱼","中国菜","菜","荤",32,["鱼", "姜", "葱", "蒸鱼豉油"],0,"鲁菜",""],
@@ -1035,57 +1064,57 @@ const RAW=[
 ["青岛大虾烧白菜","中国菜","菜","荤",22,["虾仁", "蒜", "盐", "料酒"],0,"鲁菜",""],
 ["得莫利炖鱼","中国菜","菜","荤",26,["鱼", "姜", "葱", "蒸鱼豉油"],0,"东北菜",""],
 ["哈尔滨红肠","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"东北菜",""],
-["雪衣豆沙","中国菜","甜品","素",9,["糖", "水", "配料"],0,"鲁菜",""],
-["拔丝苹果","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"鲁菜",""],
+["雪衣豆沙","中国菜","甜饮","素",9,["糖", "水", "配料"],0,"鲁菜",""],
+["拔丝苹果","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"鲁菜",""],
 ["熏肉大饼","中国菜","主食","荤",9,["面粉", "油", "盐"],0,"鲁菜",""],
 ["新疆炒米粉","中国菜","主食","荤",14,["米粉", "汤", "香菜", "辣油"],0,"新疆菜",""],
-["羊蝎子","中国菜","汤饮","荤",26,["羊肉", "羊骨", "葱", "姜", "香料"],0,"鲁菜",""],
+["羊蝎子","中国菜","汤","荤",26,["羊肉", "羊骨", "葱", "姜", "香料"],0,"鲁菜",""],
 ["洋芋擦擦","中国菜","主食","素",8,["芋头", "糖", "椰浆"],0,"西北菜",""],
 ["浆水面","中国菜","主食","素",8,["面条", "葱", "酱油", "油"],1,"西北菜",""],
 ["天水呱呱","中国菜","小食","素",7,["蔬菜", "蒜", "盐", "油"],1,"西北菜",""],
 ["陇西腊肉","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"西北菜",""],
 ["贵州米粉","中国菜","主食","荤",12,["米粉", "汤", "香菜", "辣油"],0,"云贵菜",""],
 ["遵义羊肉粉","中国菜","主食","荤",13,["羊肉", "孜然", "洋葱", "盐"],0,"云贵菜",""],
-["凯里酸汤鱼","中国菜","汤饮","荤",28,["鱼", "豆腐", "葱", "姜", "香菜"],0,"云贵菜",""],
+["凯里酸汤鱼","中国菜","汤","荤",28,["鱼", "豆腐", "葱", "姜", "香菜"],0,"云贵菜",""],
 ["安顺裹卷","中国菜","小食","素",7,["蔬菜", "蒜", "盐", "油"],0,"云贵菜",""],
-["毕节汤圆","中国菜","甜品","素",7,["糯米", "糖", "配料"],0,"云贵菜",""],
+["毕节汤圆","中国菜","甜饮","素",7,["糯米", "糖", "配料"],0,"云贵菜",""],
 ["兴义刷把头","中国菜","主食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"云贵菜",""],
 ["胡辣羊蹄","中国菜","菜","荤",18,["羊肉", "孜然", "洋葱", "盐"],0,"新疆菜",""],
 ["米肠子面肺子","中国菜","菜","荤",14,["面条", "葱", "酱油", "油"],0,"新疆菜",""],
-["丸子汤","中国菜","汤饮","荤",14,["肉丸", "葱", "姜", "香菜"],0,"新疆菜",""],
+["丸子汤","中国菜","汤","荤",14,["肉丸", "葱", "姜", "香菜"],0,"新疆菜",""],
 ["恩施腊肉","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["襄阳牛肉面","中国菜","主食","荤",12,["牛肉", "酱油", "料酒", "葱"],0,"湖北菜",""],
-["瓦罐鸡汤","中国菜","汤饮","荤",16,["鸡肉", "鸡骨", "葱", "姜"],0,"湖北菜",""],
+["瓦罐鸡汤","中国菜","汤","荤",16,["鸡肉", "鸡骨", "葱", "姜"],0,"湖北菜",""],
 ["荆沙鱼糕","中国菜","菜","荤",22,["鱼", "姜", "葱", "蒸鱼豉油"],0,"湖北菜",""],
 ["潢川贡面","中国菜","主食","素",8,["面条", "葱", "酱油", "油"],0,"豫菜",""],
 ["道口烧鸡","中国菜","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],0,"豫菜",""],
 ["浆面条","中国菜","主食","素",7,["面条", "葱", "酱油", "油"],0,"豫菜",""],
 ["牡丹燕菜","中国菜","菜","素",16,["时令蔬菜", "蒜", "盐", "油"],0,"豫菜",""],
 ["固始鹅块","中国菜","菜","荤",24,["肉类", "酱油", "料酒", "葱", "姜"],0,"豫菜",""],
-["信阳炖菜","中国菜","汤饮","荤",18,["蔬菜", "肉类", "豆制品", "高汤"],0,"豫菜",""],
+["信阳炖菜","中国菜","汤","荤",18,["蔬菜", "肉类", "豆制品", "高汤"],0,"豫菜",""],
 ["汴京烤鸭","中国菜","菜","荤",40,["鸭肉", "葱", "姜", "酱油"],0,"豫菜",""],
 ["徽州毛豆腐","中国菜","菜","素",10,["豆腐", "葱", "酱油", "盐"],0,"徽菜",""],
 ["清蒸石鸡","中国菜","菜","荤",28,["鸡肉", "葱", "姜", "酱油"],0,"徽菜",""],
 ["云雾肉","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"徽菜",""],
 ["凤炖牡丹","中国菜","菜","荤",26,["肉类", "酱油", "料酒", "葱", "姜"],0,"豫菜",""],
 ["芝士玉米烙","网红菜","菜","素",12,["芝士", "奶油", "面粉", "鸡蛋"],0,"",""],
-["爆浆珍珠蛋糕","网红菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["伯爵红茶千层","网红菜","甜品","素",15,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["海盐芝士蛋糕","网红菜","甜品","素",13,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["芋泥波波奶茶","网红菜","汤饮","素",13,["茶基底", "牛奶", "糖", "珍珠", "芋泥"],1,"",""],
-["生椰拿铁（冰）","网红菜","汤饮","素",14,["咖啡豆", "水", "牛奶", "椰浆", "糖", "冰"],1,"",""],
-["杨梅吐气茶","网红菜","汤饮","素",12,["杨梅", "茶", "糖", "冰"],0,"",""],
-["多肉葡萄","网红菜","汤饮","素",14,["葡萄", "糖", "水", "冰"],1,"",""],
-["满杯红柚","网红菜","汤饮","素",13,["柚子", "糖", "水", "冰"],1,"",""],
-["芝芝莓莓","网红菜","汤饮","素",15,["茶基底", "牛奶", "糖", "芝士奶盖", "草莓"],1,"",""],
-["豆乳盒子","网红菜","甜品","素",13,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["肉松小贝","网红菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["芝士流心蛋挞","网红菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["彩虹蛋糕","网红菜","甜品","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["星空慕斯","网红菜","甜品","素",14,["奶油", "巧克力", "糖", "吉利丁"],0,"",""],
-["抹茶生巧","网红菜","甜品","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["脏脏可颂","网红菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["爆浆麻薯","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["爆浆珍珠蛋糕","网红菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["伯爵红茶千层","网红菜","甜饮","素",15,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["海盐芝士蛋糕","网红菜","甜饮","素",13,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["芋泥波波奶茶","网红菜","甜饮","素",13,["茶基底", "牛奶", "糖", "珍珠", "芋泥"],1,"",""],
+["生椰拿铁（冰）","网红菜","甜饮","素",14,["咖啡豆", "水", "牛奶", "椰浆", "糖", "冰"],1,"",""],
+["杨梅吐气茶","网红菜","汤","素",12,["杨梅", "茶", "糖", "冰"],0,"",""],
+["多肉葡萄","网红菜","甜饮","素",14,["葡萄", "糖", "水", "冰"],1,"",""],
+["满杯红柚","网红菜","甜饮","素",13,["柚子", "糖", "水", "冰"],1,"",""],
+["芝芝莓莓","网红菜","甜饮","素",15,["茶基底", "牛奶", "糖", "芝士奶盖", "草莓"],1,"",""],
+["豆乳盒子","网红菜","甜饮","素",13,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["肉松小贝","网红菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["芝士流心蛋挞","网红菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["彩虹蛋糕","网红菜","甜饮","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["星空慕斯","网红菜","甜饮","素",14,["奶油", "巧克力", "糖", "吉利丁"],0,"",""],
+["抹茶生巧","网红菜","甜饮","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["脏脏可颂","网红菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["爆浆麻薯","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
 ["芝士棒棒糖","网红菜","小食","素",10,["芝士", "奶油", "面粉", "鸡蛋"],0,"",""],
 ["拉丝芝士棒","网红菜","小食","素",10,["芝士", "奶油", "面粉", "鸡蛋"],0,"",""],
 ["脆皮年糕","网红菜","小食","素",8,["年糕", "蔬菜", "酱油", "糖"],0,"",""],
@@ -1094,21 +1123,21 @@ const RAW=[
 ["凉拌海蜇","网红菜","小食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"",""],
 ["柠檬手撕鸡","网红菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],1,"",""],
 ["藤椒鸡","网红菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"",""],
-["无水蜂蜜蛋糕","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["古早味蛋糕","网红菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["无水蜂蜜蛋糕","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["古早味蛋糕","网红菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
 ["爆浆芝士鸡排","网红菜","菜","荤",16,["鸡肉", "葱", "姜", "酱油"],0,"",""],
 ["脆皮烤肠","网红菜","小食","荤",10,["肉类", "酱油", "料酒", "葱", "姜"],0,"",""],
 ["芝士热狗棒","网红菜","小食","荤",11,["芝士", "奶油", "面粉", "鸡蛋"],0,"",""],
-["鸡蛋仔","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["格子Q饼","网红菜","甜品","素",9,["面粉", "黄油", "糖"],0,"",""],
-["芒果西米露","网红菜","甜品","素",9,["糖", "水", "配料"],1,"",""],
-["杨枝甘露（碗）","网红菜","甜品","素",12,["糖", "水", "配料"],1,"",""],
-["烧仙草冻","网红菜","甜品","素",8,["糖", "水", "配料"],1,"",""],
-["桃胶雪燕","网红菜","汤饮","素",14,["桃胶", "雪燕", "冰糖", "水"],0,"",""],
-["木瓜炖桃胶","网红菜","甜品","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["酒酿鸡蛋","网红菜","甜品","素",7,["糯米", "酒曲", "糖"],1,"",""],
-["红糖糍粑","网红菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["炸鲜奶","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["鸡蛋仔","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["格子Q饼","网红菜","甜饮","素",9,["面粉", "黄油", "糖"],0,"",""],
+["芒果西米露","网红菜","甜饮","素",9,["糖", "水", "配料"],1,"",""],
+["杨枝甘露（碗）","网红菜","甜饮","素",12,["糖", "水", "配料"],1,"",""],
+["烧仙草冻","网红菜","甜饮","素",8,["糖", "水", "配料"],1,"",""],
+["桃胶雪燕","网红菜","汤","素",14,["桃胶", "雪燕", "冰糖", "水"],0,"",""],
+["木瓜炖桃胶","网红菜","甜饮","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["酒酿鸡蛋","网红菜","甜饮","素",7,["糯米", "酒曲", "糖"],1,"",""],
+["红糖糍粑","网红菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["炸鲜奶","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
 ["脆皮炸鲜奶","网红菜","小食","素",9,["蔬菜", "蒜", "盐", "油"],0,"",""],
 ["芝士焗红薯泥","网红菜","菜","素",9,["芝士", "奶油", "面粉", "鸡蛋"],0,"",""],
 ["番茄芝士焗饭","网红菜","主食","荤",16,["番茄", "鸡蛋", "糖", "盐"],0,"",""],
@@ -1122,16 +1151,16 @@ const RAW=[
 ["冰草沙拉","网红菜","菜","素",12,["生菜", "番茄", "橄榄油", "盐"],1,"",""],
 ["鸡胸肉沙拉","网红菜","菜","素",12,["鸡肉", "葱", "姜", "酱油"],0,"",""],
 ["牛油果沙拉","网红菜","菜","素",14,["牛肉", "酱油", "料酒", "葱"],1,"",""],
-["隔夜酸奶杯","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["奇亚籽布丁","网红菜","甜品","素",10,["牛奶", "鸡蛋", "糖", "吉利丁"],0,"",""],
-["椰香西米糕","网红菜","甜品","素",8,["糖", "水", "配料"],1,"",""],
-["芒果糯米糍","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["抹茶红豆糕","网红菜","甜品","素",9,["糯米", "糖", "配料"],0,"",""],
-["红豆双皮奶","网红菜","甜品","素",9,["糖", "水", "配料"],1,"",""],
-["黑糖珍珠鲜奶","网红菜","汤饮","素",13,["茶基底", "牛奶", "糖", "珍珠", "黑糖"],1,"",""],
-["焙茶拿铁（冰）","网红菜","汤饮","素",12,["咖啡豆", "水", "牛奶", "糖", "冰"],1,"",""],
-["厚乳奶茶","网红菜","汤饮","素",12,["茶基底", "牛奶", "糖", "厚乳"],1,"",""],
-["莓莓酸奶","网红菜","汤饮","素",12,["茶基底", "牛奶", "糖", "草莓"],1,"",""],
+["隔夜酸奶杯","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["奇亚籽布丁","网红菜","甜饮","素",10,["牛奶", "鸡蛋", "糖", "吉利丁"],0,"",""],
+["椰香西米糕","网红菜","甜饮","素",8,["糖", "水", "配料"],1,"",""],
+["芒果糯米糍","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["抹茶红豆糕","网红菜","甜饮","素",9,["糯米", "糖", "配料"],0,"",""],
+["红豆双皮奶","网红菜","甜饮","素",9,["糖", "水", "配料"],1,"",""],
+["黑糖珍珠鲜奶","网红菜","甜饮","素",13,["茶基底", "牛奶", "糖", "珍珠", "黑糖"],1,"",""],
+["焙茶拿铁（冰）","网红菜","甜饮","素",12,["咖啡豆", "水", "牛奶", "糖", "冰"],1,"",""],
+["厚乳奶茶","网红菜","甜饮","素",12,["茶基底", "牛奶", "糖", "厚乳"],1,"",""],
+["莓莓酸奶","网红菜","甜饮","素",12,["茶基底", "牛奶", "糖", "草莓"],1,"",""],
 ["惠灵顿牛排（小份）","欧洲菜","菜","荤",48,["牛肉", "酱油", "料酒", "葱"],0,"","英国"],
 ["战斧牛排","美洲菜","菜","荤",108,["牛肉", "酱油", "料酒", "葱"],0,"","美国"],
 ["低温慢煮牛排","美洲菜","菜","荤",52,["牛肉", "酱油", "料酒", "葱"],0,"","美国"],
@@ -1144,10 +1173,10 @@ const RAW=[
 ["鹅肝","欧洲菜","菜","荤",58,["肉类", "酱油", "料酒", "葱", "姜"],0,"","法国"],
 ["生蚝","欧洲菜","菜","荤",40,["肉类", "酱油", "料酒", "葱", "姜"],0,"","法国"],
 ["蒜香大虾","欧洲菜","菜","荤",28,["虾仁", "蒜", "盐", "料酒"],0,"","西班牙"],
-["海鲜浓汤","欧洲菜","汤饮","荤",18,["海鲜", "葱", "姜"],0,"","法国"],
-["野菌汤","欧洲菜","汤饮","素",12,["菌菇", "葱", "姜"],0,"","法国"],
-["芦笋浓汤","欧洲菜","汤饮","素",12,["芦笋", "奶油", "高汤"],0,"","法国"],
-["番茄海鲜汤","欧洲菜","汤饮","荤",16,["番茄", "鸡蛋", "葱", "糖"],0,"","西班牙"],
+["海鲜浓汤","欧洲菜","汤","荤",18,["海鲜", "葱", "姜"],0,"","法国"],
+["野菌汤","欧洲菜","汤","素",12,["菌菇", "葱", "姜"],0,"","法国"],
+["芦笋浓汤","欧洲菜","汤","素",12,["芦笋", "奶油", "高汤"],0,"","法国"],
+["番茄海鲜汤","欧洲菜","汤","荤",16,["番茄", "鸡蛋", "葱", "糖"],0,"","西班牙"],
 ["南瓜海鲜烩饭","欧洲菜","主食","荤",22,["大米", "配菜", "酱油", "油"],0,"","意大利"],
 ["松露炒蛋","欧洲菜","菜","荤",26,["鸡蛋", "盐", "葱"],1,"","法国"],
 ["班尼迪克蛋（三文鱼）","美洲菜","菜","荤",24,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","美国"],
@@ -1164,30 +1193,30 @@ const RAW=[
 ["炸花菜","美洲菜","小食","素",9,["时令蔬菜", "蒜", "盐", "油"],0,"","美国"],
 ["蒜香蘑菇","欧洲菜","小食","素",10,["蘑菇", "蒜", "盐", "油"],0,"","法国"],
 ["烤布里芝士","欧洲菜","小食","素",12,["芝士", "奶油", "面粉", "鸡蛋"],0,"","法国"],
-["巧克力喷泉","美洲菜","甜品","素",12,["巧克力", "奶油", "糖"],0,"","美国"],
-["翻转苹果派","美洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["栗子蛋糕","欧洲菜","甜品","素",13,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
-["胡萝卜蛋糕","美洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
-["提拉米苏杯","欧洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","意大利"],
-["芝士水果杯","美洲菜","甜品","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["焦糖苹果塔","美洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["香草冰淇淋","美洲菜","甜品","素",8,["牛奶", "奶油", "糖"],1,"","美国"],
-["巧克力冰淇淋","美洲菜","甜品","素",8,["牛奶", "奶油", "糖"],1,"","美国"],
-["草莓冰淇淋","美洲菜","甜品","素",8,["牛奶", "奶油", "糖"],1,"","美国"],
-["圣代","美洲菜","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
-["奶昔","美洲菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["巧克力奶昔","美洲菜","甜品","素",12,["巧克力", "奶油", "糖"],1,"","美国"],
-["草莓奶昔","美洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["香蕉船","美洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
-["咖啡芝士蛋糕","美洲菜","甜品","素",15,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["蓝莓芝士蛋糕","美洲菜","甜品","素",15,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["树莓慕斯","欧洲菜","甜品","素",13,["奶油", "巧克力", "糖", "吉利丁"],1,"","法国"],
-["柠檬蛋白派","美洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
-["费南雪","欧洲菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
-["达克瓦兹","欧洲菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
-["杏仁蛋糕","欧洲菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
-["牛角可颂","欧洲菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
-["巧克力可颂","欧洲菜","甜品","素",10,["巧克力", "奶油", "糖"],0,"","法国"],
+["巧克力喷泉","美洲菜","甜饮","素",12,["巧克力", "奶油", "糖"],0,"","美国"],
+["翻转苹果派","美洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["栗子蛋糕","欧洲菜","甜饮","素",13,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["胡萝卜蛋糕","美洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
+["提拉米苏杯","欧洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","意大利"],
+["芝士水果杯","美洲菜","甜饮","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["焦糖苹果塔","美洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["香草冰淇淋","美洲菜","甜饮","素",8,["牛奶", "奶油", "糖"],1,"","美国"],
+["巧克力冰淇淋","美洲菜","甜饮","素",8,["牛奶", "奶油", "糖"],1,"","美国"],
+["草莓冰淇淋","美洲菜","甜饮","素",8,["牛奶", "奶油", "糖"],1,"","美国"],
+["圣代","美洲菜","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
+["奶昔","美洲菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["巧克力奶昔","美洲菜","甜饮","素",12,["巧克力", "奶油", "糖"],1,"","美国"],
+["草莓奶昔","美洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["香蕉船","美洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","美国"],
+["咖啡芝士蛋糕","美洲菜","甜饮","素",15,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["蓝莓芝士蛋糕","美洲菜","甜饮","素",15,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["树莓慕斯","欧洲菜","甜饮","素",13,["奶油", "巧克力", "糖", "吉利丁"],1,"","法国"],
+["柠檬蛋白派","美洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","美国"],
+["费南雪","欧洲菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["达克瓦兹","欧洲菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["杏仁蛋糕","欧洲菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["牛角可颂","欧洲菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","法国"],
+["巧克力可颂","欧洲菜","甜饮","素",10,["巧克力", "奶油", "糖"],0,"","法国"],
 ["蒜香法棍","欧洲菜","小食","素",8,["蔬菜", "蒜", "盐", "油"],0,"","法国"],
 ["番茄布鲁斯凯塔","欧洲菜","小食","素",9,["番茄", "鸡蛋", "糖", "盐"],0,"","意大利"],
 ["烤辣椒","美洲菜","小食","素",8,["蔬菜", "蒜", "盐", "油"],0,"","墨西哥"],
@@ -1213,21 +1242,21 @@ const RAW=[
 ["越南春卷（炸）","东南亚","小食","荤",12,["米纸", "虾", "蔬菜", "米粉"],0,"","越南"],
 ["泰式鱼饼","东南亚","小食","荤",12,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","泰国"],
 ["印尼虾片","东南亚","小食","素",6,["虾仁", "蒜", "盐", "料酒"],0,"","印尼"],
-["香蕉煎饼","东南亚","甜品","素",9,["面粉", "黄油", "糖"],0,"","泰国"],
-["椰丝球","东南亚","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["椰糖椰丝糕","东南亚","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","马来西亚"],
-["斑兰椰丝卷","东南亚","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["泰式椰汁糕","东南亚","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["越南芋头糕","东南亚","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","越南"],
-["新加坡千层糕","东南亚","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","新加坡"],
-["椰浆西米露","东南亚","甜品","素",8,["糖", "水", "配料"],1,"","泰国"],
-["摩摩喳喳（热）","东南亚","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","缅甸"],
-["泰式奶茶（热）","东南亚","汤饮","素",10,["红茶", "牛奶", "糖"],1,"","泰国"],
-["越南姜茶","东南亚","汤饮","素",8,["姜", "茶", "糖", "水"],0,"","越南"],
-["老挝冰咖啡","东南亚","汤饮","素",10,["咖啡豆", "水", "糖", "冰"],1,"","泰国"],
-["柬埔寨椰子奶昔","东南亚","汤饮","素",10,["椰肉", "糖", "水", "冰"],1,"","泰国"],
-["泰式柠檬水","东南亚","汤饮","素",8,["柠檬", "糖", "水", "冰"],1,"","泰国"],
-["新加坡拉茶","东南亚","汤饮","素",9,["红茶", "牛奶", "糖"],0,"","新加坡"],
+["香蕉煎饼","东南亚","甜饮","素",9,["面粉", "黄油", "糖"],0,"","泰国"],
+["椰丝球","东南亚","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["椰糖椰丝糕","东南亚","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","马来西亚"],
+["斑兰椰丝卷","东南亚","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["泰式椰汁糕","东南亚","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["越南芋头糕","东南亚","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","越南"],
+["新加坡千层糕","东南亚","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","新加坡"],
+["椰浆西米露","东南亚","甜饮","素",8,["糖", "水", "配料"],1,"","泰国"],
+["摩摩喳喳（热）","东南亚","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","缅甸"],
+["泰式奶茶（热）","东南亚","甜饮","素",10,["红茶", "牛奶", "糖"],1,"","泰国"],
+["越南姜茶","东南亚","汤","素",8,["姜", "茶", "糖", "水"],0,"","越南"],
+["老挝冰咖啡","东南亚","甜饮","素",10,["咖啡豆", "水", "糖", "冰"],1,"","泰国"],
+["柬埔寨椰子奶昔","东南亚","甜饮","素",10,["椰肉", "糖", "水", "冰"],1,"","泰国"],
+["泰式柠檬水","东南亚","甜饮","素",8,["柠檬", "糖", "水", "冰"],1,"","泰国"],
+["新加坡拉茶","东南亚","汤","素",9,["红茶", "牛奶", "糖"],0,"","新加坡"],
 ["印尼椰香饭","东南亚","主食","素",10,["大米", "配菜", "酱油", "油"],1,"","印尼"],
 ["菲律宾烤肠","东南亚","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"","菲律宾"],
 ["泰式烤猪颈肉","东南亚","菜","荤",24,["猪肉", "酱油", "料酒", "葱"],0,"","泰国"],
@@ -1248,18 +1277,18 @@ const RAW=[
 ["中东坚果饭","中东菜","主食","素",11,["大米", "配菜", "酱油", "油"],1,"","土耳其"],
 ["藏红花比尔亚尼","中东菜","主食","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"","伊朗"],
 ["羊肉库斯库斯","中东菜","主食","荤",18,["羊肉", "孜然", "洋葱", "盐"],0,"","土耳其"],
-["土耳其石榴汁（甜）","中东菜","汤饮","素",8,["水", "糖", "风味配料"],1,"","土耳其"],
-["薄荷柠檬水","中东菜","汤饮","素",8,["柠檬", "糖", "水", "冰"],1,"","土耳其"],
-["玫瑰水奶冻","中东菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
-["藏红花奶冻","中东菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","伊朗"],
-["枣泥球","中东菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
-["芝麻蜜饼","中东菜","甜品","素",8,["面粉", "黄油", "糖"],0,"","土耳其"],
-["中东奶酪蛋糕","中东菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
-["炸面团（甜）","中东菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
+["土耳其石榴汁（甜）","中东菜","甜饮","素",8,["水", "糖", "风味配料"],1,"","土耳其"],
+["薄荷柠檬水","中东菜","甜饮","素",8,["柠檬", "糖", "水", "冰"],1,"","土耳其"],
+["玫瑰水奶冻","中东菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
+["藏红花奶冻","中东菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","伊朗"],
+["枣泥球","中东菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
+["芝麻蜜饼","中东菜","甜饮","素",8,["面粉", "黄油", "糖"],0,"","土耳其"],
+["中东奶酪蛋糕","中东菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
+["炸面团（甜）","中东菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
 ["阿拉伯面包","中东菜","主食","素",5,["面条", "葱", "酱油", "油"],1,"","阿拉伯"],
-["大麦粥","中东菜","汤饮","素",7,["大麦", "水", "糖"],0,"","土耳其"],
-["扁豆汤（浓）","中东菜","汤饮","素",9,["扁豆", "蔬菜", "高汤"],0,"","土耳其"],
-["羊肉汤","中东菜","汤饮","荤",14,["羊肉", "羊骨", "羊油", "葱", "姜", "香料"],0,"","土耳其"],
+["大麦粥","中东菜","汤","素",7,["大麦", "水", "糖"],0,"","土耳其"],
+["扁豆汤（浓）","中东菜","汤","素",9,["扁豆", "蔬菜", "高汤"],0,"","土耳其"],
+["羊肉汤","中东菜","汤","荤",14,["羊肉", "羊骨", "羊油", "葱", "姜", "香料"],0,"","土耳其"],
 ["茄子炖羊肉","中东菜","菜","荤",24,["羊肉", "孜然", "洋葱", "盐"],0,"","土耳其"],
 ["番茄炖羊肉","中东菜","菜","荤",22,["羊肉", "孜然", "洋葱", "盐"],0,"","土耳其"],
 ["烤茄子酱","中东菜","小食","素",8,["茄子", "蒜", "酱油", "盐"],0,"","土耳其"],
@@ -1272,12 +1301,12 @@ const RAW=[
 ["牛肉沙威玛","中东菜","主食","荤",16,["牛肉", "酱油", "料酒", "葱"],0,"","以色列"],
 ["法拉费汉堡","中东菜","主食","素",10,["鹰嘴豆", "香菜", "孜然", "面粉"],0,"","黎巴嫩"],
 ["皮塔夹烤肉","中东菜","主食","荤",14,["肉类", "酱油", "料酒", "葱", "姜"],0,"","土耳其"],
-["库纳法（奶酪）","中东菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
-["巴克拉瓦（坚果）","中东菜","甜品","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
-["土耳其软糖（玫瑰）","中东菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
-["哈尔瓦（芝麻）","中东菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
-["米布丁（藏红花）","中东菜","甜品","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],0,"","伊朗"],
-["牛奶布丁（玫瑰）","中东菜","甜品","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],0,"","土耳其"],
+["库纳法（奶酪）","中东菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
+["巴克拉瓦（坚果）","中东菜","甜饮","素",13,["面粉", "鸡蛋", "糖", "奶油"],1,"","土耳其"],
+["土耳其软糖（玫瑰）","中东菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
+["哈尔瓦（芝麻）","中东菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","土耳其"],
+["米布丁（藏红花）","中东菜","甜饮","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],0,"","伊朗"],
+["牛奶布丁（玫瑰）","中东菜","甜饮","素",8,["牛奶", "鸡蛋", "糖", "吉利丁"],0,"","土耳其"],
 ["什锦烤肉拼盘","中东菜","菜","荤",32,["羊肉", "鸡肉", "蔬菜", "香料"],0,"","土耳其"],
 ["烤全羊（小）","中东菜","菜","荤",80,["羊肉", "孜然", "洋葱", "盐"],0,"","土耳其"],
 ["叙利亚 Shakshuka（蛋）","中东菜","菜","荤",16,["鸡蛋", "盐", "葱"],0,"","叙利亚"],
@@ -1295,25 +1324,25 @@ const RAW=[
 ["韩式煎饺","韩料","小食","荤",12,["饺子皮", "肉馅", "葱", "酱油"],0,"","韩国"],
 ["韩式蒸饺","韩料","小食","荤",12,["饺子皮", "肉馅", "葱", "酱油"],0,"","韩国"],
 ["辣白菜饺子","韩料","小食","荤",12,["饺子皮", "肉馅", "葱", "酱油"],0,"","韩国"],
-["韩式糖饼","韩料","甜品","素",8,["面粉", "黄油", "糖"],0,"","韩国"],
-["韩式鸡蛋糕","韩料","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"","韩国"],
-["韩式红豆粥","韩料","汤饮","素",8,["红豆", "大米", "糖"],0,"","韩国"],
-["韩式南瓜粥（甜）","韩料","汤饮","素",8,["南瓜", "大米", "水", "糖"],0,"","韩国"],
-["韩式雪浓汤（牛骨）","韩料","汤饮","荤",22,["牛肉", "牛骨", "葱", "姜", "香料"],0,"","韩国"],
-["韩式牛杂汤","韩料","汤饮","荤",18,["牛肉", "牛骨", "葱", "姜", "香料"],0,"","韩国"],
-["韩式海带汤","韩料","汤饮","素",10,["海带", "排骨", "姜", "蒜"],0,"","韩国"],
-["韩式大酱汤（海鲜）","韩料","汤饮","荤",14,["大酱", "豆腐", "西葫芦", "葱"],0,"","韩国"],
-["韩式辣豆腐汤（肉）","韩料","汤饮","荤",14,["豆腐", "虾仁", "葱", "香油"],0,"","韩国"],
+["韩式糖饼","韩料","甜饮","素",8,["面粉", "黄油", "糖"],0,"","韩国"],
+["韩式鸡蛋糕","韩料","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"","韩国"],
+["韩式红豆粥","韩料","汤","素",8,["红豆", "大米", "糖"],0,"","韩国"],
+["韩式南瓜粥（甜）","韩料","汤","素",8,["南瓜", "大米", "水", "糖"],0,"","韩国"],
+["韩式雪浓汤（牛骨）","韩料","汤","荤",22,["牛肉", "牛骨", "葱", "姜", "香料"],0,"","韩国"],
+["韩式牛杂汤","韩料","汤","荤",18,["牛肉", "牛骨", "葱", "姜", "香料"],0,"","韩国"],
+["韩式海带汤","韩料","汤","素",10,["海带", "排骨", "姜", "蒜"],0,"","韩国"],
+["韩式大酱汤（海鲜）","韩料","汤","荤",14,["大酱", "豆腐", "西葫芦", "葱"],0,"","韩国"],
+["韩式辣豆腐汤（肉）","韩料","汤","荤",14,["豆腐", "虾仁", "葱", "香油"],0,"","韩国"],
 ["韩式烤牛肠","韩料","菜","荤",22,["牛肉", "酱油", "料酒", "葱"],0,"","韩国"],
 ["韩式烤鱿鱼","韩料","菜","荤",24,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
 ["韩式烤虾","韩料","菜","荤",26,["虾仁", "蒜", "盐", "料酒"],0,"","韩国"],
 ["韩式烤鳗鱼","韩料","菜","荤",44,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
-["韩式人参鸡","韩料","汤饮","荤",28,["鸡肉", "鸡骨", "葱", "姜"],0,"","韩国"],
+["韩式人参鸡","韩料","汤","荤",28,["鸡肉", "鸡骨", "葱", "姜"],0,"","韩国"],
 ["韩式辣炖排骨","韩料","菜","荤",30,["肉类", "酱油", "料酒", "葱", "姜"],0,"","韩国"],
 ["韩式炒粉丝（肉）","韩料","菜","荤",13,["米粉", "汤", "香菜", "辣油"],0,"","韩国"],
 ["韩式杂菜（肉）","韩料","菜","荤",13,["时令蔬菜", "蒜", "盐", "油"],0,"","韩国"],
-["韩式米肠汤","韩料","汤饮","荤",14,["米肠", "内脏", "葱", "姜", "蒜"],0,"","韩国"],
-["韩式鱼饼汤（辣）","韩料","汤饮","荤",12,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
+["韩式米肠汤","韩料","汤","荤",14,["米肠", "内脏", "葱", "姜", "蒜"],0,"","韩国"],
+["韩式鱼饼汤（辣）","韩料","汤","荤",12,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
 ["韩式鸡蛋卷（芝士）","韩料","小食","荤",11,["鸡肉", "葱", "姜", "酱油"],0,"","韩国"],
 ["韩式土豆饼（海鲜）","韩料","小食","荤",9,["土豆", "油", "盐", "葱"],0,"","韩国"],
 ["韩式海鲜葱饼","韩料","主食","荤",14,["面粉", "油", "盐"],0,"","韩国"],
@@ -1328,8 +1357,8 @@ const RAW=[
 ["韩式小鱼饼","韩料","小食","荤",9,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
 ["韩式方便面","韩料","主食","素",7,["面条", "葱", "酱油", "油"],0,"","韩国"],
 ["韩式芝士方便面","韩料","主食","荤",9,["面条", "葱", "酱油", "油"],0,"","韩国"],
-["韩式部队锅（芝士）","韩料","汤饮","荤",30,["午餐肉", "芝士", "年糕", "泡菜", "拉面"],0,"","韩国"],
-["韩式米酒","韩料","汤饮","素",8,["基酒", "柠檬", "冰"],1,"","韩国"],
+["韩式部队锅（芝士）","韩料","汤","荤",30,["午餐肉", "芝士", "年糕", "泡菜", "拉面"],0,"","韩国"],
+["韩式米酒","韩料","甜饮","素",8,["基酒", "柠檬", "冰"],1,"","韩国"],
 ["日式亲子盖饭","日料","主食","荤",16,["大米", "配菜", "酱油", "油"],0,"","日本"],
 ["日式牛肉盖饭","日料","主食","荤",18,["牛肉", "酱油", "料酒", "葱"],0,"","日本"],
 ["日式猪排盖饭","日料","主食","荤",18,["猪肉", "酱油", "料酒", "葱"],0,"","日本"],
@@ -1347,30 +1376,30 @@ const RAW=[
 ["日式烤青花鱼","日料","菜","荤",18,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["日式盐烤青花鱼","日料","菜","荤",18,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["日式煮物","日料","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"","日本"],
-["日式关东煮（萝卜）","日料","汤饮","素",10,["萝卜", "排骨或牛骨", "姜", "盐"],0,"","日本"],
-["日式关东煮（蛋）","日料","汤饮","荤",12,["萝卜", "鱼丸", "海带", "魔芋", "高汤"],0,"","日本"],
-["日式味噌汤（豆腐）","日料","汤饮","素",6,["味噌", "豆腐", "海带", "葱"],0,"","日本"],
-["日式豚骨汤","日料","汤饮","荤",14,["排骨", "姜", "盐"],0,"","日本"],
-["日式抹茶拿铁（冰）","日料","汤饮","素",12,["咖啡豆", "水", "牛奶", "糖", "冰"],1,"","日本"],
-["日式焙茶拿铁（冰）","日料","汤饮","素",12,["咖啡豆", "水", "牛奶", "糖", "冰"],1,"","日本"],
-["日式草莓大福","日料","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["日式抹茶大福","日料","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","日本"],
-["日式白玉红豆汤","日料","甜品","素",7,["糯米", "糖", "配料"],1,"","日本"],
-["日式铜锣烧（抹茶）","日料","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","日本"],
-["日式鲷鱼烧（抹茶）","日料","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"","日本"],
-["日式羊羹（抹茶）","日料","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"","日本"],
-["日式蕨饼（黄豆粉）","日料","甜品","素",7,["面粉", "黄油", "糖"],0,"","日本"],
-["日式水信玄饼（樱花）","日料","甜品","素",8,["面粉", "黄油", "糖"],1,"","日本"],
+["日式关东煮（萝卜）","日料","汤","素",10,["萝卜", "排骨或牛骨", "姜", "盐"],0,"","日本"],
+["日式关东煮（蛋）","日料","汤","荤",12,["萝卜", "鱼丸", "海带", "魔芋", "高汤"],0,"","日本"],
+["日式味噌汤（豆腐）","日料","汤","素",6,["味噌", "豆腐", "海带", "葱"],0,"","日本"],
+["日式豚骨汤","日料","汤","荤",14,["排骨", "姜", "盐"],0,"","日本"],
+["日式抹茶拿铁（冰）","日料","甜饮","素",12,["咖啡豆", "水", "牛奶", "糖", "冰"],1,"","日本"],
+["日式焙茶拿铁（冰）","日料","甜饮","素",12,["咖啡豆", "水", "牛奶", "糖", "冰"],1,"","日本"],
+["日式草莓大福","日料","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["日式抹茶大福","日料","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","日本"],
+["日式白玉红豆汤","日料","甜饮","素",7,["糯米", "糖", "配料"],1,"","日本"],
+["日式铜锣烧（抹茶）","日料","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"","日本"],
+["日式鲷鱼烧（抹茶）","日料","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"","日本"],
+["日式羊羹（抹茶）","日料","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"","日本"],
+["日式蕨饼（黄豆粉）","日料","甜饮","素",7,["面粉", "黄油", "糖"],0,"","日本"],
+["日式水信玄饼（樱花）","日料","甜饮","素",8,["面粉", "黄油", "糖"],1,"","日本"],
 ["日式仙贝（酱油）","日料","小食","素",6,["糯米", "酱油", "海苔"],0,"","日本"],
 ["日式米果（海苔）","日料","小食","素",6,["大米", "酱油", "糖"],1,"","日本"],
-["日式茶碗蒸（蟹）","日料","汤饮","荤",14,["鸡蛋", "高汤", "虾仁", "香菇"],0,"","日本"],
+["日式茶碗蒸（蟹）","日料","汤","荤",14,["鸡蛋", "高汤", "虾仁", "香菇"],0,"","日本"],
 ["日式玉子烧（芝士）","日料","小食","荤",10,["芝士", "奶油", "面粉", "鸡蛋"],0,"","日本"],
 ["日式厚蛋烧（明太）","日料","小食","荤",10,["鸡蛋", "盐", "葱"],0,"","日本"],
 ["日式章鱼烧（芝士）","日料","小食","荤",12,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["日式大阪烧（海鲜）","日料","主食","荤",14,["面粉", "卷心菜", "鸡蛋", "酱"],0,"","日本"],
 ["日式御好烧（肉）","日料","主食","荤",14,["面粉", "卷心菜", "鸡蛋", "酱"],0,"","日本"],
-["日式寿喜锅（素）","日料","汤饮","素",24,["牛肉", "豆腐", "青菜", "洋葱", "酱油"],0,"","日本"],
-["日式涮锅（猪肉）","日料","汤饮","荤",28,["羊肉", "蔬菜", "蘸料", "高汤"],0,"","日本"],
+["日式寿喜锅（素）","日料","汤","素",24,["牛肉", "豆腐", "青菜", "洋葱", "酱油"],0,"","日本"],
+["日式涮锅（猪肉）","日料","汤","荤",28,["羊肉", "蔬菜", "蘸料", "高汤"],0,"","日本"],
 ["日式三文鱼刺身","日料","菜","荤",40,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["日式金枪鱼刺身","日料","菜","荤",46,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["日式北极贝刺身","日料","菜","荤",38,["鱼生", "芥末", "酱油", "白萝卜"],0,"","日本"],
@@ -1391,84 +1420,84 @@ const RAW=[
 ["日式饭团（梅子）","日料","主食","素",5,["大米", "配菜", "酱油", "油"],0,"","日本"],
 ["日式饭团（昆布）","日料","主食","素",5,["大米", "配菜", "酱油", "油"],0,"","日本"],
 ["日式鲑鱼饭团","日料","主食","荤",7,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
-["日式抹茶冰淇淋（白玉）","日料","甜品","素",11,["牛奶", "奶油", "糖"],1,"","日本"],
-["日式抹茶芭菲（红豆）","日料","甜品","素",13,["糯米", "糖", "配料"],1,"","日本"],
-["日式芝士蛋糕（草莓）","日料","甜品","素",14,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["日式舒芙蕾芝士（莓）","日料","甜品","素",15,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
-["淡奶芝士蛋糕","网红菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["奥利奥芝士","网红菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["海盐奶盖","网红菜","汤饮","素",13,["茶基底", "牛奶", "糖"],1,"",""],
-["咸蛋黄芋泥","网红菜","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["芝士爆浆","网红菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["爆浆珍珠","网红菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
-["巧克力熔岩","网红菜","甜品","素",12,["巧克力", "奶油", "糖"],1,"",""],
-["西瓜啵啵","网红菜","汤饮","素",14,["茶基底", "牛奶", "糖", "珍珠"],1,"",""],
-["青提多多","网红菜","汤饮","素",14,["青提", "绿茶", "糖", "冰"],0,"",""],
-["荔枝冰","网红菜","汤饮","素",12,["荔枝", "糖", "水", "冰"],1,"",""],
-["桂花酒酿圆子","网红菜","甜品","素",7,["糯米", "酒曲", "糖"],1,"",""],
+["日式抹茶冰淇淋（白玉）","日料","甜饮","素",11,["牛奶", "奶油", "糖"],1,"","日本"],
+["日式抹茶芭菲（红豆）","日料","甜饮","素",13,["糯米", "糖", "配料"],1,"","日本"],
+["日式芝士蛋糕（草莓）","日料","甜饮","素",14,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["日式舒芙蕾芝士（莓）","日料","甜饮","素",15,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["淡奶芝士蛋糕","网红菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["奥利奥芝士","网红菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["海盐奶盖","网红菜","甜饮","素",13,["茶基底", "牛奶", "糖"],1,"",""],
+["咸蛋黄芋泥","网红菜","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["芝士爆浆","网红菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["爆浆珍珠","网红菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],1,"",""],
+["巧克力熔岩","网红菜","甜饮","素",12,["巧克力", "奶油", "糖"],1,"",""],
+["西瓜啵啵","网红菜","甜饮","素",14,["茶基底", "牛奶", "糖", "珍珠"],1,"",""],
+["青提多多","网红菜","汤","素",14,["青提", "绿茶", "糖", "冰"],0,"",""],
+["荔枝冰","网红菜","甜饮","素",12,["荔枝", "糖", "水", "冰"],1,"",""],
+["桂花酒酿圆子","网红菜","甜饮","素",7,["糯米", "酒曲", "糖"],1,"",""],
 ["凉拌海带丝","网红菜","小食","素",6,["海带", "高汤", "酱油", "蒜"],0,"",""],
 ["麻辣鸡爪","网红菜","小食","荤",14,["鸡肉", "葱", "姜", "酱油"],0,"",""],
-["脆皮炸牛奶","网红菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["拔丝香蕉","网红菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["抹茶奶盖","网红菜","汤饮","素",13,["绿茶", "牛奶", "糖", "抹茶"],1,"",""],
-["黑糖波波","网红菜","汤饮","素",13,["茶基底", "牛奶", "糖", "珍珠", "黑糖"],1,"",""],
-["草莓波波","网红菜","汤饮","素",14,["茶基底", "牛奶", "糖", "珍珠", "草莓"],1,"",""],
-["芒果波波","网红菜","汤饮","素",14,["茶基底", "牛奶", "糖", "珍珠"],1,"",""],
-["葡萄柚波波","网红菜","汤饮","素",14,["茶基底", "牛奶", "糖", "珍珠", "葡萄"],1,"",""],
+["脆皮炸牛奶","网红菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["拔丝香蕉","网红菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["抹茶奶盖","网红菜","甜饮","素",13,["绿茶", "牛奶", "糖", "抹茶"],1,"",""],
+["黑糖波波","网红菜","甜饮","素",13,["茶基底", "牛奶", "糖", "珍珠", "黑糖"],1,"",""],
+["草莓波波","网红菜","甜饮","素",14,["茶基底", "牛奶", "糖", "珍珠", "草莓"],1,"",""],
+["芒果波波","网红菜","甜饮","素",14,["茶基底", "牛奶", "糖", "珍珠"],1,"",""],
+["葡萄柚波波","网红菜","甜饮","素",14,["茶基底", "牛奶", "糖", "珍珠", "葡萄"],1,"",""],
 ["芝士爆浆年糕","网红菜","小食","素",9,["年糕", "蔬菜", "酱油", "糖"],0,"",""],
-["咸蛋黄流心","网红菜","甜品","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
-["奥利奥奶盖","网红菜","汤饮","素",13,["茶基底", "牛奶", "糖", "奥利奥"],1,"",""],
+["咸蛋黄流心","网红菜","甜饮","素",11,["面粉", "鸡蛋", "糖", "奶油"],0,"",""],
+["奥利奥奶盖","网红菜","甜饮","素",13,["茶基底", "牛奶", "糖", "奥利奥"],1,"",""],
 ["越南烤肉粉","东南亚","主食","荤",13,["米粉", "汤", "香菜", "辣油"],0,"","越南"],
 ["越南猪排饭","东南亚","主食","荤",14,["猪肉", "酱油", "料酒", "葱"],0,"","越南"],
 ["新加坡福建面","东南亚","主食","荤",15,["面条", "葱", "酱油", "油"],0,"","新加坡"],
 ["马来西亚槟城虾面","东南亚","主食","荤",15,["虾仁", "蒜", "盐", "料酒"],0,"","马来西亚"],
 ["印尼加多加多","东南亚","菜","素",12,["蔬菜", "蒜", "盐", "油"],0,"","印尼"],
-["柬埔寨椰香糯米","东南亚","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["柬埔寨椰香糯米","东南亚","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
 ["越南米纸卷","东南亚","小食","素",10,["蔬菜", "蒜", "盐", "油"],0,"","越南"],
 ["泰式九层塔炒肉","东南亚","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"","泰国"],
-["菲律宾halo-halo","东南亚","甜品","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"","菲律宾"],
-["马来西亚煎蕊","东南亚","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","马来西亚"],
+["菲律宾halo-halo","东南亚","甜饮","素",10,["面粉", "鸡蛋", "糖", "奶油"],0,"","菲律宾"],
+["马来西亚煎蕊","东南亚","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"","马来西亚"],
 ["泰式罗勒炒鸡","东南亚","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"","泰国"],
 ["新加坡黑椒蟹","东南亚","菜","荤",58,["螃蟹", "姜", "醋", "葱"],0,"","新加坡"],
 ["越南烤肉丸","东南亚","小食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"","越南"],
-["缅甸椰糖糕","东南亚","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","马来西亚"],
-["泰式椰丝糕","东南亚","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
-["菲律宾芒果糯米饭","东南亚","甜品","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","菲律宾"],
+["缅甸椰糖糕","东南亚","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"","马来西亚"],
+["泰式椰丝糕","东南亚","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","泰国"],
+["菲律宾芒果糯米饭","东南亚","甜饮","素",12,["面粉", "鸡蛋", "糖", "奶油"],1,"","菲律宾"],
 ["越南腰果虾","东南亚","菜","荤",28,["虾仁", "蒜", "盐", "料酒"],1,"","越南"],
 ["泰式柠檬草烤鸡","东南亚","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],1,"","泰国"],
 ["老挝烤香肠","东南亚","小食","荤",14,["肉类", "酱油", "料酒", "葱", "姜"],0,"","泰国"],
 ["柬埔寨鱼饼","东南亚","小食","荤",12,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","泰国"],
 ["韩式辣炒明太鱼","韩料","菜","荤",22,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
-["韩式明太鱼汤","韩料","汤饮","荤",16,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
+["韩式明太鱼汤","韩料","汤","荤",16,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
 ["韩式辣炒安康鱼","韩料","菜","荤",26,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
 ["韩式炖牛尾","韩料","菜","荤",34,["牛肉", "酱油", "料酒", "葱"],0,"","韩国"],
-["韩式牛尾汤","韩料","汤饮","荤",22,["牛肉", "牛骨", "葱", "姜", "香料"],0,"","韩国"],
+["韩式牛尾汤","韩料","汤","荤",22,["牛肉", "牛骨", "葱", "姜", "香料"],0,"","韩国"],
 ["韩式辣炒章鱼","韩料","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
 ["韩式烤牛舌","韩料","菜","荤",44,["牛肉", "酱油", "料酒", "葱"],0,"","韩国"],
 ["韩式烤猪颈肉","韩料","菜","荤",24,["猪肉", "酱油", "料酒", "葱"],0,"","韩国"],
 ["韩式辣炒大肠","韩料","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"","韩国"],
-["韩式炖排骨汤","韩料","汤饮","荤",22,["排骨", "莲藕或玉米", "姜", "盐"],0,"","韩国"],
-["韩式鲍鱼粥","韩料","汤饮","荤",20,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
-["韩式海鲜粥","韩料","汤饮","荤",16,["海鲜", "葱", "姜"],0,"","韩国"],
-["韩式松茸汤","韩料","汤饮","素",18,["松茸", "鸡汤", "葱"],0,"","韩国"],
+["韩式炖排骨汤","韩料","汤","荤",22,["排骨", "莲藕或玉米", "姜", "盐"],0,"","韩国"],
+["韩式鲍鱼粥","韩料","汤","荤",20,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
+["韩式海鲜粥","韩料","汤","荤",16,["海鲜", "葱", "姜"],0,"","韩国"],
+["韩式松茸汤","韩料","汤","素",18,["松茸", "鸡汤", "葱"],0,"","韩国"],
 ["韩式野菜拌饭","韩料","主食","素",12,["大米", "配菜", "酱油", "油"],0,"","韩国"],
 ["韩式玉米芝士","韩料","小食","素",10,["芝士", "奶油", "面粉", "鸡蛋"],0,"","韩国"],
 ["韩式辣炒鱿鱼须","韩料","菜","荤",22,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
 ["韩式烤青花鱼","韩料","菜","荤",18,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","韩国"],
 ["韩式辣炒鸡丁","韩料","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"","韩国"],
-["韩式金枪鱼泡菜汤","韩料","汤饮","荤",14,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
+["韩式金枪鱼泡菜汤","韩料","汤","荤",14,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","韩国"],
 ["韩式土豆炖牛肉","韩料","菜","荤",22,["牛肉", "酱油", "料酒", "葱"],0,"","韩国"],
 ["日式散寿司","日料","主食","荤",24,["肉类", "酱油", "料酒", "葱", "姜"],0,"","日本"],
 ["日式手卷寿司","日料","主食","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"","日本"],
 ["日式稻荷寿司","日料","主食","素",12,["蔬菜", "蒜", "盐", "油"],0,"","日本"],
 ["日式茶泡饭","日料","主食","素",10,["茶叶", "水", "糖"],0,"","日本"],
-["日式亲子锅","日料","汤饮","荤",28,["鸡肉", "鸡蛋", "洋葱", "高汤"],0,"","日本"],
-["日式石狩锅","日料","汤饮","荤",30,["三文鱼", "豆腐", "蔬菜", "味噌", "高汤"],0,"","日本"],
+["日式亲子锅","日料","汤","荤",28,["鸡肉", "鸡蛋", "洋葱", "高汤"],0,"","日本"],
+["日式石狩锅","日料","汤","荤",30,["三文鱼", "豆腐", "蔬菜", "味噌", "高汤"],0,"","日本"],
 ["日式猪肉姜烧","日料","菜","荤",18,["猪肉", "酱油", "料酒", "葱"],0,"","日本"],
 ["日式牛肉薯煮","日料","菜","荤",20,["牛肉", "酱油", "料酒", "葱"],0,"","日本"],
 ["日式筑前煮","日料","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"","日本"],
-["日式红豆年糕汤","日料","汤饮","素",8,["红豆", "年糕", "糖"],0,"","日本"],
-["日式柚子大福","日料","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
+["日式红豆年糕汤","日料","汤","素",8,["红豆", "年糕", "糖"],0,"","日本"],
+["日式柚子大福","日料","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","日本"],
 ["日式金平牛蒡","日料","菜","素",9,["牛肉", "酱油", "料酒", "葱"],0,"","日本"],
 ["日式鳕鱼西京烧","日料","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","日本"],
 ["日式南蛮渍鸡","日料","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"","日本"],
@@ -1486,7 +1515,7 @@ const RAW=[
 ["土耳其pide","中东菜","主食","素",9,["蔬菜", "蒜", "盐", "油"],0,"","土耳其"],
 ["黎巴嫩烤肉卷","中东菜","主食","荤",16,["羊肉", "香料", "盐"],0,"","黎巴嫩"],
 ["阿拉伯抓饭","中东菜","主食","荤",16,["大米", "配菜", "酱油", "油"],1,"","阿拉伯"],
-["土耳其豆汤","中东菜","汤饮","素",9,["红扁豆", "洋葱", "胡萝卜", "香料"],0,"","土耳其"],
+["土耳其豆汤","中东菜","汤","素",9,["红扁豆", "洋葱", "胡萝卜", "香料"],0,"","土耳其"],
 ["伊朗茄子炖","中东菜","菜","素",11,["茄子", "蒜", "酱油", "盐"],0,"","伊朗"],
 ["埃及蚕豆","中东菜","小食","素",7,["蔬菜", "蒜", "盐", "油"],0,"","土耳其"],
 ["摩洛哥塔吉锅","中东菜","菜","荤",28,["肉类", "酱油", "料酒", "葱", "姜"],0,"","土耳其"],
@@ -1495,13 +1524,13 @@ const RAW=[
 ["黎巴嫩香草饭","中东菜","主食","素",11,["大米", "配菜", "酱油", "油"],0,"","黎巴嫩"],
 ["意式烤面包","欧洲菜","小食","素",8,["面条", "葱", "酱油", "油"],0,"","意大利"],
 ["德式猪肘","欧洲菜","菜","荤",38,["猪肉", "酱油", "料酒", "葱"],0,"","德国"],
-["比利时华夫饼","欧洲菜","甜品","素",10,["面粉", "黄油", "糖"],0,"","比利时"],
+["比利时华夫饼","欧洲菜","甜饮","素",10,["面粉", "黄油", "糖"],0,"","比利时"],
 ["荷兰煎饼","欧洲菜","主食","素",10,["面粉", "油", "盐"],0,"","荷兰"],
-["奥地利萨赫蛋糕","欧洲菜","甜品","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"","奥地利"],
+["奥地利萨赫蛋糕","欧洲菜","甜饮","素",14,["面粉", "鸡蛋", "糖", "奶油"],0,"","奥地利"],
 ["瑞典肉丸","欧洲菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"","北欧"],
 ["挪威三文鱼","欧洲菜","菜","荤",38,["鱼", "姜", "葱", "蒸鱼豉油"],0,"","北欧"],
 ["丹麦开放三明治","欧洲菜","主食","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"","北欧"],
-["芬兰三文鱼汤","欧洲菜","汤饮","荤",16,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","北欧"],
+["芬兰三文鱼汤","欧洲菜","汤","荤",16,["鱼", "豆腐", "葱", "姜", "香菜"],0,"","北欧"],
 ["古巴三明治","美洲菜","主食","荤",14,["肉类", "酱油", "料酒", "葱", "姜"],0,"","古巴"],
 ["牙买加烤鸡","美洲菜","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],0,"","牙买加"],
 ["美式烧烤排骨","美洲菜","菜","荤",26,["肉类", "酱油", "料酒", "葱", "姜"],0,"","美国"],
@@ -1511,7 +1540,7 @@ const RAW=[
 ["法式红酒炖鸡","欧洲菜","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],1,"","法国"],
 ["意式米兰烩牛膝","欧洲菜","菜","荤",40,["牛肉", "酱油", "料酒", "葱"],0,"","意大利"],
 ["德国猪手","欧洲菜","菜","荤",36,["猪肉", "酱油", "料酒", "葱"],0,"","德国"],
-["西班牙吉事果","欧洲菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","西班牙"],
+["西班牙吉事果","欧洲菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"","西班牙"],
 ["美式纽约客牛排","美洲菜","菜","荤",56,["牛肉", "酱油", "料酒", "葱"],1,"","美国"],
 ["水煮肉片","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],1,"川菜",""],
 ["酸菜鱼","中国菜","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],0,"川菜",""],
@@ -1527,7 +1556,7 @@ const RAW=[
 ["川味香肠","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"川菜",""],
 ["红油抄手","中国菜","主食","荤",10,["肉类", "酱油", "料酒", "葱", "姜"],0,"川菜",""],
 ["川味卤拼","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"川菜",""],
-["白果炖鸡","中国菜","汤饮","荤",22,["水", "糖", "风味配料"],1,"川菜",""],
+["白果炖鸡","中国菜","甜饮","荤",22,["水", "糖", "风味配料"],1,"川菜",""],
 ["竹笋烧牛肉","中国菜","菜","荤",28,["牛肉", "酱油", "料酒", "葱"],0,"川菜",""],
 ["魔芋烧鸭","中国菜","菜","荤",20,["鸭肉", "葱", "姜", "酱油"],0,"川菜",""],
 ["二姐兔丁","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"川菜",""],
@@ -1548,9 +1577,9 @@ const RAW=[
 ["藤椒鸡","中国菜","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],0,"川菜",""],
 ["泡椒牛蛙","中国菜","菜","荤",26,["牛肉", "酱油", "料酒", "葱"],0,"川菜",""],
 ["干锅鱿鱼","中国菜","菜","荤",24,["鱼", "姜", "葱", "蒸鱼豉油"],0,"川菜",""],
-["酸萝卜老鸭汤","中国菜","汤饮","荤",22,["萝卜", "排骨或牛骨", "姜", "盐"],0,"川菜",""],
-["蛋烘糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"川菜",""],
-["三大炮","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"川菜",""],
+["酸萝卜老鸭汤","中国菜","汤","荤",22,["萝卜", "排骨或牛骨", "姜", "盐"],0,"川菜",""],
+["蛋烘糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"川菜",""],
+["三大炮","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"川菜",""],
 ["甜水面","中国菜","主食","素",8,["面条", "葱", "酱油", "油"],1,"川菜",""],
 ["鸡丝凉面","中国菜","主食","素",8,["鸡肉", "葱", "姜", "酱油"],0,"川菜",""],
 ["叉烧包","中国菜","主食","荤",9,["面粉", "馅料", "酵母"],0,"粤菜",""],
@@ -1573,12 +1602,12 @@ const RAW=[
 ["萝卜糕","中国菜","主食","素",8,["蔬菜", "蒜", "盐", "油"],0,"粤菜",""],
 ["芋头糕","中国菜","主食","素",8,["芋头", "糖", "椰浆"],0,"粤菜",""],
 ["马拉糕","中国菜","主食","素",7,["蔬菜", "蒜", "盐", "油"],0,"粤菜",""],
-["伦教糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
-["椰汁马豆糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"粤菜",""],
-["腐乳饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"粤菜",""],
-["老婆饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"粤菜",""],
-["鸡仔饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"粤菜",""],
-["广式月饼","中国菜","甜品","素",10,["面粉", "黄油", "糖"],0,"粤菜",""],
+["伦教糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"粤菜",""],
+["椰汁马豆糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"粤菜",""],
+["腐乳饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"粤菜",""],
+["老婆饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"粤菜",""],
+["鸡仔饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"粤菜",""],
+["广式月饼","中国菜","甜饮","素",10,["面粉", "黄油", "糖"],0,"粤菜",""],
 ["叉烧酥","中国菜","主食","荤",10,["肉类", "酱油", "料酒", "葱", "姜"],0,"粤菜",""],
 ["陈皮鸭","中国菜","菜","荤",22,["鸭肉", "葱", "姜", "酱油"],0,"粤菜",""],
 ["白云猪手","中国菜","菜","荤",18,["猪肉", "酱油", "料酒", "葱"],0,"粤菜",""],
@@ -1587,7 +1616,7 @@ const RAW=[
 ["碟头饭","中国菜","主食","荤",14,["大米", "配菜", "酱油", "油"],0,"粤菜",""],
 ["港式菠萝油","中国菜","主食","荤",10,["菠菜", "蒜", "盐"],0,"粤菜",""],
 ["潮州鱼饺","中国菜","主食","荤",12,["鱼", "姜", "葱", "蒸鱼豉油"],0,"粤菜",""],
-["港式丝袜奶茶","中国菜","汤饮","素",12,["红茶", "牛奶", "糖"],1,"粤菜",""],
+["港式丝袜奶茶","中国菜","甜饮","素",12,["红茶", "牛奶", "糖"],1,"粤菜",""],
 ["永州喝螺","中国菜","小食","荤",14,["肉类", "酱油", "料酒", "葱", "姜"],0,"湘菜",""],
 ["湘潭水煮活鱼","中国菜","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],1,"湘菜",""],
 ["湘西土匪猪肝","中国菜","菜","荤",20,["猪肉", "酱油", "料酒", "葱"],0,"湘菜",""],
@@ -1598,7 +1627,7 @@ const RAW=[
 ["湘西酸汤鱼","中国菜","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],0,"湘菜",""],
 ["宁乡花猪肉","中国菜","菜","荤",22,["猪肉", "酱油", "料酒", "葱"],0,"湘菜",""],
 ["血粑鸭","中国菜","菜","荤",24,["鸭肉", "葱", "姜", "酱油"],0,"湘菜",""],
-["苗家酸汤","中国菜","汤饮","荤",18,["鱼", "番茄", "木姜子", "辣椒", "酸汤"],0,"湘菜",""],
+["苗家酸汤","中国菜","汤","荤",18,["鱼", "番茄", "木姜子", "辣椒", "酸汤"],0,"湘菜",""],
 ["擂辣椒皮蛋","中国菜","菜","素",8,["鸡蛋", "盐", "葱"],0,"湘菜",""],
 ["手撕包菜","中国菜","菜","素",8,["面粉", "馅料", "酵母"],0,"湘菜",""],
 ["干锅包菜","中国菜","菜","素",9,["面粉", "馅料", "酵母"],0,"湘菜",""],
@@ -1622,27 +1651,27 @@ const RAW=[
 ["油爆海螺","中国菜","菜","荤",34,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["酥锅","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["博山豆腐箱","中国菜","菜","荤",16,["豆腐", "葱", "酱油", "盐"],0,"鲁菜",""],
-["奶汤鲫鱼","中国菜","汤饮","荤",20,["鱼", "豆腐", "葱", "姜", "香菜"],0,"鲁菜",""],
+["奶汤鲫鱼","中国菜","汤","荤",20,["鱼", "豆腐", "葱", "姜", "香菜"],0,"鲁菜",""],
 ["软炸里脊","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["山东丸子","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["胶东大饽饽","中国菜","主食","素",6,["蔬菜", "蒜", "盐", "油"],0,"鲁菜",""],
 ["潍坊朝天锅","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["菏泽烧饼","中国菜","主食","素",5,["面粉", "油", "盐"],0,"鲁菜",""],
-["临沂糁汤","中国菜","汤饮","荤",12,["鸡肉", "麦仁", "胡椒", "葱", "姜"],0,"鲁菜",""],
-["单县羊肉汤","中国菜","汤饮","荤",16,["羊肉", "羊骨", "羊油", "葱", "姜", "香料"],0,"鲁菜",""],
+["临沂糁汤","中国菜","汤","荤",12,["鸡肉", "麦仁", "胡椒", "葱", "姜"],0,"鲁菜",""],
+["单县羊肉汤","中国菜","汤","荤",16,["羊肉", "羊骨", "羊油", "葱", "姜", "香料"],0,"鲁菜",""],
 ["枣庄辣子鸡","中国菜","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],0,"鲁菜",""],
 ["莱芜烧饼","中国菜","主食","素",5,["面粉", "油", "盐"],0,"鲁菜",""],
-["泰山三美","中国菜","汤饮","素",10,["白菜", "豆腐", "水"],0,"鲁菜",""],
+["泰山三美","中国菜","汤","素",10,["白菜", "豆腐", "水"],0,"鲁菜",""],
 ["孔府一品锅","中国菜","菜","荤",28,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["红烧肘子","中国菜","菜","荤",24,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["酱爆肉丁","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["爆三样","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"鲁菜",""],
 ["鲅鱼水饺","中国菜","主食","荤",14,["鱼", "姜", "葱", "蒸鱼豉油"],1,"鲁菜",""],
-["海鲜疙瘩汤","中国菜","汤饮","荤",14,["海鲜", "葱", "姜"],0,"鲁菜",""],
+["海鲜疙瘩汤","中国菜","汤","荤",14,["海鲜", "葱", "姜"],0,"鲁菜",""],
 ["海肠炒韭菜","中国菜","菜","荤",30,["时令蔬菜", "蒜", "盐", "油"],0,"鲁菜",""],
 ["葱油海蜇","中国菜","菜","素",12,["蔬菜", "蒜", "盐", "油"],0,"鲁菜",""],
-["济南甜沫","中国菜","汤饮","素",6,["小米", "花生", "豆腐皮", "青菜", "香料"],0,"鲁菜",""],
-["德州羊肠汤","中国菜","汤饮","荤",12,["羊肉", "羊骨", "葱", "姜", "香料"],0,"鲁菜",""],
+["济南甜沫","中国菜","汤","素",6,["小米", "花生", "豆腐皮", "青菜", "香料"],0,"鲁菜",""],
+["德州羊肠汤","中国菜","汤","荤",12,["羊肉", "羊骨", "葱", "姜", "香料"],0,"鲁菜",""],
 ["清蒸大闸蟹","中国菜","菜","荤",48,["螃蟹", "姜", "醋", "葱"],0,"苏菜",""],
 ["蟹粉豆腐","中国菜","菜","荤",22,["螃蟹", "姜", "醋", "葱"],0,"苏菜",""],
 ["无锡酱排骨","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"苏菜",""],
@@ -1665,8 +1694,8 @@ const RAW=[
 ["葱烤鲫鱼","中国菜","菜","荤",18,["鱼", "姜", "葱", "蒸鱼豉油"],0,"本帮菜",""],
 ["两面黄","中国菜","主食","素",12,["面条", "葱", "酱油", "油"],0,"本帮菜",""],
 ["雪菜肉丝面","中国菜","主食","荤",10,["面条", "葱", "酱油", "油"],0,"本帮菜",""],
-["常州大麻糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"苏菜",""],
-["南通脆饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"苏菜",""],
+["常州大麻糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"苏菜",""],
+["南通脆饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"苏菜",""],
 ["泰州干丝","中国菜","菜","素",14,["蔬菜", "蒜", "盐", "油"],0,"苏菜",""],
 ["蟹黄汤包","中国菜","主食","荤",16,["螃蟹", "姜", "醋", "葱"],0,"苏菜",""],
 ["文楼汤包","中国菜","主食","荤",16,["高汤", "盐", "葱", "姜"],0,"苏菜",""],
@@ -1688,29 +1717,29 @@ const RAW=[
 ["糟鱼","中国菜","菜","荤",22,["鱼", "姜", "葱", "蒸鱼豉油"],0,"浙菜",""],
 ["酱萝卜","中国菜","小食","素",6,["蔬菜", "蒜", "盐", "油"],0,"浙菜",""],
 ["万年青","中国菜","小食","素",6,["蔬菜", "蒜", "盐", "油"],0,"浙菜",""],
-["吴山酥油饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"浙菜",""],
+["吴山酥油饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"浙菜",""],
 ["葱包桧","中国菜","主食","素",6,["面粉", "馅料", "酵母"],0,"浙菜",""],
-["条头糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
-["薄荷糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"浙菜",""],
-["麻糍","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
-["奉化千层饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"浙菜",""],
-["绍兴香糕","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
+["条头糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
+["薄荷糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"浙菜",""],
+["麻糍","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
+["奉化千层饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"浙菜",""],
+["绍兴香糕","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
 ["嘉兴粽子","中国菜","主食","荤",10,["肉类", "酱油", "料酒", "葱", "姜"],0,"浙菜",""],
 ["湖州千张包子","中国菜","主食","荤",12,["面粉", "馅料", "酵母"],0,"浙菜",""],
 ["缙云烧饼","中国菜","主食","素",6,["面粉", "油", "盐"],0,"浙菜",""],
 ["温州瘦肉丸","中国菜","小食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"浙菜",""],
 ["绍兴霉干菜","中国菜","菜","素",8,["时令蔬菜", "蒜", "盐", "油"],0,"浙菜",""],
-["西湖藕粉","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
-["龙井茶点","中国菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
+["西湖藕粉","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
+["龙井茶点","中国菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"浙菜",""],
 ["淡糟香螺片","中国菜","菜","荤",30,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
 ["爆糟排骨","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
 ["醉排骨","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
 ["南煎肝","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
-["鸡汤汆海蚌","中国菜","汤饮","荤",30,["鸡肉", "鸡骨", "葱", "姜"],0,"闽菜",""],
+["鸡汤汆海蚌","中国菜","汤","荤",30,["鸡肉", "鸡骨", "葱", "姜"],0,"闽菜",""],
 ["半月沉江","中国菜","菜","素",14,["蔬菜", "蒜", "盐", "油"],0,"闽菜",""],
 ["七星鱼丸","中国菜","主食","荤",14,["鱼", "姜", "葱", "蒸鱼豉油"],0,"闽菜",""],
 ["厦门海蛎面线","中国菜","主食","荤",12,["面条", "葱", "酱油", "油"],0,"闽菜",""],
-["泉州面线糊","中国菜","汤饮","荤",10,["线面", "葱", "姜", "虾皮", "油条"],0,"闽菜",""],
+["泉州面线糊","中国菜","汤","荤",10,["线面", "葱", "姜", "虾皮", "油条"],0,"闽菜",""],
 ["莆田卤面","中国菜","主食","荤",14,["面条", "葱", "酱油", "油"],0,"闽菜",""],
 ["漳州卤面","中国菜","主食","荤",14,["面条", "葱", "酱油", "油"],0,"闽菜",""],
 ["汀州豆腐干","中国菜","菜","荤",12,["豆腐", "葱", "酱油", "盐"],0,"闽菜",""],
@@ -1719,13 +1748,13 @@ const RAW=[
 ["红糟鳗鱼","中国菜","菜","荤",28,["鱼", "姜", "葱", "蒸鱼豉油"],0,"闽菜",""],
 ["福州肉松","中国菜","小食","荤",14,["肉类", "酱油", "料酒", "葱", "姜"],0,"闽菜",""],
 ["厦门薄饼","中国菜","主食","素",10,["面粉", "油", "盐"],0,"闽菜",""],
-["芋果","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"闽菜",""],
+["芋果","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"闽菜",""],
 ["福清光饼","中国菜","主食","素",6,["面粉", "油", "盐"],0,"闽菜",""],
 ["葱肉饼","中国菜","主食","荤",10,["面粉", "油", "盐"],0,"闽菜",""],
 ["徽州刀板香","中国菜","菜","荤",26,["肉类", "酱油", "料酒", "葱", "姜"],0,"徽菜",""],
 ["徽州蒸鸡","中国菜","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"徽菜",""],
 ["方腊鱼","中国菜","菜","荤",26,["鱼", "姜", "葱", "蒸鱼豉油"],0,"徽菜",""],
-["徽州圆子","中国菜","甜品","素",10,["糯米", "酒曲", "糖"],0,"徽菜",""],
+["徽州圆子","中国菜","甜饮","素",10,["糯米", "酒曲", "糖"],0,"徽菜",""],
 ["炸斑鸠","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"徽菜",""],
 ["徽式炒面","中国菜","主食","素",10,["面条", "葱", "酱油", "油"],0,"徽菜",""],
 ["绩溪菜糕","中国菜","主食","素",7,["时令蔬菜", "蒜", "盐", "油"],0,"徽菜",""],
@@ -1737,31 +1766,31 @@ const RAW=[
 ["徽州炒粉丝","中国菜","主食","素",9,["米粉", "汤", "香菜", "辣油"],0,"徽菜",""],
 ["徽州毛峰熏鱼","中国菜","菜","荤",22,["鱼", "姜", "葱", "蒸鱼豉油"],0,"徽菜",""],
 ["胡适家乡菜","中国菜","菜","荤",18,["时令蔬菜", "蒜", "盐", "油"],0,"徽菜",""],
-["歙县豆腐脑","中国菜","汤饮","素",6,["豆腐", "葱花", "香油"],0,"徽菜",""],
-["祁门冻米糖","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"徽菜",""],
-["徽州顶市酥","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"徽菜",""],
+["歙县豆腐脑","中国菜","汤","素",6,["豆腐", "葱花", "香油"],0,"徽菜",""],
+["祁门冻米糖","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"徽菜",""],
+["徽州顶市酥","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"徽菜",""],
 ["北京涮羊肉","中国菜","菜","荤",38,["羊肉", "孜然", "洋葱", "盐"],0,"京菜",""],
 ["炙子烤肉","中国菜","菜","荤",36,["肉类", "酱油", "料酒", "葱", "姜"],0,"京菜",""],
 ["炸灌肠","中国菜","小食","素",6,["蔬菜", "蒜", "盐", "油"],0,"京菜",""],
-["炒红果","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"京菜",""],
-["杏仁豆腐","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
-["芸豆卷","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
-["糖卷果","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"京菜",""],
-["奶油炸糕","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
-["宫廷奶酪","中国菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["炒红果","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"京菜",""],
+["杏仁豆腐","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["芸豆卷","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["糖卷果","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"京菜",""],
+["奶油炸糕","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["宫廷奶酪","中国菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
 ["肉末烧饼","中国菜","主食","素",7,["面粉", "油", "盐"],0,"京菜",""],
 ["北京烧饼","中国菜","主食","素",5,["面粉", "油", "盐"],0,"京菜",""],
-["羊蝎子火锅","中国菜","汤饮","荤",26,["羊肉", "羊骨", "葱", "姜", "香料"],0,"京菜",""],
+["羊蝎子火锅","中国菜","汤","荤",26,["羊肉", "羊骨", "葱", "姜", "香料"],0,"京菜",""],
 ["炒麻豆腐","中国菜","菜","素",8,["豆腐", "葱", "酱油", "盐"],0,"京菜",""],
 ["北京糖火烧","中国菜","主食","素",6,["蔬菜", "蒜", "盐", "油"],0,"京菜",""],
 ["螺丝转","中国菜","主食","素",6,["蔬菜", "蒜", "盐", "油"],0,"京菜",""],
 ["墩饽饽","中国菜","主食","素",6,["蔬菜", "蒜", "盐", "油"],0,"京菜",""],
-["蜜麻花","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
-["萨其马","中国菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["蜜麻花","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
+["萨其马","中国菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"京菜",""],
 ["白水羊头","中国菜","菜","荤",22,["羊肉", "孜然", "洋葱", "盐"],1,"京菜",""],
 ["锅塌豆腐","中国菜","菜","素",12,["豆腐", "葱", "酱油", "盐"],0,"京菜",""],
 ["北京酱肘子","中国菜","菜","荤",24,["肉类", "酱油", "料酒", "葱", "姜"],0,"京菜",""],
-["老北京酸奶","中国菜","汤饮","素",8,["牛奶", "发酵菌", "糖", "水果"],1,"京菜",""],
+["老北京酸奶","中国菜","甜饮","素",8,["牛奶", "发酵菌", "糖", "水果"],1,"京菜",""],
 ["宫廷御膳","中国菜","菜","荤",30,["肉类", "酱油", "料酒", "葱", "姜"],0,"京菜",""],
 ["北京爆肚","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"京菜",""],
 ["东北乱炖","中国菜","菜","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"东北菜",""],
@@ -1806,7 +1835,7 @@ const RAW=[
 ["青海酿皮","中国菜","小食","素",7,["蔬菜", "蒜", "盐", "油"],0,"西北菜",""],
 ["甘肃炒面片","中国菜","主食","荤",12,["面条", "葱", "酱油", "油"],0,"西北菜",""],
 ["陇东饸饹","中国菜","主食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"西北菜",""],
-["羊肉粉汤","中国菜","汤饮","荤",14,["羊肉", "羊骨", "葱", "姜", "香料"],0,"西北菜",""],
+["羊肉粉汤","中国菜","汤","荤",14,["羊肉", "羊骨", "葱", "姜", "香料"],0,"西北菜",""],
 ["粉汤饺子","中国菜","主食","荤",12,["米粉", "汤", "香菜", "辣油"],0,"西北菜",""],
 ["陕北羊肉面","中国菜","主食","荤",12,["羊肉", "孜然", "洋葱", "盐"],0,"西北菜",""],
 ["油泼扯面","中国菜","主食","素",10,["面条", "葱", "酱油", "油"],0,"西北菜",""],
@@ -1820,7 +1849,7 @@ const RAW=[
 ["固原馓饭","中国菜","主食","素",8,["大米", "配菜", "酱油", "油"],0,"西北菜",""],
 ["陕西蒸碗","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"西北菜",""],
 ["陕北黄米馍","中国菜","主食","素",7,["蔬菜", "蒜", "盐", "油"],0,"西北菜",""],
-["青海老酸奶","中国菜","汤饮","素",7,["牛奶", "发酵菌", "糖", "水果"],1,"西北菜",""],
+["青海老酸奶","中国菜","甜饮","素",7,["牛奶", "发酵菌", "糖", "水果"],1,"西北菜",""],
 ["甘肃洋芋","中国菜","菜","素",8,["芋头", "糖", "椰浆"],0,"西北菜",""],
 ["陕北油馍","中国菜","主食","素",6,["蔬菜", "蒜", "盐", "油"],0,"西北菜",""],
 ["宁夏馓子","中国菜","小食","素",6,["蔬菜", "蒜", "盐", "油"],0,"西北菜",""],
@@ -1858,9 +1887,9 @@ const RAW=[
 ["炒烤肉","中国菜","菜","荤",26,["肉类", "酱油", "料酒", "葱", "姜"],0,"新疆菜",""],
 ["架子肉","中国菜","菜","荤",32,["肉类", "酱油", "料酒", "葱", "姜"],0,"新疆菜",""],
 ["红柳烤肉","中国菜","小食","荤",16,["肉类", "酱油", "料酒", "葱", "姜"],0,"新疆菜",""],
-["酸奶疙瘩","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"新疆菜",""],
-["奶啤","中国菜","汤饮","素",8,["牛奶", "啤酒花", "水"],0,"新疆菜",""],
-["卡瓦斯","中国菜","汤饮","素",8,["面包", "水", "糖"],0,"新疆菜",""],
+["酸奶疙瘩","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],1,"新疆菜",""],
+["奶啤","中国菜","汤","素",8,["牛奶", "啤酒花", "水"],0,"新疆菜",""],
+["卡瓦斯","中国菜","汤","素",8,["面包", "水", "糖"],0,"新疆菜",""],
 ["新疆烤鱼","中国菜","菜","荤",30,["鱼", "姜", "葱", "蒸鱼豉油"],0,"新疆菜",""],
 ["伊犁马肠","中国菜","菜","荤",24,["肉类", "酱油", "料酒", "葱", "姜"],0,"新疆菜",""],
 ["风干牛肉","中国菜","菜","荤",30,["牛肉", "酱油", "料酒", "葱"],0,"新疆菜",""],
@@ -1870,43 +1899,43 @@ const RAW=[
 ["新疆油馕","中国菜","主食","素",5,["面粉", "酵母", "盐", "芝麻"],0,"新疆菜",""],
 ["烤南瓜","中国菜","菜","素",8,["南瓜", "黄油", "盐"],0,"新疆菜",""],
 ["新疆大盘鱼","中国菜","菜","荤",30,["鱼", "姜", "葱", "蒸鱼豉油"],0,"新疆菜",""],
-["哈密瓜","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"新疆菜",""],
+["哈密瓜","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"新疆菜",""],
 ["新疆馕包肉","中国菜","菜","荤",26,["面粉", "馅料", "酵母"],0,"新疆菜",""],
 ["新疆炒面片","中国菜","主食","荤",13,["面条", "葱", "酱油", "油"],0,"新疆菜",""],
-["巴哈利","中国菜","甜品","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"新疆菜",""],
+["巴哈利","中国菜","甜饮","素",9,["面粉", "鸡蛋", "糖", "奶油"],0,"新疆菜",""],
 ["沙道观杜家鸡","中国菜","菜","荤",22,["鸡肉", "葱", "姜", "酱油"],0,"湖北菜",""],
 ["洪湖莲藕","中国菜","菜","素",12,["莲藕", "糖", "醋", "盐"],0,"湖北菜",""],
-["孝感米酒","中国菜","汤饮","素",8,["基酒", "柠檬", "冰"],1,"湖北菜",""],
+["孝感米酒","中国菜","甜饮","素",8,["基酒", "柠檬", "冰"],1,"湖北菜",""],
 ["麻城肉糕","中国菜","菜","荤",18,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["钟祥蟠龙菜","中国菜","菜","荤",22,["时令蔬菜", "蒜", "盐", "油"],0,"湖北菜",""],
 ["公安锅盔","中国菜","主食","素",6,["蔬菜", "蒜", "盐", "油"],0,"湖北菜",""],
-["黄石港饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"湖北菜",""],
-["咸宁桂花糕","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
+["黄石港饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"湖北菜",""],
+["咸宁桂花糕","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
 ["宜昌萝卜饺子","中国菜","主食","荤",10,["饺子皮", "肉馅", "葱", "酱油"],0,"湖北菜",""],
 ["襄阳缠蹄","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
-["鄂州东坡饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"湖北菜",""],
+["鄂州东坡饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"湖北菜",""],
 ["黄州烧梅","中国菜","主食","荤",10,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["恩施油香儿","中国菜","小食","素",7,["蔬菜", "蒜", "盐", "油"],0,"湖北菜",""],
 ["土家酱香饼","中国菜","主食","素",6,["面粉", "油", "盐"],0,"湖北菜",""],
-["秭归脐橙","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"湖北菜",""],
+["秭归脐橙","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"湖北菜",""],
 ["房县小花菇","中国菜","菜","素",14,["蘑菇", "蒜", "盐", "油"],0,"湖北菜",""],
 ["潜江鸡爪","中国菜","小食","荤",14,["鸡肉", "葱", "姜", "酱油"],0,"湖北菜",""],
-["荆门雪枣","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
+["荆门雪枣","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
 ["黄陂豆丝","中国菜","主食","素",8,["蔬菜", "蒜", "盐", "油"],0,"湖北菜",""],
 ["通城拍打","中国菜","小食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["罗田吊锅","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["英山茶叶蛋","中国菜","小食","荤",6,["鸡蛋", "盐", "葱"],0,"湖北菜",""],
-["十堰郧阳三合汤","中国菜","汤饮","荤",14,["牛肉", "饺子", "粉丝", "胡椒", "高汤"],0,"湖北菜",""],
-["随州蜜枣","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
+["十堰郧阳三合汤","中国菜","汤","荤",14,["牛肉", "饺子", "粉丝", "胡椒", "高汤"],0,"湖北菜",""],
+["随州蜜枣","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
 ["天门蒸菜","中国菜","菜","素",12,["时令蔬菜", "蒜", "盐", "油"],0,"湖北菜",""],
-["孝感麻糖","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
+["孝感麻糖","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
 ["武汉汤包","中国菜","主食","荤",12,["高汤", "盐", "葱", "姜"],0,"湖北菜",""],
-["黄石藕粉","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
+["黄石藕粉","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"湖北菜",""],
 ["宜昌红油小面","中国菜","主食","荤",9,["面条", "葱", "酱油", "油"],0,"湖北菜",""],
 ["湖北过早","中国菜","主食","荤",10,["肉类", "酱油", "料酒", "葱", "姜"],0,"湖北菜",""],
 ["萍乡烟熏肉","中国菜","菜","荤",20,["肉类", "酱油", "料酒", "葱", "姜"],0,"赣菜",""],
 ["婺源糊菜","中国菜","菜","素",9,["时令蔬菜", "蒜", "盐", "油"],0,"赣菜",""],
-["上饶鸡汤","中国菜","汤饮","荤",16,["鸡肉", "鸡骨", "葱", "姜"],0,"赣菜",""],
+["上饶鸡汤","中国菜","汤","荤",16,["鸡肉", "鸡骨", "葱", "姜"],0,"赣菜",""],
 ["鹰潭天师板栗","中国菜","菜","素",10,["栗子", "糖", "油"],0,"赣菜",""],
 ["抚州临川牛杂","中国菜","菜","荤",18,["牛肉", "酱油", "料酒", "葱"],0,"赣菜",""],
 ["吉安狗肉","中国菜","菜","荤",26,["肉类", "酱油", "料酒", "葱", "姜"],0,"赣菜",""],
@@ -1917,13 +1946,13 @@ const RAW=[
 ["宜春扎粉","中国菜","主食","荤",9,["米粉", "汤", "香菜", "辣油"],0,"赣菜",""],
 ["新余麻辣鸭","中国菜","菜","荤",20,["鸭肉", "葱", "姜", "酱油"],0,"赣菜",""],
 ["赣味烧鹅","中国菜","菜","荤",28,["肉类", "酱油", "料酒", "葱", "姜"],0,"赣菜",""],
-["南昌白糖糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"赣菜",""],
-["赣南脐橙","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"赣菜",""],
+["南昌白糖糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"赣菜",""],
+["赣南脐橙","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"赣菜",""],
 ["井冈山竹笋","中国菜","菜","素",10,["笋", "肉", "酱油", "盐"],0,"赣菜",""],
 ["赣州月亮巴","中国菜","小食","素",7,["蔬菜", "蒜", "盐", "油"],0,"赣菜",""],
 ["抚州麻鸡","中国菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"赣菜",""],
-["吉安薄酥饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"赣菜",""],
-["九江酥饼","中国菜","甜品","素",7,["面粉", "黄油", "糖"],0,"赣菜",""],
+["吉安薄酥饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"赣菜",""],
+["九江酥饼","中国菜","甜饮","素",7,["面粉", "黄油", "糖"],0,"赣菜",""],
 ["洛阳水席","中国菜","菜","荤",24,["肉类", "酱油", "料酒", "葱", "姜"],1,"豫菜",""],
 ["鲤鱼焙面","中国菜","菜","荤",30,["鱼", "姜", "葱", "蒸鱼豉油"],0,"豫菜",""],
 ["炸八块","中国菜","菜","荤",22,["肉类", "酱油", "料酒", "葱", "姜"],0,"豫菜",""],
@@ -1932,25 +1961,25 @@ const RAW=[
 ["杞县酱萝卜","中国菜","小食","素",6,["蔬菜", "蒜", "盐", "油"],0,"豫菜",""],
 ["汝州粉皮","中国菜","菜","素",8,["米粉", "汤", "香菜", "辣油"],0,"豫菜",""],
 ["驻马店鸡肉丸","中国菜","菜","荤",14,["鸡肉", "葱", "姜", "酱油"],0,"豫菜",""],
-["安阳扁粉菜","中国菜","汤饮","荤",12,["粉条", "豆腐", "青菜", "高汤"],0,"豫菜",""],
+["安阳扁粉菜","中国菜","汤","荤",12,["粉条", "豆腐", "青菜", "高汤"],0,"豫菜",""],
 ["濮阳壮馍","中国菜","主食","荤",10,["肉类", "酱油", "料酒", "葱", "姜"],0,"豫菜",""],
 ["南阳板面","中国菜","主食","荤",12,["面条", "葱", "酱油", "油"],0,"豫菜",""],
-["信阳毛尖","中国菜","汤饮","素",8,["茶叶", "水"],0,"豫菜",""],
-["商丘水激馍","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"豫菜",""],
+["信阳毛尖","中国菜","汤","素",8,["茶叶", "水"],0,"豫菜",""],
+["商丘水激馍","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],1,"豫菜",""],
 ["焦作怀府山药","中国菜","菜","素",10,["山药", "糖", "桂花"],0,"豫菜",""],
 ["三门峡大刀面","中国菜","主食","素",9,["面条", "葱", "酱油", "油"],0,"豫菜",""],
 ["许昌腐竹","中国菜","菜","素",9,["蔬菜", "蒜", "盐", "油"],0,"豫菜",""],
 ["漯河麻鸡","中国菜","菜","荤",18,["鸡肉", "葱", "姜", "酱油"],0,"豫菜",""],
 ["新乡红焖羊肉","中国菜","菜","荤",26,["羊肉", "孜然", "洋葱", "盐"],0,"豫菜",""],
 ["鹤壁浚县子馍","中国菜","主食","素",7,["蔬菜", "蒜", "盐", "油"],0,"豫菜",""],
-["洛阳不翻汤","中国菜","汤饮","素",8,["丸子", "豆腐", "粉丝", "胡椒", "高汤"],0,"豫菜",""],
+["洛阳不翻汤","中国菜","汤","素",8,["丸子", "豆腐", "粉丝", "胡椒", "高汤"],0,"豫菜",""],
 ["开封炒凉粉","中国菜","小食","素",7,["米粉", "汤", "香菜", "辣油"],0,"豫菜",""],
 ["南阳黄牛肉","中国菜","菜","荤",28,["牛肉", "酱油", "料酒", "葱"],0,"豫菜",""],
 ["信阳焖菜","中国菜","菜","荤",18,["时令蔬菜", "蒜", "盐", "油"],0,"豫菜",""],
 ["周口邓城猪蹄","中国菜","菜","荤",22,["猪肉", "酱油", "料酒", "葱"],0,"豫菜",""],
 ["平顶山郏县饸饹面","中国菜","主食","荤",12,["面条", "葱", "酱油", "油"],0,"豫菜",""],
-["熟梨糕","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
-["杨村糕干","中国菜","甜品","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
+["熟梨糕","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
+["杨村糕干","中国菜","甜饮","素",6,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
 ["唐山棋子烧饼","中国菜","主食","素",6,["面粉", "油", "盐"],0,"津冀菜",""],
 ["石家庄缸炉烧饼","中国菜","主食","素",6,["面粉", "油", "盐"],0,"津冀菜",""],
 ["白洋淀全鱼宴","中国菜","菜","荤",32,["鱼", "姜", "葱", "蒸鱼豉油"],0,"津冀菜",""],
@@ -1958,35 +1987,35 @@ const RAW=[
 ["张家口莜面","中国菜","主食","素",8,["面条", "葱", "酱油", "油"],0,"津冀菜",""],
 ["河北烧饼","中国菜","主食","素",5,["面粉", "油", "盐"],0,"津冀菜",""],
 ["沧州火锅鸡","中国菜","菜","荤",26,["鸡肉", "葱", "姜", "酱油"],0,"津冀菜",""],
-["衡水老白干","中国菜","汤饮","素",10,["高粱", "水"],1,"津冀菜",""],
+["衡水老白干","中国菜","甜饮","素",10,["高粱", "水"],1,"津冀菜",""],
 ["秦皇岛海鲜","中国菜","菜","荤",30,["肉类", "酱油", "料酒", "葱", "姜"],0,"津冀菜",""],
 ["廊坊香河肉饼","中国菜","主食","荤",12,["面粉", "油", "盐"],0,"津冀菜",""],
 ["邢台焖饼","中国菜","主食","荤",10,["面粉", "油", "盐"],0,"津冀菜",""],
-["邯郸豆沫","中国菜","汤饮","素",6,["小米", "黄豆", "花生", "青菜", "香菜"],0,"津冀菜",""],
-["唐山蜂蜜麻糖","中国菜","甜品","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
+["邯郸豆沫","中国菜","汤","素",6,["小米", "黄豆", "花生", "青菜", "香菜"],0,"津冀菜",""],
+["唐山蜂蜜麻糖","中国菜","甜饮","素",7,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
 ["石家庄回民扒鸡","中国菜","菜","荤",20,["鸡肉", "葱", "姜", "酱油"],0,"津冀菜",""],
 ["张家口坝上莜面","中国菜","主食","素",8,["面条", "葱", "酱油", "油"],0,"津冀菜",""],
 ["保定槐茂酱菜","中国菜","小食","素",7,["时令蔬菜", "蒜", "盐", "油"],0,"津冀菜",""],
-["沧州金丝小枣","中国菜","甜品","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
+["沧州金丝小枣","中国菜","甜饮","素",8,["面粉", "鸡蛋", "糖", "奶油"],0,"津冀菜",""],
 ["邯郸驴肉香肠","中国菜","小食","荤",12,["肉类", "酱油", "料酒", "葱", "姜"],0,"津冀菜",""],
 ["培根蛋面","欧洲菜","主食","荤",18,["意面", "蛋黄", "培根", "黑胡椒", "芝士"],0,"","意大利"],
-["卡布奇诺","欧洲菜","汤饮","素",15,["浓缩咖啡", "牛奶", "奶泡"],0,"","意大利"],
-["阿芙佳朵","欧洲菜","甜品","素",14,["香草冰淇淋", "浓缩咖啡"],0,"","意大利"],
-["意式蔬菜汤","欧洲菜","汤饮","素",12,["番茄", "豆类", "蔬菜", "洋葱"],0,"","意大利"],
+["卡布奇诺","欧洲菜","汤","素",15,["浓缩咖啡", "牛奶", "奶泡"],0,"","意大利"],
+["阿芙佳朵","欧洲菜","甜饮","素",14,["香草冰淇淋", "浓缩咖啡"],0,"","意大利"],
+["意式蔬菜汤","欧洲菜","汤","素",12,["番茄", "豆类", "蔬菜", "洋葱"],0,"","意大利"],
 ["米兰炸排","欧洲菜","菜","荤",26,["小牛肉", "面包糠", "蛋", "芝士"],0,"","意大利"],
 ["帕尔马火腿蜜瓜","欧洲菜","小食","荤",22,["帕尔马火腿", "蜜瓜"],0,"","意大利"],
 ["意式番茄面包","欧洲菜","小食","素",8,["面包", "番茄", "蒜", "橄榄油"],0,"","意大利"],
-["法式苹果塔","欧洲菜","甜品","素",16,["苹果", "酥皮", "黄油", "糖"],0,"","法国"],
+["法式苹果塔","欧洲菜","甜饮","素",16,["苹果", "酥皮", "黄油", "糖"],0,"","法国"],
 ["法式咸派","欧洲菜","菜","荤",20,["鸡蛋", "奶油", "培根", "派皮"],0,"","法国"],
 ["法式奶油焗龙虾","欧洲菜","菜","荤",58,["龙虾", "奶油", "芝士", "白葡萄酒"],0,"","法国"],
-["法式舒芙蕾芝士","欧洲菜","甜品","素",18,["芝士", "蛋", "奶油"],0,"","法国"],
+["法式舒芙蕾芝士","欧洲菜","甜饮","素",18,["芝士", "蛋", "奶油"],0,"","法国"],
 ["勃艮第牛肉","欧洲菜","菜","荤",32,["牛肉", "红酒", "胡萝卜", "洋葱"],0,"","法国"],
 ["法式薯条","欧洲菜","小食","素",8,["土豆", "油", "盐"],0,"","法国"],
 ["蒜香橄榄油虾","欧洲菜","菜","荤",30,["虾", "蒜", "橄榄油", "辣椒"],0,"","西班牙"],
 ["西班牙土豆饼","欧洲菜","主食","荤",14,["土豆", "鸡蛋", "洋葱"],0,"","西班牙"],
-["西班牙冷汤","欧洲菜","汤饮","素",10,["番茄", "黄瓜", "面包", "橄榄油"],0,"","西班牙"],
+["西班牙冷汤","欧洲菜","汤","素",10,["番茄", "黄瓜", "面包", "橄榄油"],0,"","西班牙"],
 ["伊比利亚火腿","欧洲菜","小食","荤",38,["伊比利亚火腿"],0,"","西班牙"],
-["西班牙油条","欧洲菜","甜品","素",10,["面粉", "油", "糖", "肉桂"],0,"","西班牙"],
+["西班牙油条","欧洲菜","甜饮","素",10,["面粉", "油", "糖", "肉桂"],0,"","西班牙"],
 ["德式香肠","欧洲菜","菜","荤",18,["香肠", "芥末酱", "酸菜"],0,"","德国"],
 ["德式酸菜","欧洲菜","小食","素",6,["卷心菜", "盐", "白葡萄酒"],0,"","德国"],
 ["德式碱水面包","欧洲菜","主食","素",8,["面粉", "碱水", "盐"],0,"","德国"],
@@ -1995,7 +2024,7 @@ const RAW=[
 ["英式烤牛肉","欧洲菜","菜","荤",30,["牛肉", "约克郡布丁", "肉汁"],0,"","英国"],
 ["约克郡布丁","欧洲菜","主食","素",8,["面粉", "蛋", "牛奶"],0,"","英国"],
 ["慕萨卡","欧洲菜","菜","荤",20,["茄子", "羊肉", "土豆", "白酱"],0,"","希腊"],
-["希腊酸奶","欧洲菜","甜品","素",8,["希腊酸奶", "蜂蜜", "坚果"],0,"","希腊"],
+["希腊酸奶","欧洲菜","甜饮","素",8,["希腊酸奶", "蜂蜜", "坚果"],0,"","希腊"],
 ["希腊烤肉串","欧洲菜","菜","荤",18,["羊肉", "柠檬", "香草"],0,"","希腊"],
 ["菠菜派","欧洲菜","小食","素",12,["菠菜", "菲达芝士", "酥皮"],0,"","希腊"],
 ["俄式土豆沙拉","欧洲菜","小食","荤",10,["土豆", "豌豆", "胡萝卜", "蛋黄酱"],0,"","俄罗斯"],
@@ -2003,53 +2032,50 @@ const RAW=[
 ["俄式煎饼","欧洲菜","主食","素",10,["面粉", "蛋", "牛奶", "酸奶油"],0,"","俄罗斯"],
 ["俄式肉冻","欧洲菜","菜","荤",16,["猪肉", "猪蹄", "香料"],0,"","俄罗斯"],
 ["芝士火锅","欧洲菜","菜","荤",26,["芝士", "白葡萄酒", "蒜", "面包"],0,"","瑞士"],
-["巧克力火锅","欧洲菜","甜品","素",18,["巧克力", "奶油", "水果"],0,"","瑞士"],
+["巧克力火锅","欧洲菜","甜饮","素",18,["巧克力", "奶油", "水果"],0,"","瑞士"],
 ["瑞士土豆饼","欧洲菜","主食","素",10,["土豆", "油", "洋葱"],0,"","瑞士"],
-["葡式蛋挞","欧洲菜","甜品","素",8,["酥皮", "蛋", "牛奶", "焦糖"],0,"","葡萄牙"],
+["葡式蛋挞","欧洲菜","甜饮","素",8,["酥皮", "蛋", "牛奶", "焦糖"],0,"","葡萄牙"],
 ["葡式烤鸡","欧洲菜","菜","荤",20,["鸡", "辣椒粉", "柠檬"],0,"","葡萄牙"],
 ["葡式海鲜饭","欧洲菜","主食","荤",24,["米", "海鲜", "藏红花"],0,"","葡萄牙"],
-["巧克力曲奇","美洲菜","甜品","素",8,["面粉", "黄油", "巧克力豆", "糖"],0,"","美国"],
+["巧克力曲奇","美洲菜","甜饮","素",8,["面粉", "黄油", "巧克力豆", "糖"],0,"","美国"],
 ["烤芝士三明治","美洲菜","主食","荤",10,["面包", "芝士", "黄油"],0,"","美国"],
 ["美式早餐煎饼","美洲菜","主食","素",12,["面粉", "蛋", "牛奶", "枫糖"],0,"","美国"],
 ["美式奶油玉米","美洲菜","菜","素",8,["玉米", "奶油", "黄油"],0,"","美国"],
-["美式南瓜派","美洲菜","甜品","素",14,["南瓜", "肉桂", "派皮", "奶油"],0,"","美国"],
-["美式蓝莓麦芬","美洲菜","甜品","素",10,["面粉", "蓝莓", "蛋", "糖"],0,"","美国"],
-["美式热可可","美洲菜","汤饮","素",10,["巧克力", "牛奶", "棉花糖"],0,"","美国"],
+["美式南瓜派","美洲菜","甜饮","素",14,["南瓜", "肉桂", "派皮", "奶油"],0,"","美国"],
+["美式蓝莓麦芬","美洲菜","甜饮","素",10,["面粉", "蓝莓", "蛋", "糖"],0,"","美国"],
+["美式热可可","美洲菜","汤","素",10,["巧克力", "牛奶", "棉花糖"],0,"","美国"],
 ["美式烤棉花糖","美洲菜","小食","素",6,["棉花糖", "巧克力", "饼干"],0,"","美国"],
 ["墨西哥红米饭","美洲菜","主食","素",8,["米", "番茄", "洋葱"],0,"","墨西哥"],
 ["墨西哥辣椒炖肉","美洲菜","菜","荤",18,["牛肉丸", "番茄", "辣椒", "香料"],0,"","墨西哥"],
-["墨西哥玉米饼汤","美洲菜","汤饮","荤",12,["玉米饼", "番茄", "鸡汤", "牛油果"],0,"","墨西哥"],
+["墨西哥玉米饼汤","美洲菜","汤","荤",12,["玉米饼", "番茄", "鸡汤", "牛油果"],0,"","墨西哥"],
 ["墨西哥莎莎酱","美洲菜","小食","素",6,["番茄", "洋葱", "辣椒", "香菜"],0,"","墨西哥"],
 ["墨西哥法西塔","美洲菜","菜","荤",20,["牛肉", "彩椒", "洋葱", "玉米饼"],0,"","墨西哥"],
 ["肉汁薯条","美洲菜","小食","荤",12,["薯条", "肉汁", "芝士条"],0,"","加拿大"],
 ["枫糖煎饼","美洲菜","主食","素",12,["面粉", "枫糖", "蛋", "牛奶"],0,"","加拿大"],
 ["蒙特利尔烟熏肉","美洲菜","菜","荤",22,["烟熏牛肉", "黑麦面包", "芥末"],0,"","加拿大"],
-["加拿大豌豆汤","美洲菜","汤饮","荤",10,["豌豆", "培根", "洋葱"],0,"","加拿大"],
+["加拿大豌豆汤","美洲菜","汤","荤",10,["豌豆", "培根", "洋葱"],0,"","加拿大"],
 ["巴西烤肉","美洲菜","菜","荤",32,["牛肉", "盐", "辣椒"],0,"","巴西"],
 ["巴西黑豆饭","美洲菜","主食","荤",14,["黑豆", "猪肉", "米饭", "橙"],0,"","巴西"],
 ["巴西芝士面包","美洲菜","小食","素",8,["木薯粉", "芝士", "蛋"],0,"","巴西"],
-["巴西柠檬水","美洲菜","汤饮","素",8,["青柠", "糖", "水"],0,"","巴西"],
+["巴西柠檬水","美洲菜","汤","素",8,["青柠", "糖", "水"],0,"","巴西"],
 ["阿根廷烤肉","美洲菜","菜","荤",34,["牛肉", "盐", "迷迭香"],0,"","阿根廷"],
 ["阿根廷牛排","美洲菜","菜","荤",36,["牛排", "盐", "黑胡椒"],0,"","阿根廷"],
 ["阿根廷馅饼","美洲菜","小食","荤",12,["面皮", "牛肉", "洋葱", "鸡蛋"],0,"","阿根廷"],
-["阿根廷焦糖牛奶酱","美洲菜","甜品","素",8,["牛奶", "糖"],0,"","阿根廷"],
-["土耳其红茶","中东菜","汤饮","素",6,["红茶", "糖"],0,"","土耳其"],
-["土耳其冰淇淋","中东菜","甜品","素",12,["牛奶", "兰茎粉", "坚果"],0,"","土耳其"],
+["阿根廷焦糖牛奶酱","美洲菜","甜饮","素",8,["牛奶", "糖"],0,"","阿根廷"],
+["土耳其红茶","中东菜","汤","素",6,["红茶", "糖"],0,"","土耳其"],
+["土耳其冰淇淋","中东菜","甜饮","素",12,["牛奶", "兰茎粉", "坚果"],0,"","土耳其"],
 ["土耳其烤包子","中东菜","小食","荤",12,["面皮", "肉", "洋葱", "香料"],0,"","土耳其"],
 ["土耳其茄子卷","中东菜","菜","荤",16,["茄子", "肉", "番茄", "香料"],0,"","土耳其"],
-["黎巴嫩石榴汁","中东菜","汤饮","素",8,["石榴", "糖", "水"],0,"","黎巴嫩"],
-["伊朗米饭布丁","中东菜","甜品","素",10,["米", "牛奶", "玫瑰", "糖"],0,"","伊朗"],
+["黎巴嫩石榴汁","中东菜","汤","素",8,["石榴", "糖", "水"],0,"","黎巴嫩"],
+["伊朗米饭布丁","中东菜","甜饮","素",10,["米", "牛奶", "玫瑰", "糖"],0,"","伊朗"],
 ["以色列胡姆斯","中东菜","小食","素",8,["鹰嘴豆", "芝麻酱", "柠檬", "蒜"],0,"","以色列"],
 ["以色列茄子泥","中东菜","小食","素",8,["茄子", "芝麻酱", "柠檬", "蒜"],0,"","以色列"],
 ["阿拉伯羊肉饭","中东菜","主食","荤",18,["米", "羊肉", "坚果", "香料"],0,"","阿拉伯"],
 ["阿拉伯烤肉串","中东菜","菜","荤",18,["羊肉", "香料", "盐"],0,"","阿拉伯"],
-["阿拉伯咖啡","中东菜","汤饮","素",6,["咖啡豆", "豆蔻"],0,"","阿拉伯"]
+["阿拉伯咖啡","中东菜","汤","素",6,["咖啡豆", "豆蔻"],0,"","阿拉伯"]
 ];
-
-/* ============ 状态 ============ */
-const STORE_KEY = "mealdaily_v6";
+const TOPCATS = ["菜","汤","主食","甜饮","小食"];
 const LEFTCATS = ["全部","中国菜","网红菜","东南亚","日料","韩料","中东菜","欧洲菜","美洲菜"];
-const TOPCATS = ["菜","汤饮","主食","甜品","小食"];
 // 图标库（长按菜品详情图标可选）
 const EMOJI_GRID = ["🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥭","🍍","🥥","🥝",
   "🍅","🥑","🍆","🥔","🥕","🌽","🌶️","🫑","🥒","🥬","🥦","🧄","🧅","🍄","🥜","🫘",
@@ -2060,11 +2086,11 @@ const EMOJI_GRID = ["🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","�
   "🧉","🍾","🧊","🍽️","🥣","🥢","🍴","🥄"];
 // 五级评价：夯(最好) → 拉(最差)
 const RATINGS = [
-  {v:5,label:"夯",emoji:"🤩",color:"#34c759"},
-  {v:4,label:"顶级",emoji:"😍",color:"#007aff"},
-  {v:3,label:"人上人",emoji:"😎",color:"#ff9500"},
-  {v:2,label:"NPC",emoji:"😐",color:"#8e8e93"},
-  {v:1,label:"拉",emoji:"💀",color:"#ff3b30"},
+  {v:5,label:"夯",emoji:"🤩",color:"#34C759"},
+  {v:4,label:"顶级",emoji:"😍",color:"#007AFF"},
+  {v:3,label:"人上人",emoji:"😎",color:"#FDB11A"},
+  {v:2,label:"NPC",emoji:"😐",color:"#5856D6"},
+  {v:1,label:"拉",emoji:"💀",color:"#FF3B30"},
 ];
 function ratingOf(v){return RATINGS.find(r=>r.v==v)||RATINGS[2];}
 
@@ -2072,18 +2098,31 @@ const DISHES = RAW.map((e,i)=>({
   id:"d"+i, name:e[0], cuisine:e[1], kind:e[2], meat:e[3], cost:e[4],
   ingredients:e[5], drink:e[6], province:e[7]||"", country:e[8]||"", custom:false
 }));
+function countryFlag(c){
+  const map={
+    "日本":"🇯🇵","韩国":"🇰🇷","土耳其":"🇹🇷","美国":"🇺🇸","泰国":"🇹🇭",
+    "法国":"🇫🇷","意大利":"🇮🇹","越南":"🇻🇳","黎巴嫩":"🇱🇧","英国":"🇬🇧",
+    "墨西哥":"🇲🇽","伊朗":"🇮🇷","西班牙":"🇪🇸","马来西亚":"🇲🇾","新加坡":"🇸🇬",
+    "以色列":"🇮🇱","德国":"🇩🇪","希腊":"🇬🇷","菲律宾":"🇵🇭","阿拉伯":"🇸🇦",
+    "俄罗斯":"🇷🇺","印尼":"🇮🇩","缅甸":"🇲🇲","北欧":"🇫🇮","加拿大":"🇨🇦",
+    "巴西":"🇧🇷","阿根廷":"🇦🇷","叙利亚":"🇸🇾","瑞士":"🇨🇭","葡萄牙":"🇵🇹",
+    "伊拉克":"🇮🇶","比利时":"🇧🇪","荷兰":"🇳🇱","奥地利":"🇦🇹","古巴":"🇨🇺",
+    "牙买加":"🇯🇲"
+  };
+  return map[c]||"🌍";
+}
 // 地域标签：中国菜显示省份，东南亚/中东/欧洲/美洲显示国家
 function regionLabel(d){
   if(d.cuisine==="中国菜" && d.province) return "📍 "+d.province;
-  if(d.country) return "🌍 "+d.country;
+  if(d.country) return countryFlag(d.country)+" "+d.country;
   return "";
 }
 
 // 视频链接：自定义 > 菜品自带 > 默认搜索
 function getVideoUrls(d){
   const o=state.overrides[d.id]||{};
-  const dy=o.dyUrl||d.dyUrl||`https://www.douyin.com/search/${encodeURIComponent(d.name)}?type=video`;
-  const xhs=o.xhsUrl||d.xhsUrl||`https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(d.name)}`;
+  const dy=o.dyUrl||d.dyUrl||`https://www.douyin.com/`;
+  const xhs=o.xhsUrl||d.xhsUrl||`https://www.xiaohongshu.com/`;
   return {dy,xhs};
 }
 
@@ -2093,11 +2132,22 @@ function resolve(d){
   return o ? Object.assign({}, d, o) : d;
 }
 
+const STORE_KEY="mealdaily_v6";
 let state = load();
+function migrateKind(k){
+  if(k==="甜品") return "甜饮";
+  if(k==="汤饮") return "汤";
+  return k;
+}
 function load(){
   try{
     const s = JSON.parse(localStorage.getItem(STORE_KEY));
-    if(s) return Object.assign(defaultState(), s);
+    if(s){
+      const merged=Object.assign(defaultState(), s);
+      (merged.custom||[]).forEach(d=>{ if(d.kind) d.kind=migrateKind(d.kind); });
+      Object.values(merged.overrides||{}).forEach(o=>{ if(o.kind) o.kind=migrateKind(o.kind); });
+      return merged;
+    }
   }catch(e){}
   return defaultState();
 }
@@ -2115,7 +2165,7 @@ function dishById(id){const d=DISHES.concat(state.custom).find(x=>x.id===id);ret
 function fieldForDish(d){
   if(d.kind==="菜") return "dishes";
   if(d.kind==="主食") return "staples";
-  if(d.kind==="汤饮") return "tangyin";
+  if(d.kind==="汤" || d.kind==="甜饮") return "tangyin";
   if(d.kind==="小食") return "snacks";
   return "dishes";
 }
@@ -2123,7 +2173,7 @@ function fieldLabel(f){return {dishes:"菜品",staples:"主食",tangyin:"汤饮"
 function poolForField(f){
   if(f==="dishes") return allDishes().filter(d=>d.kind==="菜");
   if(f==="staples") return allDishes().filter(d=>d.kind==="主食");
-  if(f==="tangyin") return allDishes().filter(d=>d.kind==="汤饮");
+  if(f==="tangyin") return allDishes().filter(d=>d.kind==="汤" || d.kind==="甜饮");
   if(f==="snacks")  return allDishes().filter(d=>d.kind==="小食");
   return allDishes();
 }
@@ -2144,8 +2194,8 @@ function emoFor(d){
   if(/牛|羊|猪|肉|排|肠|骨/.test(n)) return "🥩";
   if(/蛋/.test(n)) return "🍳";
   if(/豆腐|素|斋/.test(n)&&d.meat==="素") return "🥬";
-  if(k==="甜品") return "🍰";
-  if(k==="汤饮") return "🥤";
+  if(k==="甜饮") return d.drink?"🥤":"🍰";
+  if(k==="汤") return "🍲";
   if(k==="主食") return "🍚";
   if(k==="小食") return "🍡";
   return "🍽️";
@@ -2165,12 +2215,12 @@ function buildPlan(){
   const dishes = pickN(meatPool,mN).concat(pickN(vegPool,vN));
   shuffle(dishes);
   const staples = pickN(pool.filter(d=>d.kind==="主食"), state.stapleCount);
-  const tangyin = pickN(pool.filter(d=>d.kind==="汤饮"), state.tangyinCount);
+  const tangyin = pickN(pool.filter(d=>d.kind==="汤" || d.kind==="甜饮"), state.tangyinCount);
   const snacks  = pickN(pool.filter(d=>d.kind==="小食"), state.snackCount);
   // 周六额外加一份汤饮
   const day = new Date().getDay();
   if(day===6){
-    const extra = pool.filter(d=>d.kind==="汤饮" && !tangyin.find(x=>x.id===d.id));
+    const extra = pool.filter(d=>(d.kind==="汤" || d.kind==="甜饮") && !tangyin.find(x=>x.id===d.id));
     if(extra.length) tangyin.push(pickN(extra,1)[0]);
   }
   const total = mN+vN;
@@ -2194,6 +2244,7 @@ function render(){
   else html=renderOther();
   app.innerHTML=html;
   document.getElementById("addDishBtn").classList.toggle("hide",state.tab!=="library");
+  document.getElementById("addCheckinBtn").classList.toggle("hide",state.tab!=="checkin");
   bindTabbar();
 }
 function bindTabbar(){
@@ -2206,18 +2257,18 @@ function renderToday(){
   const p=state.plan;
   if(!p || p.date!==todayStr() || !p.tangyin || !p.snacks){state.plan=buildPlan();save();}
   const pp=state.plan;
-  const dishCards = pp.dishes.map((id)=>dishRow(dishById(id),"dishes"));
-  const stapleCards = pp.staples.map((id)=>dishRow(dishById(id),"staples"));
-  const tangyinCards = pp.tangyin.map((id)=>dishRow(dishById(id),"tangyin"));
-  const snackCards = pp.snacks.map((id)=>dishRow(dishById(id),"snacks"));
+  const dishCards = pp.dishes.map((id,i)=>dishRow(dishById(id),"dishes",i));
+  const stapleCards = pp.staples.map((id,i)=>dishRow(dishById(id),"staples",i));
+  const tangyinCards = pp.tangyin.map((id,i)=>dishRow(dishById(id),"tangyin",i));
+  const snackCards = pp.snacks.map((id,i)=>dishRow(dishById(id),"snacks",i));
   return `
   <div class="topbar">
     <div class="title"><h1>今日餐食</h1><div class="sub">${pp.date} · ${pp.servings}人份</div></div>
     <div class="search-mini">
-      <div class="search-box"><span class="ic">🔍</span>
-        <input placeholder="搜菜名/食材" value="${esc(state.todaySearch)}"
-          oninput="state.todaySearch=this.value;save()"
-          onkeydown="if(event.key==='Enter'){event.preventDefault();state.todaySearchActive=true;renderTodaySearch();}">
+      <div class="search-box"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+        <input placeholder="输入关键词" value="${esc(state.todaySearch)}"
+          oninput="state.todaySearch=this.value;state.todaySearchActive=true;save();renderTodaySearch();"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();}">
         ${state.todaySearch?`<button class="clear" onclick="event.stopPropagation();clearTodaySearch()">×</button>`:""}
       </div>
     </div>
@@ -2231,30 +2282,35 @@ function renderToday(){
   </div>
   <div class="section-title"><h2>菜品</h2><span class="tag" onclick="openMeatVegPicker()">荤 ${countMeat(pp.dishes,"荤")} · 素 ${countMeat(pp.dishes,"素")}</span></div>
   <div class="list">${dishCards.join("")||emptyRow()}</div>
-  <div class="section-title"><h2>主食</h2><span class="tag stepper-tag"><button class="ts-btn" onclick="step('stapleCount',0,3,-1)">−</button><span class="ts-val">${state.stapleCount}</span><button class="ts-btn" onclick="step('stapleCount',0,3,1)">+</button></span></div>
+  <div class="section-title"><h2>主食</h2><span class="tag stepper-tag"><span class="ts-val">${state.stapleCount}</span><button class="ts-btn" onclick="step('stapleCount',0,3,1)">+</button></span></div>
   <div class="list">${stapleCards.join("")||emptyRow()}</div>
-  <div class="section-title"><h2>汤饮</h2><span class="tag stepper-tag"><button class="ts-btn" onclick="step('tangyinCount',0,3,-1)">−</button><span class="ts-val">${state.tangyinCount}</span><button class="ts-btn" onclick="step('tangyinCount',0,3,1)">+</button></span></div>
+  <div class="section-title"><h2>汤饮</h2><span class="tag stepper-tag"><span class="ts-val">${state.tangyinCount}</span><button class="ts-btn" onclick="step('tangyinCount',0,3,1)">+</button></span></div>
   <div class="list">${tangyinCards.join("")||emptyRow()}</div>
-  <div class="section-title"><h2>小食</h2><span class="tag stepper-tag"><button class="ts-btn" onclick="step('snackCount',0,3,-1)">−</button><span class="ts-val">${state.snackCount}</span><button class="ts-btn" onclick="step('snackCount',0,3,1)">+</button></span></div>
+  <div class="section-title"><h2>小食</h2><span class="tag stepper-tag"><span class="ts-val">${state.snackCount}</span><button class="ts-btn" onclick="step('snackCount',0,3,1)">+</button></span></div>
   <div class="list">${snackCards.join("")||emptyRow()}</div>
   ${tabbarHTML("today")}`;
 }
-function dishRow(d,field){
+function dishRow(d,field,index=0){
   if(!d) return emptyRow();
   const e=emoFor(d);
-  return `<div class="dcard" onclick="openDetail('${d.id}')">
-    <div class="emoji">${e}</div>
-    <div class="body">
-      <div class="nm">${esc(d.name)}</div>
-      <div class="meta">
-        <span class="pill meat${d.meat}">${d.meat}</span>
-        <span class="pill cuisine">${d.cuisine}</span>
-        <span class="pill cost">¥${Math.round(d.cost*state.servings)}</span>
+  return `<div class="swipe-wrap" data-field="${field}" data-index="${index}" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
+    <div class="delete-btn" onclick="event.stopPropagation();deletePlanItem('${field}',${index})">删除</div>
+    <div class="swipe-content" onclick="swipeContentClick(event,'${d.id}')">
+      <div class="dcard">
+        <div class="emoji">${e}</div>
+        <div class="body">
+          <div class="nm">${esc(d.name)}</div>
+          <div class="meta">
+            <span class="pill meat${d.meat}">${d.meat}</span>
+            <span class="pill cuisine">${d.cuisine}</span>
+            <span class="pill cost">¥${Math.round(d.cost*state.servings)}</span>
+          </div>
+          ${regionLabel(d)?`<div class="prov">${esc(regionLabel(d))}</div>`:""}
+        </div>
+        <button class="replace-btn" onclick="event.stopPropagation();openReplace('${field}')">替换</button>
+        <span class="arrow">›</span>
       </div>
-      ${regionLabel(d)?`<div class="prov">${esc(regionLabel(d))}</div>`:""}
     </div>
-    <button class="replace-btn" onclick="event.stopPropagation();openReplace('${field}')">替换</button>
-    <span class="arrow">›</span>
   </div>`;
 }
 function countMeat(ids,m){return ids.filter(id=>{const d=dishById(id);return d&&d.meat===m;}).length;}
@@ -2274,13 +2330,13 @@ function todaySearchResults(){
   if(!list.length) return `<div class="list"><div class="empty">暂时还没有这个菜哦～</div></div>`;
   return `<div class="list">`+list.slice(0,12).map(d=>{
     const f=fieldForDish(d);
-    return `<div class="dcard" onclick="replaceBySearch('${d.id}')">
+    return `<div class="dcard" onclick="addToToday('${d.id}')">
       <div class="emoji">${emoFor(d)}</div>
       <div class="body"><div class="nm">${esc(d.name)}</div>
         <div class="meta"><span class="pill meat${d.meat}">${d.meat}</span>
         <span class="pill cuisine">${d.cuisine}</span>
         <span class="pill cost">¥${d.cost}</span></div></div>
-      <span class="arrow" style="font-size:12px;color:var(--accent2);">替换为今日${fieldLabel(f)} ›</span>
+      <span class="arrow" style="font-size:12px;color:var(--accent2);">加入今日${fieldLabel(f)} ›</span>
     </div>`;
   }).join("")+`</div>`;
 }
@@ -2315,16 +2371,17 @@ function dishCountChip(){
     </div></div>`;
 }
 function adjustDishTotal(delta){
-  let m=state.meatCount, v=state.vegCount;
+  if(!state.plan) state.plan=buildPlan();
+  const total=state.meatCount+state.vegCount;
+  if(delta>0 && total>=10) return;
   if(delta>0){
-    if(m+v>=10) return;
-    if(v<=m) v++; else m++;
+    if(state.vegCount<=state.meatCount) addPlanMeat("荤"); else addPlanMeat("素");
   }else{
-    if(v>0) v--; else if(m>0) m--;
+    if(state.vegCount>0) removePlanMeat("素"); else if(state.meatCount>0) removePlanMeat("荤");
   }
-  if(m+v===0){ if(v===0&&m===0){v=1;} }
-  state.meatCount=m; state.vegCount=v; state.dishCount=m+v;
-  state.plan=buildPlan(); save(); render();
+  if((state.plan.dishes||[]).length===0){ addPlanMeat("素"); }
+  syncPlanCounts();
+  save(); render();
 }
 function openMeatVegPicker(){
   showModal(`<div class="sheet-head"><h3>设置荤素数量</h3><span class="x" onclick="closeModal()">×</span></div>
@@ -2345,13 +2402,19 @@ function openMeatVegPicker(){
     <div class="modal-foot"><button class="primary-btn" onclick="applyMeatVeg()">完成</button></div>`);
 }
 function setMeatVeg(m,v){
+  if(!state.plan) state.plan=buildPlan();
   m=Math.max(0,parseInt(m)||0); v=Math.max(0,parseInt(v)||0);
   if(m+v===0) v=1;
   if(m+v>10){ if(m>v) m--; else v--; }
-  state.meatCount=m; state.vegCount=v; state.dishCount=m+v;
+  let curM=state.meatCount, curV=state.vegCount;
+  while(curM<m){ if(!addPlanMeat("荤")) break; curM++; }
+  while(curM>m){ if(!removePlanMeat("荤")) break; curM--; }
+  while(curV<v){ if(!addPlanMeat("素")) break; curV++; }
+  while(curV>v){ if(!removePlanMeat("素")) break; curV--; }
+  syncPlanCounts();
   const mm=document.getElementById("mvM"), vv=document.getElementById("mvV");
   if(mm) mm.textContent=state.meatCount; if(vv) vv.textContent=state.vegCount;
-  state.plan=buildPlan(); save(); render();
+  save(); render();
 }
 function applyMeatVeg(){ closeModal(); }
 
@@ -2384,25 +2447,190 @@ function regen(){
 }
 function stepper(lab,key,min,max){
   const v=state[key];
-  return `<div class="chip"><span class="lab">${lab}</span>
+  return `<div class="chip" style="background:#E5E5EA;border:0;"><span class="lab">${lab}</span>
     <div class="stepper">
-      <button onclick="step('${key}',${min},${max},-1)">−</button>
+      <button style="border:0;background:#fff;" onclick="step('${key}',${min},${max},-1)">−</button>
       <span class="val">${v}</span>
-      <button onclick="step('${key}',${min},${max},1)">+</button>
+      <button style="border:0;background:#fff;" onclick="step('${key}',${min},${max},1)">+</button>
     </div></div>`;
 }
-function step(key,min,max,delta){
-  state[key]=Math.min(max,Math.max(min,state[key]+delta));
-  if(key==="servings"){if(state.plan)state.plan.servings=state.servings;}
-  if(key==="dishCount"||key==="stapleCount"||key==="tangyinCount"||key==="snackCount"){state.plan=buildPlan();}
+/* 在已有 plan 上追加/移除单品，避免全部刷新 */
+function planFieldForKind(k){
+  if(k==="菜") return "dishes";
+  if(k==="主食") return "staples";
+  if(k==="汤" || k==="甜饮") return "tangyin";
+  if(k==="小食") return "snacks";
+  return null;
+}
+function poolForKind(k){
+  if(k==="菜") return allDishes().filter(d=>d.kind==="菜");
+  if(k==="主食") return allDishes().filter(d=>d.kind==="主食");
+  if(k==="汤") return allDishes().filter(d=>d.kind==="汤");
+  if(k==="甜饮") return allDishes().filter(d=>d.kind==="甜饮");
+  if(k==="小食") return allDishes().filter(d=>d.kind==="小食");
+  return [];
+}
+function randomAdd(arr,pool){
+  const ex=new Set(arr);
+  const cands=pool.filter(d=>!ex.has(d.id));
+  const list=cands.length?cands:pool;
+  if(!list.length) return null;
+  return list[Math.floor(Math.random()*list.length)].id;
+}
+function addPlanItemByKind(kind){
+  const field=planFieldForKind(kind); if(!field) return false;
+  const pool=poolForKind(kind);
+  const arr=state.plan[field]||[];
+  const id=randomAdd(arr,pool);
+  if(id){ arr.push(id); state.plan[field]=arr; return true; }
+  return false;
+}
+function removePlanItemByKind(kind){
+  const field=planFieldForKind(kind); if(!field) return false;
+  const arr=state.plan[field]||[];
+  if(!arr.length) return false;
+  arr.pop();
+  state.plan[field]=arr;
+  return true;
+}
+function addPlanMeat(meat){
+  const pool=allDishes().filter(d=>d.kind==="菜"&&d.meat===meat);
+  const arr=state.plan.dishes||[];
+  const id=randomAdd(arr,pool);
+  if(id){ arr.push(id); state.plan.dishes=arr; return true; }
+  return false;
+}
+function removePlanMeat(meat){
+  const arr=state.plan.dishes||[];
+  for(let i=arr.length-1;i>=0;i--){
+    const d=dishById(arr[i]);
+    if(d&&d.meat===meat){ arr.splice(i,1); state.plan.dishes=arr; return true; }
+  }
+  return false;
+}
+function syncPlanCounts(){
+  if(!state.plan) return;
+  state.plan.dishes=state.plan.dishes||[];
+  state.plan.staples=state.plan.staples||[];
+  state.plan.tangyin=state.plan.tangyin||[];
+  state.plan.snacks=state.plan.snacks||[];
+  state.meatCount=state.plan.dishes.filter(id=>{const d=dishById(id);return d&&d.meat==="荤";}).length;
+  state.vegCount=state.plan.dishes.filter(id=>{const d=dishById(id);return d&&d.meat==="素";}).length;
+  state.dishCount=state.meatCount+state.vegCount;
+  state.stapleCount=state.plan.staples.length;
+  state.tangyinCount=state.plan.tangyin.length;
+  state.snackCount=state.plan.snacks.length;
+}
+function adjustPlanFieldCount(field,target){
+  const arr=state.plan[field]||[];
+  const kindMap={staples:"主食",tangyin:"甜饮",snacks:"小食"};
+  while(arr.length<target){
+    if(field==="tangyin"){
+      // 汤饮包含汤+甜饮，随机选一种追加
+      const k=Math.random()<0.5?"汤":"甜饮";
+      if(!addPlanItemByKind(k)) break;
+    }else{
+      if(!addPlanItemByKind(kindMap[field])) break;
+    }
+  }
+  while(arr.length>target){ arr.pop(); }
+  state.plan[field]=arr;
+}
+function deletePlanItem(field,index){
+  if(!state.plan) return;
+  const arr=state.plan[field]||[];
+  if(index<0||index>=arr.length) return;
+  const removedId=arr[index];
+  arr.splice(index,1);
+  state.plan[field]=arr;
+  if(field==="dishes"){
+    const d=dishById(removedId);
+    if(d&&d.meat==="荤") state.meatCount=Math.max(0,state.meatCount-1);
+    else if(d&&d.meat==="素") state.vegCount=Math.max(0,state.vegCount-1);
+    state.dishCount=state.meatCount+state.vegCount;
+  }else{
+    const key=field==="staples"?"stapleCount":field==="tangyin"?"tangyinCount":"snackCount";
+    state[key]=Math.max(0,state[key]-1);
+  }
   save();render();
 }
-function replaceBySearch(id){
+
+/* 左滑删除 */
+let swipeEl=null,swipeWrap=null,swipeStartX=0,swipeCurrentX=0,swipeOpen=false;
+function closeAllSwipes(){
+  document.querySelectorAll('.swipe-wrap.open').forEach(w=>w.classList.remove('open'));
+}
+function swipeStart(e){
+  swipeWrap=e.currentTarget;
+  swipeEl=swipeWrap.querySelector('.swipe-content');
+  swipeStartX=e.touches[0].clientX;
+  swipeCurrentX=swipeStartX;
+  swipeOpen=swipeWrap.classList.contains('open');
+  window.didSwipe=false;
+  closeAllSwipes();
+}
+function swipeMove(e){
+  if(!swipeEl) return;
+  const x=e.touches[0].clientX;
+  const dx=x-swipeStartX;
+  swipeCurrentX=x;
+  if(Math.abs(dx)>6) window.didSwipe=true;
+  let tx=0;
+  if(swipeOpen) tx=Math.min(0,-76+dx);
+  else tx=Math.min(0,Math.max(-76,dx));
+  swipeEl.style.transform=`translateX(${tx}px)`;
+  if(Math.abs(dx)>10) e.preventDefault();
+}
+function swipeEnd(e){
+  if(!swipeEl) return;
+  const dx=swipeCurrentX-swipeStartX;
+  const threshold=40;
+  if(swipeOpen){
+    if(dx>threshold) swipeWrap.classList.remove('open');
+    else swipeWrap.classList.add('open');
+  }else{
+    if(dx<-threshold){ closeAllSwipes(); swipeWrap.classList.add('open'); }
+    else swipeWrap.classList.remove('open');
+  }
+  swipeEl.style.transform='';
+  swipeEl=null; swipeWrap=null;
+}
+function swipeContentClick(e,id){
+  const wrap=e.currentTarget.closest('.swipe-wrap');
+  if(wrap.classList.contains('open')){ wrap.classList.remove('open'); return; }
+  if(window.didSwipe){ window.didSwipe=false; return; }
+  openDetail(id);
+}
+
+function step(key,min,max,delta){
+  if(!state.plan) state.plan=buildPlan();
+  const old=state[key];
+  state[key]=Math.min(max,Math.max(min,state[key]+delta));
+  if(key==="servings"){if(state.plan)state.plan.servings=state.servings;}
+  if(key==="stapleCount") adjustPlanFieldCount("staples",state[key]);
+  if(key==="tangyinCount") adjustPlanFieldCount("tangyin",state[key]);
+  if(key==="snackCount") adjustPlanFieldCount("snacks",state[key]);
+  save();render();
+}
+function addToToday(id){
   const d=dishById(id);
+  if(!d) return;
   const f=fieldForDish(d);
+  if(!state.plan) state.plan=buildPlan();
   if(!state.plan[f]) state.plan[f]=[];
-  if(state.plan[f].length===0) state.plan[f].push(id);
-  else state.plan[f][0]=id;
+  if(state.plan[f].includes(id)){
+    confirmDialog("已存在",`${esc(d.name)} 已经在今日餐食中`);
+    return;
+  }
+  state.plan[f].push(id);
+  if(f==="dishes"){
+    if(d.meat==="荤") state.meatCount++;
+    else if(d.meat==="素") state.vegCount++;
+    state.dishCount=state.meatCount+state.vegCount;
+  }else{
+    const key=f==="staples"?"stapleCount":f==="tangyin"?"tangyinCount":"snackCount";
+    state[key]++;
+  }
   state.todaySearch=""; state.todaySearchActive=false; save(); render();
 }
 
@@ -2413,8 +2641,8 @@ function renderLibrary(){
   <div class="topbar">
     <div class="title"><h1>菜库</h1><div class="sub">${allDishes().length} 道菜 · 抖音/小红书热门</div></div>
     <div class="search-mini">
-      <div class="search-box"><span class="ic">🔍</span>
-        <input placeholder="搜菜名/食材" value="${esc(state.libSearch)}"
+      <div class="search-box"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+        <input placeholder="输入关键词" value="${esc(state.libSearch)}"
           oninput="state.libSearch=this.value;save();renderLibraryRight()">
         ${state.libSearch?`<button class="clear" onclick="event.stopPropagation();state.libSearch='';save();renderLibraryRight();document.querySelector('.search-mini input').value=''">×</button>`:""}
       </div>
@@ -2507,17 +2735,17 @@ function openDetail(id){
         <span class="pill cost">参考 ¥${d.cost}（${state.servings}人份约 ¥${Math.round(d.cost*state.servings)}）</span>
       </div>
       ${regionLabel(d)?`<div class="detail-prov">${esc(regionLabel(d))}</div>`:""}
-      <div class="detail-sec">🥘 食材<span class="mini-edit" onclick="editIngredients('${d.id}')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></div>
-      <div class="ing-list">${ing}</div>
-      <div class="detail-sec">🎬 做菜视频 <span style="font-weight:500;color:var(--gray);font-size:11px;">（长按卡片可换链接）</span></div>
+      <div class="detail-sec">🥘 食材</div>
+      <div class="ing-list">${ing}<span class="ing-add-btn" onclick="editIngredients('${d.id}')">＋</span></div>
+      <div class="detail-sec">🎬 做菜视频 <span style="font-weight:500;color:var(--gray);font-size:11px;">（长按卡片可自定义链接）</span></div>
       <div class="videos">
         <div class="vcard dy" data-type="dy" data-url="${esc(urls.dy)}">
-          <div><div class="vh">抖音 · 做菜视频</div><div class="vt">${esc(d.name)} 热门教程</div></div>
-          <div class="vgo">▶ 立即观看</div><div class="play">♪</div>
+          <div><div class="vh">抖音</div><div class="vt">${esc(d.name)} · 长按自定义链接</div></div>
+          <div class="vgo">▶ 打开</div><div class="play">♪</div>
         </div>
         <div class="vcard xhs" data-type="xhs" data-url="${esc(urls.xhs)}">
-          <div><div class="vh">小红书 · 做菜视频</div><div class="vt">${esc(d.name)} 图文/视频</div></div>
-          <div class="vgo">▶ 立即查看</div><div class="play">♥</div>
+          <div><div class="vh">小红书</div><div class="vt">${esc(d.name)} · 长按自定义链接</div></div>
+          <div class="vgo">▶ 打开</div><div class="play">♥</div>
         </div>
       </div>
     </div>`);
@@ -2700,11 +2928,11 @@ function openReplace(field){
   const label=fieldLabel(field);
   showModal(`<div class="sheet-head"><h3>替换${label}</h3><span class="x" onclick="closeModal()">×</span></div>
     <div class="sheet-body">
-      <div class="search-box rep-search"><span class="ic">🔍</span>
-        <input id="repSearch" placeholder="搜菜名/食材" oninput="renderReplaceList('${field}')"></div>
+      <div class="search-box rep-search"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+        <input id="repSearch" placeholder="输入关键词" oninput="renderReplaceList('${field}')"></div>
       <div class="rep-hint">随机推荐的${label}（点一下即替换到今日）</div>
       <div id="repList">${replaceRandomList(field)}</div>
-    </div>`);
+    </div>`,'rep-card');
 }
 function replacePick(id){replaceTodayById(id);closeModal();}
 function replaceRandomList(field){
@@ -2726,7 +2954,7 @@ function renderReplaceDcards(list){
     <div class="body"><div class="nm">${esc(d.name)}</div>
       <div class="meta"><span class="pill meat${d.meat}">${d.meat}</span>
       <span class="pill cuisine">${d.cuisine}</span></div>
-      ${d.cuisine==="省份菜"&&d.province?`<div class="prov">📍 ${esc(d.province)}</div>`:""}
+      ${regionLabel(d)?`<div class="prov">${esc(regionLabel(d))}</div>`:""}
     </div>
   </div>`).join("");
 }
@@ -2759,8 +2987,8 @@ function renderCheckins(){
   <div class="topbar">
     <div class="title"><h1>打卡</h1><div class="sub">记录每一餐的真实评价</div></div>
     <div class="search-mini">
-      <div class="search-box"><span class="ic">🔍</span>
-        <input placeholder="搜菜名/食材" value="${esc(state.ciSearch||"")}"
+      <div class="search-box"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+        <input placeholder="输入关键词" value="${esc(state.ciSearch||"")}"
           oninput="state.ciSearch=this.value;save();renderCheckinList()">
         ${state.ciSearch?`<button class="clear" onclick="event.stopPropagation();state.ciSearch='';save();renderCheckinList();document.querySelector('.search-mini input').value=''">×</button>`:""}
       </div>
@@ -2781,14 +3009,13 @@ function renderCheckins(){
       }).join("")}
     </div>
   </div>
-  <button class="primary-btn" style="margin:12px 16px 4px;width:calc(100% - 32px);" onclick="openAddCheckin()">＋ 新增打卡</button>
   <div class="timeline" id="ciTimeline">
     ${ciTimelineHTML(items)}
   </div>
   ${tabbarHTML("checkin")}`;
 }
 function ciTimelineHTML(items){
-  return items.length? items.map(ci=>ciHTML(ci)).join("") : `<div class="empty">${((state.ciSearch||"").trim()||state.ciRatingFilter)?"没有找到相关打卡":"还没有打卡记录，点上方按钮加一条吧"}</div>`;
+  return items.length? items.map(ci=>ciHTML(ci)).join("") : `<div class="empty">${((state.ciSearch||"").trim()||state.ciRatingFilter)?"没有找到相关打卡":"还没有打卡记录，点右下角 ＋ 加一条吧"}</div>`;
 }
 function renderCheckinList(){
   const el=document.getElementById("ciTimeline");
@@ -2983,7 +3210,7 @@ function submitDish(){
     meat:document.getElementById("ndMeat").value,
     cost:Number(document.getElementById("ndCost").value)||10,
     ingredients:document.getElementById("ndIng").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean),
-    drink:document.getElementById("ndTop").value==="汤饮"&&/茶|咖啡|奶茶|汁|水|饮/.test(name)?1:0,
+    drink:document.getElementById("ndTop").value==="甜饮"&&/茶|咖啡|奶茶|汁|水|饮/.test(name)?1:0,
     dyUrl:dyUrl||undefined,
     xhsUrl:xhsUrl||undefined,
     custom:true};
@@ -2996,9 +3223,9 @@ function renderOther(){
   <div class="topbar"><h1>其他</h1><div class="sub">设置 · 数据 · 关于</div></div>
   <div class="list">
     <div class="dcard" onclick="exportBackup()"><div class="emoji">💾</div>
-      <div class="body"><div class="nm">导出备份</div><div class="meta">下载 JSON 到手机</div></div><span class="arrow">›</span></div>
+      <div class="body"><div class="nm">导出备份</div><div class="meta">含自定义菜/打卡/单菜修改</div></div><span class="arrow">›</span></div>
     <div class="dcard" onclick="document.getElementById('imp').click()"><div class="emoji">📥</div>
-      <div class="body"><div class="nm">导入恢复</div><div class="meta">从 JSON 恢复数据</div></div><span class="arrow">›</span></div>
+      <div class="body"><div class="nm">导入恢复</div><div class="meta">从 JSON 整覆盖恢复</div></div><span class="arrow">›</span></div>
     <input id="imp" type="file" accept="application/json" style="display:none" onchange="importBackup(this)">
     <div class="dcard" onclick="confirmDialog('清空数据','将清空所有打卡记录与自定义菜品，今日餐食会重新生成。确定吗？',function(){state.checkins=[];state.custom=[];state.plan=null;save();render();},'清空')"><div class="emoji">🧹</div>
       <div class="body"><div class="nm">清空本地数据</div><div class="meta">重置打卡与自定义菜</div></div><span class="arrow">›</span></div>
@@ -3019,23 +3246,35 @@ function renderOther(){
   ${tabbarHTML("other")}`;
 }
 function exportBackup(){
-  const data={custom:state.custom,checkins:state.checkins};
+  // 完整备份：自定义菜、打卡记录、单菜修改（食材/图标/分类/视频链接）、今日方案与全部设置
+  const data={v:2, exportedAt:Date.now(), state:state};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
   a.download="mealdaily_backup_"+todayStr()+".json";
   a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
 }
 function importBackup(input){
-  const f=input.files[0]; if(!f) return;
+  const f=input.files[0]; if(!f){return;}
   const r=new FileReader();
   r.onload=()=>{try{
     const d=JSON.parse(r.result);
-    if(d.custom) state.custom=d.custom.concat(state.custom);
-    if(d.checkins) state.checkins=d.checkins.concat(state.checkins);
-    save();render();alert("恢复成功");
-  }catch(e){alert("文件格式错误");}};
+    const incoming = d.state ? d.state
+      : {custom:d.custom||[], checkins:d.checkins||[], overrides:d.overrides||{}};
+    confirmDialog("导入将覆盖本机数据",
+      "导入会用备份中的数据（自定义菜、打卡记录、所有单菜修改、设置）整覆盖当前手机的数据。确定继续吗？",
+      function(){
+        state = Object.assign(defaultState(), incoming);
+        state.custom = state.custom||[];
+        state.checkins = state.checkins||[];
+        state.overrides = state.overrides||{};
+        save(); render();
+        alert("恢复成功，本机数据已替换为备份内容");
+      }, "导入覆盖");
+  }catch(e){alert("文件格式错误，请选择导出的 JSON");}};
   r.readAsText(f);
+  input.value="";
 }
 
 /* ============ 工具 ============ */
@@ -3050,7 +3289,10 @@ function tabbarHTML(active){
   return `<div class="tabbar">`+tabs.map(t=>`<button data-t="${t[0]}" class="${active===t[0]?'active':''}"><span class="ic">${ICONS[t[0]]}</span>${t[1]}</button>`).join("")+`</div>`;
 }
 function showSheet(inner){document.getElementById("modal").innerHTML=`<div class="mask" onclick="if(event.target===this)closeModal()">${inner}</div>`;}
-function showModal(inner){document.getElementById("modal").innerHTML=`<div class="modal-mask" onclick="if(event.target===this)closeModal()"><div class="modal-card">${inner}</div></div>`;}
+function showModal(inner,cardClass){
+  const cls=cardClass?`modal-card ${cardClass}`:`modal-card`;
+  document.getElementById("modal").innerHTML=`<div class="modal-mask" onclick="if(event.target===this)closeModal()"><div class="${cls}">${inner}</div></div>`;
+}
 function closeModal(){document.getElementById("modal").innerHTML="";}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function nowStamp(){
@@ -3072,6 +3314,34 @@ function compressImg(file,cb){
 
 /* ============ 启动 ============ */
 document.addEventListener("click", onTodaySearchOutside);
+
+/* iOS PWA 触摸优化：禁止横向拖拽、双击缩放、原生惯性滚动 */
+let __touchStartX=0,__touchStartY=0;
+document.addEventListener("touchstart",function(e){
+  if(e.touches.length>1){ e.preventDefault(); return; }
+  __touchStartX=e.touches[0].clientX;
+  __touchStartY=e.touches[0].clientY;
+},{passive:true});
+document.addEventListener("touchmove",function(e){
+  if(e.touches.length>1){ e.preventDefault(); return; }
+  const dx=e.touches[0].clientX-__touchStartX;
+  const dy=e.touches[0].clientY-__touchStartY;
+  if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>6){
+    e.preventDefault();
+  }
+},{passive:false});
+document.addEventListener("touchend",function(e){
+  if(e.touches.length>0) e.preventDefault();
+},{passive:true});
+document.addEventListener("gesturestart",function(e){e.preventDefault();});
+document.addEventListener("dblclick",function(e){e.preventDefault();});
+
+/* 隐藏 Safari 工具栏并滚动到顶部，确保全屏延伸 */
+if(window.navigator.standalone){
+  window.scrollTo(0,0);
+  setTimeout(()=>window.scrollTo(0,0),100);
+}
+
 render();
 </script>
 </body>
