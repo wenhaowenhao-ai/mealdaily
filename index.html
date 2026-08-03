@@ -21,7 +21,7 @@
   --r:16px; --shadow:0 1px 3px rgba(0,0,0,.06),0 6px 18px rgba(0,0,0,.05);
 }
 *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
-html,body{margin:0;padding:0;width:100%;height:100%;overflow-x:hidden;}
+html,body{margin:0;padding:0;width:100%;overflow-x:hidden;}
 html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif;
@@ -32,7 +32,7 @@ body{
 input,textarea{-webkit-user-select:auto;user-select:auto;touch-action:manipulation;}
 button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulation;}
 .app{max-width:480px;margin:0 auto;min-height:100dvh;background:var(--bg);
-  padding-bottom:calc(84px + env(safe-area-inset-bottom));
+  padding-bottom:calc(92px + env(safe-area-inset-bottom));
   padding-top:max(12px, env(safe-area-inset-top));}
 .hide{display:none!important;}
 
@@ -194,8 +194,8 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 
 /* ---------- 底部 Tab ---------- */
 .tabbar{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;
-  display:flex;background:rgba(245,245,247,.92);backdrop-filter:blur(20px);
-  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:40;}
+  display:flex;background:rgba(245,245,247,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);padding-bottom:constant(safe-area-inset-bottom);padding-bottom:env(safe-area-inset-bottom);z-index:40;}
 .tabbar button{flex:1;background:0;border:0;padding:6px 0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:2px;color:var(--gray);font-size:10.5px;font-weight:600;}
 .tabbar button .ic{display:flex;width:25px;height:25px;}
@@ -211,6 +211,7 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 8px;}
 .sheet-head h3{font-size:18px;font-weight:800;margin:0;}
 .sheet-head .x{font-size:22px;color:var(--gray);padding:0 4px;}
+.sheet-head .edit-title-btn{margin-left:8px;font-size:11px;font-weight:700;color:var(--accent);background:#FFF5D6;border:1px solid #FFE4A8;border-radius:8px;padding:2px 8px;vertical-align:middle;cursor:pointer;}
 .sheet-body{padding:4px 18px 18px;}
 
 /* 居中弹窗（详情 / 新增·编辑打卡） */
@@ -2079,8 +2080,10 @@ const RAW=[
 ["阿拉伯烤肉串","中东菜","菜","荤",18,["羊肉", "香料", "盐"],0,"","阿拉伯"],
 ["阿拉伯咖啡","中东菜","汤","素",6,["咖啡豆", "豆蔻"],0,"","阿拉伯"]
 ];
-const TOPCATS = ["菜","汤","主食","甜饮","小食"];
+const TOPCATS = ["菜肴","汤羹","主食","甜饮","小食"];
 const LEFTCATS = ["全部","中国菜","网红菜","东南亚","日料","韩料","中东菜","欧洲菜","美洲菜"];
+function kindLabel(k){ if(k==="菜") return "菜肴"; if(k==="汤") return "汤羹"; return k; }
+function kindForTopcat(t){ if(t==="菜肴") return "菜"; if(t==="汤羹") return "汤"; return t; }
 // 图标库（长按菜品详情图标可选）
 const EMOJI_GRID = ["🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥭","🍍","🥥","🥝",
   "🍅","🥑","🍆","🥔","🥕","🌽","🌶️","🫑","🥒","🥬","🥦","🧄","🧅","🍄","🥜","🫘",
@@ -2151,6 +2154,8 @@ function load(){
       const merged=Object.assign(defaultState(), s);
       (merged.custom||[]).forEach(d=>{ if(d.kind) d.kind=migrateKind(d.kind); });
       Object.values(merged.overrides||{}).forEach(o=>{ if(o.kind) o.kind=migrateKind(o.kind); });
+      if(merged.libTop==="菜") merged.libTop="菜肴";
+      if(merged.libTop==="汤") merged.libTop="汤羹";
       return merged;
     }
   }catch(e){}
@@ -2174,7 +2179,7 @@ function fieldForDish(d){
   if(d.kind==="小食") return "snacks";
   return "dishes";
 }
-function fieldLabel(f){return {dishes:"菜品",staples:"主食",tangyin:"汤饮",snacks:"小食"}[f]||"菜品";}
+function fieldLabel(f){return {dishes:"菜肴",staples:"主食",tangyin:"汤羹",snacks:"小食"}[f]||"菜肴";}
 function poolForField(f){
   if(f==="dishes") return allDishes().filter(d=>d.kind==="菜");
   if(f==="staples") return allDishes().filter(d=>d.kind==="主食");
@@ -2285,11 +2290,11 @@ function renderToday(){
       <button class="refresh-btn" onclick="regen()">换一批</button>
     </div>
   </div>
-  <div class="section-title"><h2>菜品</h2><span class="tag" onclick="openMeatVegPicker()">荤 ${countMeat(pp.dishes,"荤")} · 素 ${countMeat(pp.dishes,"素")}</span></div>
+  <div class="section-title"><h2>菜肴</h2><span class="tag" onclick="openMeatVegPicker()">荤 ${countMeat(pp.dishes,"荤")} · 素 ${countMeat(pp.dishes,"素")}</span></div>
   <div class="list">${dishCards.join("")||emptyRow()}</div>
   <div class="section-title"><h2>主食</h2><span class="tag stepper-tag"><span class="ts-val">${state.stapleCount}</span><button class="ts-btn" onclick="step('stapleCount',0,3,1)">+</button></span></div>
   <div class="list">${stapleCards.join("")||emptyRow()}</div>
-  <div class="section-title"><h2>汤饮</h2><span class="tag stepper-tag"><span class="ts-val">${state.tangyinCount}</span><button class="ts-btn" onclick="step('tangyinCount',0,3,1)">+</button></span></div>
+  <div class="section-title"><h2>汤羹</h2><span class="tag stepper-tag"><span class="ts-val">${state.tangyinCount}</span><button class="ts-btn" onclick="step('tangyinCount',0,3,1)">+</button></span></div>
   <div class="list">${tangyinCards.join("")||emptyRow()}</div>
   <div class="section-title"><h2>小食</h2><span class="tag stepper-tag"><span class="ts-val">${state.snackCount}</span><button class="ts-btn" onclick="step('snackCount',0,3,1)">+</button></span></div>
   <div class="list">${snackCards.join("")||emptyRow()}</div>
@@ -2392,7 +2397,7 @@ function onTodaySearchOutside(e){
 }
 function dishCountChip(){
   const v=state.meatCount+state.vegCount;
-  return `<div class="chip"><span class="lab">菜品</span>
+  return `<div class="chip"><span class="lab">菜肴</span>
     <div class="stepper">
       <button onclick="adjustDishTotal(-1)">−</button>
       <span class="val">${v}</span>
@@ -2454,10 +2459,10 @@ function openSideCountPicker(){
       <span class="val" id="cnt-${key}">${state[key]}</span>
       <button onclick="adjSide('${key}',1)">＋</button>
     </div></div>`;
-  showModal(`<div class="sheet-head"><h3>设置主食/汤饮/小食数量</h3><span class="x" onclick="closeModal()">×</span></div>
+  showModal(`<div class="sheet-head"><h3>设置主食/汤羹/小食数量</h3><span class="x" onclick="closeModal()">×</span></div>
     <div class="sheet-body">
       ${row("主食","stapleCount")}
-      ${row("汤饮","tangyinCount")}
+      ${row("汤羹","tangyinCount")}
       ${row("小食","snackCount")}
     </div>
     <div class="modal-foot"><button class="primary-btn" onclick="closeModal()">完成</button></div>`);
@@ -2733,25 +2738,20 @@ function libraryGrid(){
     );
   }
   if(state.libLeft!=="全部") list=list.filter(d=>d.cuisine===state.libLeft);
-  if(state.libTop!=="全部") list=list.filter(d=>d.kind===state.libTop);
+  if(state.libTop!=="全部") list=list.filter(d=>d.kind===kindForTopcat(state.libTop));
   if(!list.length) return `<div class="empty">没有找到相关菜品</div>`;
   return `<div class="list lib-list">`+list.map(d=>{
     const e=emoFor(d);
-    return `<div class="swipe-wrap" data-id="${d.id}" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
-      <div class="swipe-actions"><button class="act-btn edit" onclick="event.stopPropagation();editDish('${d.id}')">编辑</button></div>
-      <div class="swipe-content" onclick="swipeContentClick(event,'${d.id}')">
-        <div class="dcard" oncontextmenu="return false;">
-          <div class="emoji">${e}</div>
-          <div class="body"><div class="nm">${esc(d.name)}</div>
-            <div class="meta"><span class="pill meat${d.meat}">${d.meat}</span>
-            <span class="pill cuisine">${d.cuisine}</span>
-            <span class="pill cost">¥${d.cost}</span>
-            <span class="pill cost">${d.kind}</span></div>
-            ${regionLabel(d)?`<div class="prov">${esc(regionLabel(d))}</div>`:""}
-          </div>
-          <span class="arrow">›</span>
-        </div>
+    return `<div class="dcard" oncontextmenu="return false;" onclick="openDetail('${d.id}')">
+      <div class="emoji">${e}</div>
+      <div class="body"><div class="nm">${esc(d.name)}</div>
+        <div class="meta"><span class="pill meat${d.meat}">${d.meat}</span>
+        <span class="pill cuisine">${d.cuisine}</span>
+        <span class="pill cost">¥${d.cost}</span>
+        <span class="pill cost">${kindLabel(d.kind)}</span></div>
+        ${regionLabel(d)?`<div class="prov">${esc(regionLabel(d))}</div>`:""}
       </div>
+      <span class="arrow">›</span>
     </div>`;
   }).join("")+`</div>`;
 }
@@ -2785,14 +2785,14 @@ function openDetail(id){
   const e=emoFor(d);
   const ing=d.ingredients.map(x=>`<span>${esc(x)}</span>`).join("");
   const urls=getVideoUrls(d);
-  showModal(`<div class="sheet-head"><h3>菜品详情</h3><span class="x" onclick="closeModal()">×</span></div>
+  showModal(`<div class="sheet-head"><h3>菜品详情<button class="edit-title-btn" onclick="editDish('${d.id}')">编辑</button></h3><span class="x" onclick="closeModal()">×</span></div>
     <div class="sheet-body">
       <div class="detail-emoji">${e}</div>
       <div class="detail-name">${esc(d.name)}</div>
       <div class="detail-meta">
         <span class="pill meat${d.meat}">${d.meat}</span>
         <span class="pill cuisine">${d.cuisine}</span>
-        <span class="pill cost">${d.kind}</span>
+        <span class="pill cost">${kindLabel(d.kind)}</span>
         <span class="pill cost">参考 ¥${d.cost}（${state.servings}人份约 ¥${Math.round(d.cost*state.servings)}）</span>
       </div>
       ${regionLabel(d)?`<div class="detail-prov">${esc(regionLabel(d))}</div>`:""}
@@ -2970,7 +2970,7 @@ function openChangeCat(id){
         ${LEFTCATS.map(c=>`<option ${c===d.cuisine?'selected':''}>${c}</option>`).join("")}
       </select></div>
       <div class="field"><label>类别</label><select id="ccTop">
-        ${TOPCATS.map(c=>`<option ${c===d.kind?'selected':''}>${c}</option>`).join("")}
+        ${TOPCATS.map(c=>`<option ${c===kindLabel(d.kind)?'selected':''}>${c}</option>`).join("")}
       </select></div>
       <div class="cc-tip">修改后仅在本机生效，不影响其他菜</div>
       <button class="primary-btn" onclick="saveChangeCat('${id}')">保存修改</button>
@@ -2978,7 +2978,7 @@ function openChangeCat(id){
 }
 function saveChangeCat(id){
   const cuisine=document.getElementById("ccLeft").value;
-  const kind=document.getElementById("ccTop").value;
+  const kind=kindForTopcat(document.getElementById("ccTop").value);
   if(!state.overrides) state.overrides={};
   state.overrides[id]={cuisine,kind};
   save();closeModal();render();
@@ -3265,13 +3265,15 @@ function submitDish(){
   if(!name){alert("请填写菜名");return;}
   const dyUrl=document.getElementById("ndDyUrl").value.trim();
   const xhsUrl=document.getElementById("ndXhsUrl").value.trim();
+  const topVal=document.getElementById("ndTop").value;
+  const rawKind=kindForTopcat(topVal);
   const d={id:"c"+Date.now(),name,
     cuisine:document.getElementById("ndLeft").value,
-    kind:document.getElementById("ndTop").value,
+    kind:rawKind,
     meat:document.getElementById("ndMeat").value,
     cost:Number(document.getElementById("ndCost").value)||10,
     ingredients:document.getElementById("ndIng").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean),
-    drink:document.getElementById("ndTop").value==="甜饮"&&/茶|咖啡|奶茶|汁|水|饮/.test(name)?1:0,
+    drink:rawKind==="甜饮"&&/茶|咖啡|奶茶|汁|水|饮/.test(name)?1:0,
     dyUrl:dyUrl||undefined,
     xhsUrl:xhsUrl||undefined,
     custom:true};
@@ -3288,7 +3290,7 @@ function editDish(id){
       <div class="field"><label>菜名</label><input id="ndName" value="${esc(d.name)}"></div>
       <div class="row2">
         <div class="field"><label>左分类</label><select id="ndLeft">${sel(LEFTCATS,d.cuisine)}</select></div>
-        <div class="field"><label>顶分类</label><select id="ndTop">${sel(TOPCATS,d.kind)}</select></div>
+        <div class="field"><label>顶分类</label><select id="ndTop">${sel(TOPCATS,kindLabel(d.kind))}</select></div>
       </div>
       <div class="row2">
         <div class="field"><label>荤/素</label><select id="ndMeat"><option ${d.meat==="荤"?"selected":""}>荤</option><option ${d.meat==="素"?"selected":""}>素</option></select></div>
@@ -3306,10 +3308,11 @@ function submitEditDish(id){
   if(!name){alert("请填写菜名");return;}
   const dy=document.getElementById("ndDyUrl").value.trim();
   const xhs=document.getElementById("ndXhsUrl").value.trim();
+  const topVal=document.getElementById("ndTop").value;
   const o={
     name,
     cuisine:document.getElementById("ndLeft").value,
-    kind:document.getElementById("ndTop").value,
+    kind:kindForTopcat(topVal),
     meat:document.getElementById("ndMeat").value,
     cost:Number(document.getElementById("ndCost").value)||10,
     ingredients:document.getElementById("ndIng").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean)
@@ -3340,7 +3343,7 @@ function renderOther(){
         <b>关于 每日餐食</b><br>
         一个纯本地、无联网的每日菜谱推送应用。所有数据存在你的浏览器本地（localStorage），不上传任何服务器。<br><br>
         <b>功能</b><br>
-        · 今日餐食：默认推送 2 菜 1 主食 1 汤饮 1 小食，菜品荤素搭配，可换一批 / 替换 / 调人数与各类数量<br>
+        · 今日餐食：默认推送 2 菜肴（1荤1素）1 主食 1 汤羹 1 小食，可换一批 / 替换 / 调人数与各类数量<br>
         · 菜库：${allDishes().length} 道真实热门菜，左侧菜系 + 顶部类别双重筛选，支持菜名/食材搜索<br>
         · 打卡：5 级评价（夯最好 → 拉最差）+ 花费 + 备注 + 图片，可编辑删除，统计本月花费与评价分布<br><br>
         <span class="note-line">关于做菜视频：点「抖音/小红书做菜视频」会直接打开对应平台、以该菜名为关键词的视频搜索结果（默认按热度排序）。由于平台限制，无法在本地保证精准定位到「最高赞」那条，但搜出来的就是该菜最热门的做菜视频。</span>
