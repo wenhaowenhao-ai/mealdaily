@@ -80,12 +80,17 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .ts-btn:active{background:#F2F2F7;}
 .ts-val{min-width:16px;text-align:center;font-size:12px;font-weight:600;color:var(--ink2);}
 .list{padding:4px 16px 12px;display:flex;flex-direction:column;gap:12px;}
-.swipe-wrap{position:relative;overflow:hidden;border-radius:var(--r);touch-action:pan-y;}
-.swipe-wrap .delete-btn{position:absolute;right:0;top:0;bottom:0;width:76px;background:var(--red);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;z-index:1;}
-.swipe-content{position:relative;z-index:2;background:var(--card);border-radius:var(--r);
-  transition:transform .15s ease;}
-.swipe-wrap.open .swipe-content{transform:translateX(-76px);}
+.lib-list{gap:8px;}
+.swipe-wrap{position:relative;overflow:hidden;border-radius:var(--r);touch-action:pan-y;--swipe-w:76px;}
+.swipe-actions{position:absolute;right:0;top:0;bottom:0;display:flex;flex-direction:row;z-index:1;height:100%;}
+.swipe-actions .act-btn{height:100%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;border:0;padding:0 10px;white-space:nowrap;min-width:64px;}
+.swipe-actions .act-btn.del{background:var(--red);}
+.swipe-actions .act-btn.edit{background:var(--blue);}
+.swipe-content{position:relative;z-index:2;background:var(--card);border-radius:0;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1);will-change:transform;}
+.swipe-content.swiping{transition:none;}
+.swipe-wrap.open .swipe-content{transform:translateX(calc(var(--swipe-w)*-1));}
+.swipe-content .dcard{border-radius:0;}
 .dcard{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);
   display:flex;align-items:center;gap:14px;cursor:pointer;position:relative;}
 .dcard:active{transform:scale(.985);}
@@ -191,8 +196,8 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .tabbar{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;
   display:flex;background:rgba(245,245,247,.92);backdrop-filter:blur(20px);
   border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:40;}
-.tabbar button{flex:1;background:0;border:0;padding:8px 0 7px;display:flex;flex-direction:column;
-  align-items:center;gap:2px;color:var(--gray);font-size:10.5px;font-weight:600;}
+.tabbar button{flex:1;background:0;border:0;padding:6px 0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;color:var(--gray);font-size:10.5px;font-weight:600;}
 .tabbar button .ic{display:flex;width:25px;height:25px;}
 .tabbar button .ic svg{width:100%;height:100%;}
 .tabbar button.active{color:var(--accent2);}
@@ -2291,10 +2296,10 @@ function renderToday(){
   ${tabbarHTML("today")}`;
 }
 function dishRow(d,field,index=0){
-  if(!d) return emptyRow();
+  if(!d) return emptyPlanRow(field);
   const e=emoFor(d);
   return `<div class="swipe-wrap" data-field="${field}" data-index="${index}" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
-    <div class="delete-btn" onclick="event.stopPropagation();deletePlanItem('${field}',${index})">删除</div>
+    <div class="swipe-actions"><button class="act-btn del" onclick="event.stopPropagation();deletePlanItem('${field}',${index})">删除</button></div>
     <div class="swipe-content" onclick="swipeContentClick(event,'${d.id}')">
       <div class="dcard">
         <div class="emoji">${e}</div>
@@ -2315,6 +2320,30 @@ function dishRow(d,field,index=0){
 }
 function countMeat(ids,m){return ids.filter(id=>{const d=dishById(id);return d&&d.meat===m;}).length;}
 function emptyRow(){return `<div class="dcard" style="color:var(--gray);justify-content:center;">（暂无）</div>`;}
+function emptyPlanRow(field){
+  return `<div class="swipe-wrap" data-field="${field}" data-empty="1" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
+    <div class="swipe-actions"></div>
+    <div class="swipe-content" onclick="swipeContentClick(event,'')">
+      <div class="dcard" style="color:var(--gray);justify-content:center;">（暂无）<span style="font-size:12px;color:var(--ink2);margin-left:6px;">右滑恢复</span></div>
+    </div>
+  </div>`;
+}
+function restorePlanField(field){
+  if(!state.plan) state.plan=buildPlan();
+  const pool=poolForField(field);
+  const key=field==='dishes'?'dishCount':field==='staples'?'stapleCount':field==='tangyin'?'tangyinCount':field==='snacks'?'snackCount':1;
+  const target=state[key]||1;
+  const arr=state.plan[field]||[];
+  const ex=new Set(arr);
+  while(arr.length<target && pool.length){
+    const cands=pool.filter(d=>!ex.has(d.id));
+    const list=cands.length?cands:pool;
+    const id=list[Math.floor(Math.random()*list.length)].id;
+    arr.push(id); ex.add(id);
+  }
+  state.plan[field]=arr;
+  save(); render();
+}
 
 function todaySearchResults(){
   if(!state.todaySearchActive) return "";
@@ -2555,50 +2584,79 @@ function deletePlanItem(field,index){
   save();render();
 }
 
-/* 左滑删除 */
-let swipeEl=null,swipeWrap=null,swipeStartX=0,swipeCurrentX=0,swipeOpen=false;
+/* 左滑删除 / 右滑恢复 */
+let currentSwipe=null;
 function closeAllSwipes(){
-  document.querySelectorAll('.swipe-wrap.open').forEach(w=>w.classList.remove('open'));
+  document.querySelectorAll('.swipe-wrap.open').forEach(w=>{w.classList.remove('open');w.querySelector('.swipe-content').style.transform='';});
+}
+function getSwipeWidth(wrap){
+  const act=wrap.querySelector('.swipe-actions');
+  return act? act.offsetWidth : 76;
 }
 function swipeStart(e){
-  swipeWrap=e.currentTarget;
-  swipeEl=swipeWrap.querySelector('.swipe-content');
-  swipeStartX=e.touches[0].clientX;
-  swipeCurrentX=swipeStartX;
-  swipeOpen=swipeWrap.classList.contains('open');
-  window.didSwipe=false;
-  closeAllSwipes();
+  const wrap=e.currentTarget;
+  const content=wrap.querySelector('.swipe-content');
+  const open=wrap.classList.contains('open');
+  if(!open) closeAllSwipes();
+  const width=getSwipeWidth(wrap);
+  wrap.style.setProperty('--swipe-w', width+'px');
+  content.classList.add('swiping');
+  currentSwipe={wrap,content,open,
+    width:width,
+    startX:e.touches[0].clientX,startY:e.touches[0].clientY,
+    currentX:e.touches[0].clientX,
+    swiped:false,cancelled:false};
 }
 function swipeMove(e){
-  if(!swipeEl) return;
-  const x=e.touches[0].clientX;
-  const dx=x-swipeStartX;
-  swipeCurrentX=x;
-  if(Math.abs(dx)>6) window.didSwipe=true;
-  let tx=0;
-  if(swipeOpen) tx=Math.min(0,-76+dx);
-  else tx=Math.min(0,Math.max(-76,dx));
-  swipeEl.style.transform=`translateX(${tx}px)`;
-  if(Math.abs(dx)>10) e.preventDefault();
+  if(!currentSwipe || currentSwipe.cancelled) return;
+  const x=e.touches[0].clientX, y=e.touches[0].clientY;
+  const dx=x-currentSwipe.startX, dy=y-currentSwipe.startY;
+  currentSwipe.currentX=x;
+  // 垂直滚动优先：第一次移动若纵向明显，则取消本次 swipe
+  if(!currentSwipe.swiped && Math.abs(dy)>Math.abs(dx) && Math.abs(dy)>10){
+    currentSwipe.cancelled=true;
+    currentSwipe.content.classList.remove('swiping');
+    currentSwipe=null;
+    return;
+  }
+  if(Math.abs(dx)>8) currentSwipe.swiped=true;
+  if(!currentSwipe.swiped) return;
+  e.preventDefault();
+  const w=currentSwipe.width;
+  let tx;
+  if(currentSwipe.open) tx=Math.min(0,-w+dx);
+  else tx=Math.min(0,Math.max(-w,dx));
+  // 拉过头时加阻力
+  if(tx>0) tx=tx*0.25;
+  if(tx<-w) tx=-w-(w+tx)*0.25;
+  currentSwipe.content.style.transform=`translateX(${tx}px)`;
 }
 function swipeEnd(e){
-  if(!swipeEl) return;
-  const dx=swipeCurrentX-swipeStartX;
-  const threshold=40;
-  if(swipeOpen){
-    if(dx>threshold) swipeWrap.classList.remove('open');
-    else swipeWrap.classList.add('open');
-  }else{
-    if(dx<-threshold){ closeAllSwipes(); swipeWrap.classList.add('open'); }
-    else swipeWrap.classList.remove('open');
+  if(!currentSwipe) return;
+  const s=currentSwipe;
+  const dx=s.currentX-s.startX;
+  const threshold=Math.max(40,s.width*0.38);
+  s.content.classList.remove('swiping');
+  s.content.style.transform='';
+  if(s.wrap.dataset.empty && dx>threshold){
+    // 右滑恢复空分类
+    restorePlanField(s.wrap.dataset.field);
+    currentSwipe=null;
+    return;
   }
-  swipeEl.style.transform='';
-  swipeEl=null; swipeWrap=null;
+  if(s.open){
+    if(dx>threshold) s.wrap.classList.remove('open');
+    else s.wrap.classList.add('open');
+  }else{
+    if(dx<-threshold){ closeAllSwipes(); s.wrap.classList.add('open'); }
+    else s.wrap.classList.remove('open');
+  }
+  currentSwipe=null;
 }
 function swipeContentClick(e,id){
   const wrap=e.currentTarget.closest('.swipe-wrap');
   if(wrap.classList.contains('open')){ wrap.classList.remove('open'); return; }
-  if(window.didSwipe){ window.didSwipe=false; return; }
+  if(currentSwipe && currentSwipe.swiped){ currentSwipe=null; return; }
   openDetail(id);
 }
 
@@ -2677,20 +2735,23 @@ function libraryGrid(){
   if(state.libLeft!=="全部") list=list.filter(d=>d.cuisine===state.libLeft);
   if(state.libTop!=="全部") list=list.filter(d=>d.kind===state.libTop);
   if(!list.length) return `<div class="empty">没有找到相关菜品</div>`;
-  return `<div class="list">`+list.map(d=>{
+  return `<div class="list lib-list">`+list.map(d=>{
     const e=emoFor(d);
-    return `<div class="dcard" oncontextmenu="return false;" onclick="onLibCardClick('${d.id}')"
-      onmousedown="startLibLongPress('${d.id}')" onmouseup="cancelLibLongPress()" onmouseleave="cancelLibLongPress()"
-      ontouchstart="startLibLongPress('${d.id}')" ontouchend="cancelLibLongPress()" ontouchmove="cancelLibLongPress()">
-      <div class="emoji">${e}</div>
-      <div class="body"><div class="nm">${esc(d.name)}</div>
-        <div class="meta"><span class="pill meat${d.meat}">${d.meat}</span>
-        <span class="pill cuisine">${d.cuisine}</span>
-        <span class="pill cost">¥${d.cost}</span>
-        <span class="pill cost">${d.kind}</span></div>
-        ${regionLabel(d)?`<div class="prov">${esc(regionLabel(d))}</div>`:""}
+    return `<div class="swipe-wrap" data-id="${d.id}" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
+      <div class="swipe-actions"><button class="act-btn edit" onclick="event.stopPropagation();editDish('${d.id}')">编辑</button></div>
+      <div class="swipe-content" onclick="swipeContentClick(event,'${d.id}')">
+        <div class="dcard" oncontextmenu="return false;">
+          <div class="emoji">${e}</div>
+          <div class="body"><div class="nm">${esc(d.name)}</div>
+            <div class="meta"><span class="pill meat${d.meat}">${d.meat}</span>
+            <span class="pill cuisine">${d.cuisine}</span>
+            <span class="pill cost">¥${d.cost}</span>
+            <span class="pill cost">${d.kind}</span></div>
+            ${regionLabel(d)?`<div class="prov">${esc(regionLabel(d))}</div>`:""}
+          </div>
+          <span class="arrow">›</span>
+        </div>
       </div>
-      <span class="arrow">›</span>
     </div>`;
   }).join("")+`</div>`;
 }
@@ -3215,6 +3276,49 @@ function submitDish(){
     xhsUrl:xhsUrl||undefined,
     custom:true};
   state.custom.push(d);save();closeModal();render();
+}
+function editDish(id){
+  const d=dishById(id); if(!d) return;
+  const sel=(arr,v)=>arr.map(c=>`<option ${c===v?'selected':''}>${c}</option>`).join("");
+  const urls=getVideoUrls(d);
+  const dyVal=urls.dy==="https://www.douyin.com/"?"":urls.dy;
+  const xhsVal=urls.xhs==="https://www.xiaohongshu.com/"?"":urls.xhs;
+  showModal(`<div class="sheet-head"><h3>编辑菜品</h3><span class="x" onclick="closeModal()">×</span></div>
+    <div class="sheet-body">
+      <div class="field"><label>菜名</label><input id="ndName" value="${esc(d.name)}"></div>
+      <div class="row2">
+        <div class="field"><label>左分类</label><select id="ndLeft">${sel(LEFTCATS,d.cuisine)}</select></div>
+        <div class="field"><label>顶分类</label><select id="ndTop">${sel(TOPCATS,d.kind)}</select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>荤/素</label><select id="ndMeat"><option ${d.meat==="荤"?"selected":""}>荤</option><option ${d.meat==="素"?"selected":""}>素</option></select></div>
+        <div class="field"><label>参考成本(元)</label><input id="ndCost" type="number" value="${d.cost}"></div>
+      </div>
+      <div class="field"><label>食材（逗号分隔）</label><textarea id="ndIng">${(d.ingredients||[]).join(", ")}</textarea></div>
+      <div class="field"><label>抖音链接（可选）</label><input id="ndDyUrl" value="${esc(dyVal)}"></div>
+      <div class="field"><label>小红书链接（可选）</label><input id="ndXhsUrl" value="${esc(xhsVal)}"></div>
+    </div>
+    <div class="modal-foot"><button class="primary-btn" onclick="submitEditDish('${id}')">保存修改</button></div>`);
+}
+function submitEditDish(id){
+  const d=dishById(id); if(!d) return;
+  const name=document.getElementById("ndName").value.trim();
+  if(!name){alert("请填写菜名");return;}
+  const dy=document.getElementById("ndDyUrl").value.trim();
+  const xhs=document.getElementById("ndXhsUrl").value.trim();
+  const o={
+    name,
+    cuisine:document.getElementById("ndLeft").value,
+    kind:document.getElementById("ndTop").value,
+    meat:document.getElementById("ndMeat").value,
+    cost:Number(document.getElementById("ndCost").value)||10,
+    ingredients:document.getElementById("ndIng").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean)
+  };
+  o.dyUrl=dy||undefined;
+  o.xhsUrl=xhs||undefined;
+  if(!state.overrides) state.overrides={};
+  state.overrides[id]=o;
+  save();closeModal();render();
 }
 
 /* ============ 其他 ============ */
