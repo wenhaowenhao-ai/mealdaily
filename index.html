@@ -94,7 +94,6 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .swipe-content .dcard{border-radius:var(--r) 0 0 var(--r);}
 .dcard{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);
   display:flex;align-items:center;gap:14px;cursor:pointer;position:relative;}
-.dcard:active{transform:scale(.985);}
 .dcard .emoji{width:50px;height:50px;border-radius:13px;background:transparent;display:flex;align-items:center;
   justify-content:center;font-size:27px;flex-shrink:0;}
 .dcard .body{flex:1;min-width:0;}
@@ -147,7 +146,6 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .gcard{background:var(--card2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border:1px solid rgba(255,255,255,.6);border-radius:15px;padding:12px;box-shadow:var(--shadow);
   cursor:pointer;display:flex;flex-direction:column;gap:7px;}
-.gcard:active{transform:scale(.97);}
 .gcard .row{display:flex;align-items:center;gap:9px;}
 .gcard .emoji{width:38px;height:38px;border-radius:10px;background:transparent;display:flex;align-items:center;
   justify-content:center;font-size:21px;flex-shrink:0;}
@@ -156,7 +154,6 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .add-dish-btn{position:fixed;right:14px;bottom:92px;width:48px;height:48px;border-radius:50%;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:0;font-size:24px;
   box-shadow:0 6px 18px rgba(255,107,0,.4);z-index:30;}
-.add-dish-btn:active{transform:scale(.92);}
 .empty{padding:40px 16px;text-align:center;color:var(--gray);font-size:14px;}
 
 /* ---------- 打卡 ---------- */
@@ -173,8 +170,7 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .rate-stat .rs-row{display:flex;gap:6px;flex-wrap:nowrap;}
 .rate-chip{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;
   justify-content:center;padding:8px 2px 6px;border-radius:12px;background:#F2F2F7;border:2px solid transparent;
-  transition:transform .12s ease,background .12s ease,border-color .12s ease;}
-.rate-chip:active{transform:scale(.96);}
+  transition:background .12s ease,border-color .12s ease;}
 .rate-chip .rc-emoji{font-size:22px;line-height:1;margin-bottom:3px;}
 .rate-chip .rc-label{font-size:11px;font-weight:700;color:var(--ink);white-space:nowrap;}
 .rate-chip .rc-count{font-size:10px;color:var(--ink3);margin-top:2px;}
@@ -248,13 +244,11 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .detail-emoji{width:74px;height:74px;border-radius:18px;background:transparent;display:flex;align-items:center;
   justify-content:center;font-size:40px;margin:6px auto 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;
   user-select:none;-webkit-user-select:none;}
-.detail-emoji:active{transform:scale(.96);}
 .detail-name{font-size:22px;font-weight:800;text-align:center;}
 .emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:12px;}
 .emoji-cell{aspect-ratio:1;border:1px solid transparent;border-radius:11px;background:#F2F2F7;font-size:26px;
   display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;}
 .emoji-cell.on{background:#FFF8E7;border-color:var(--accent);}
-.emoji-cell:active{transform:scale(.9);}
 .emoji-custom{display:flex;gap:8px;margin-bottom:10px;}
 .emoji-custom input{flex:1;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;
   background:#fff;font-family:inherit;color:var(--ink);outline:0;}
