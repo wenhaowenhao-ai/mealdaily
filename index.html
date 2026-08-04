@@ -2225,27 +2225,30 @@ async function cbPush(silent){ const client=await sbEnsureAuth(); if(!client){ i
   }catch(e){ if(!silent) cbSetStatus("同步失败："+(e&&e.message?e.message:e),true); return false; }
 }
 function saveNoPush(){ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }
-async function cbPull(){ const client=await sbEnsureAuth(); if(!client){ alert("请先填写并保存 Supabase 配置"); return; }
-  if(!state.cb.code){ alert("请先填写同步码"); return; }
+async function cbPull(silent){ const client=await sbEnsureAuth();
+  if(!client){ if(silent) cbSetStatus("未配置 Supabase 或登录失败",true); else alert("请先填写并保存 Supabase 配置"); return; }
+  if(!state.cb.code){ if(silent) cbSetStatus("请先填写同步码",true); else alert("请先填写同步码"); return; }
   try{
     const uid=await sha256Hex(state.cb.code);
     const {data,error}=await client.from(CB_TABLE).select("data").eq("user_id",uid).maybeSingle();
     if(error) throw error;
-    if(!data){ alert("云端还没有该同步码的备份"); return; }
+    if(!data){ if(silent) cbSetStatus("云端暂无该同步码的备份"); else alert("云端还没有该同步码的备份"); return; }
     const parsed=JSON.parse(data.data);
-    confirmDialog("从云端恢复会覆盖本机数据","确定用云端数据覆盖当前手机数据吗？",function(){
+    const apply=function(){
       state=Object.assign(defaultState(),parsed);
       state.custom=state.custom||[]; state.checkins=state.checkins||[]; state.overrides=state.overrides||{}; state.deleted=state.deleted||[];
       if(!state.cb) state.cb={url:"",key:"",code:"",lastSync:null};
       state.cb.lastSync=Date.now();
-      saveNoPush(); render();
-      alert("已从云端恢复");
-    },"从云端恢复");
-  }catch(e){ alert("拉取失败："+(e&&e.message?e.message:e)); }
+      saveNoPush(); render(); cbRefreshCloudInfo();
+      if(silent) cbSetStatus("已从云端恢复"); else alert("已从云端恢复");
+    };
+    if(silent) apply();
+    else confirmDialog("从云端恢复会覆盖本机数据","确定用云端数据覆盖当前手机数据吗？",apply,"从云端恢复");
+  }catch(e){ const msg="拉取失败："+(e&&e.message?e.message:e); if(silent) cbSetStatus(msg,true); else alert(msg); }
 }
 function lcSaveConfig(){ const url=document.getElementById("sbUrl"); const key=document.getElementById("sbKey"); const code=document.getElementById("sbCode");
   if(url) state.cb.url=url.value.trim(); if(key) state.cb.key=key.value.trim(); if(code) state.cb.code=code.value.trim(); saveNoPush();
-  if(sbClientGet()){ cbSetStatus("配置已保存，正在首次同步…"); cbPush().then(()=>cbRefreshCloudInfo()); }
+  if(sbClientGet()){ cbSetStatus("配置已保存，正在从云端恢复…"); cbPull(true); }
   else cbSetStatus("配置已保存（未检测到 Supabase SDK 或信息不全）", !!(state.cb&&state.cb.url&&state.cb.key)); }
 function lcPushNow(){ if(!sbClientGet()){ alert("请先填写并保存 Supabase 配置（URL 和 Anon Key）"); return; } cbSetStatus("正在同步…"); cbPush().then(()=>cbRefreshCloudInfo()); }
 function lcPullNow(){ cbPull(); }
