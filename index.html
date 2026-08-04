@@ -48,10 +48,12 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
   border-radius:14px;padding:10px 14px;}
 .search-box .ic{width:16px;height:16px;color:var(--gray);opacity:.85;display:flex;align-items:center;justify-content:center;}
 .search-box .ic svg{width:100%;height:100%;}
-.search-box input{flex:1;border:0;outline:0;font-size:14px;background:transparent;color:var(--ink);}
+.search-box input{flex:1;min-width:0;border:0;outline:0;font-size:14px;background:transparent;color:var(--ink);}
 .search-box input::placeholder{color:#8E8E93;}
-.search-box .clear{width:20px;height:20px;border-radius:50%;border:0;background:#C7C7CC;color:#fff;
-  font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;margin-left:2px;}
+.search-box .clear{width:20px;min-width:20px;height:20px;min-height:20px;border-radius:50%;border:0;background:#C7C7CC;color:#fff;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;margin-left:2px;box-sizing:border-box;
+  -webkit-appearance:none;appearance:none;padding:0;font-family:inherit;-webkit-tap-highlight-color:transparent;}
+.search-box .clear svg{display:block;width:12px;height:12px;flex-shrink:0;}
 
 /* ---------- 紧凑控件 ---------- */
 .controls{display:flex;flex-direction:column;gap:7px;padding:9px 16px 11px;background:transparent;border-bottom:0;}
@@ -2349,8 +2351,9 @@ function renderToday(){
       <div class="search-box"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
         <input placeholder="输入关键词" value="${esc(state.todaySearch)}"
           oninput="state.todaySearch=this.value;state.todaySearchActive=true;save();renderTodaySearch();toggleClear('todayClearBtn',this.value);"
+          onkeyup="toggleClear('todayClearBtn',this.value);"
           onkeydown="if(event.key==='Enter'){event.preventDefault();}">
-        <button class="clear" id="todayClearBtn" style="${state.todaySearch?'':'display:none'}" onclick="event.stopPropagation();clearTodaySearch()">×</button>
+        <button class="clear" id="todayClearBtn" style="${state.todaySearch?'':'display:none'}" onclick="event.stopPropagation();clearTodaySearch()" aria-label="清空"><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
     </div>
   </div>
@@ -2780,8 +2783,9 @@ function renderLibrary(){
     <div class="search-mini">
       <div class="search-box"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
         <input placeholder="输入关键词" value="${esc(state.libSearch)}"
-          oninput="state.libSearch=this.value;save();renderLibraryRight();toggleClear('libClearBtn',this.value);">
-        <button class="clear" id="libClearBtn" style="${state.libSearch?'':'display:none'}" onclick="event.stopPropagation();clearLibSearch()">×</button>
+          oninput="state.libSearch=this.value;save();renderLibraryRight();toggleClear('libClearBtn',this.value);"
+          onkeyup="toggleClear('libClearBtn',this.value);">
+        <button class="clear" id="libClearBtn" style="${state.libSearch?'':'display:none'}" onclick="event.stopPropagation();clearLibSearch()" aria-label="清空"><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
     </div>
   </div>
