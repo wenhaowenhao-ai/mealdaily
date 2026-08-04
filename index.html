@@ -165,17 +165,22 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .month-stat .t{font-size:13px;opacity:.9;}
 .month-stat .v{font-size:28px;font-weight:800;margin-top:2px;}
 .month-stat .c{font-size:12px;opacity:.85;margin-top:4px;}
-.rate-stat{margin:10px 16px 4px;background:#fff;border:1px solid var(--line);border-radius:var(--r);
-  padding:10px 12px;box-shadow:var(--shadow);}
-.rate-stat .rs-title{font-size:11px;color:var(--ink2);margin-bottom:7px;font-weight:600;}
-.rate-stat .rs-row{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;
+.rate-stat{margin:12px 16px 6px;background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:14px 14px 12px;box-shadow:var(--shadow);}
+.rate-stat .rs-title{display:flex;justify-content:space-between;align-items:baseline;font-size:16px;
+  color:var(--ink);margin-bottom:12px;font-weight:700;}
+.rate-stat .rs-count{font-size:12px;color:var(--ink2);font-weight:500;}
+.rate-stat .rs-row{display:flex;gap:10px;flex-wrap:nowrap;overflow-x:auto;
   -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
-  touch-action:pan-x;scrollbar-width:none;padding-bottom:2px;}
+  touch-action:pan-x;scrollbar-width:none;padding:2px 2px 6px;}
 .rate-stat .rs-row::-webkit-scrollbar{display:none;}
-.rate-chip{display:inline-flex;align-items:center;gap:3px;background:#fff;border:1px solid;
-  border-radius:9px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;scroll-snap-align:start;}
-.rate-chip .rc-emoji{font-size:13px;}
-.rate-chip b{font-weight:800;}
+.rate-chip{flex:0 0 auto;width:76px;height:88px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;border-radius:16px;background:#F2F2F7;border:2px solid transparent;
+  scroll-snap-align:start;transition:transform .12s ease,background .12s ease,border-color .12s ease;}
+.rate-chip:active{transform:scale(.96);}
+.rate-chip .rc-emoji{font-size:30px;line-height:1;margin-bottom:5px;}
+.rate-chip .rc-label{font-size:13px;font-weight:700;color:var(--ink);}
+.rate-chip .rc-count{font-size:11px;color:var(--ink3);margin-top:3px;}
 .timeline{padding:8px 16px 100px;position:relative;}
 .tl-item{position:relative;padding:0 0 16px 26px;}
 .tl-item:before{content:"";position:absolute;left:8px;top:6px;bottom:-6px;width:2px;background:var(--line);}
@@ -305,6 +310,15 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .ghost-btn{width:100%;background:#F2F2F7;color:var(--ink);border:1px solid var(--line);
   border-radius:14px;padding:13px;font-size:15px;font-weight:700;margin-top:9px;}
 .ghost-btn:active{opacity:.7;}
+/* LeanCloud 同步 */
+.sync-card .lc-form{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+.sync-card .lc-form input{width:100%;box-sizing:border-box;background:#F2F2F7;border:1px solid var(--line);
+  border-radius:11px;padding:11px 12px;font-size:14px;color:var(--ink);outline:none;}
+.sync-card .lc-form input:focus{border-color:var(--accent);}
+.sync-card .lc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px;}
+.sync-card .lc-actions button{width:auto;flex:1;padding:11px 8px;font-size:13px;margin-top:0;border-radius:11px;}
+.sync-card .lc-status{font-size:12px;color:var(--ink2);margin-top:6px;}
+.sync-card .lc-status.err{color:#FF3B30;}
 /* 食材编辑 */
 .mini-edit{display:inline-flex;align-items:center;margin-left:6px;line-height:1;
   color:var(--gray);cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -337,6 +351,7 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 <button class="add-dish-btn hide" id="addDishBtn" onclick="openAddDish()">＋</button>
 <button class="add-dish-btn hide" id="addCheckinBtn" onclick="openAddCheckin()">＋</button>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const RAW=[
 ["麻婆豆腐","中国菜","菜","素",10,["豆腐", "牛肉末", "豆瓣酱", "花椒", "蒜苗", "辣椒面"],0,"川菜",""],
@@ -2108,6 +2123,7 @@ const RATINGS = [
   {v:1,label:"拉",emoji:"💀",color:"#FF3B30"},
 ];
 function ratingOf(v){return RATINGS.find(r=>r.v==v)||RATINGS[2];}
+function hexToRgba(h,a){let c=h.slice(1);if(c.length===3)c=c.split('').map(x=>x+x).join('');const n=parseInt(c,16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;}
 
 const DISHES = RAW.map((e,i)=>({
   id:"d"+i, name:e[0], cuisine:e[1], kind:e[2], meat:e[3], cost:e[4],
@@ -2171,9 +2187,58 @@ function load(){
 function defaultState(){
   return {tab:"today",servings:2,dishCount:2,meatCount:1,vegCount:1,stapleCount:1,tangyinCount:1,snackCount:1,
     libLeft:"全部",libTop:"全部",libSearch:"",todaySearch:"",todaySearchActive:false,ciSearch:"",ciRatingFilter:null,
-    plan:null,custom:[],checkins:[],overrides:{}};
+    plan:null,custom:[],checkins:[],overrides:{},cb:{url:"",key:"",lastSync:null}};
 }
-function save(){localStorage.setItem(STORE_KEY,JSON.stringify(state));}
+function save(){localStorage.setItem(STORE_KEY,JSON.stringify(state)); cbSchedulePush();}
+function fmtTime(ts){ if(!ts) return ""; const d=new Date(ts);
+  const p=n=>String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; }
+let _cbTimer=null;
+function cbSchedulePush(){ if(_cbTimer) clearTimeout(_cbTimer); _cbTimer=setTimeout(()=>{ _cbTimer=null; cbPush(); },1500); }
+const CB_TABLE="mealdaily_sync";
+let sbClient=null;
+function sbClientGet(){ if(!sbClient && typeof supabase!=="undefined" && state.cb && state.cb.url && state.cb.key){ try{ sbClient=supabase.createClient(state.cb.url, state.cb.key, {auth:{persistSession:true, autoRefreshToken:true}}); }catch(e){ sbClient=null; } } return sbClient; }
+function cbSetStatus(msg,err){ const el=document.getElementById("lcStatus"); if(el){ el.textContent=msg; el.classList.toggle("err",!!err); } }
+async function sbEnsureAuth(){ const client=sbClientGet(); if(!client) return null;
+  try{ const {data}=await client.auth.getUser(); if(data&&data.user) return client;
+    const r=await client.auth.signInAnonymously(); if(r&&r.data&&r.data.user) return client; return null; }catch(e){ return null; } }
+async function sbGetUid(client){ try{ const {data}=await client.auth.getUser(); return data&&data.user?data.user.id:null; }catch(e){ return null; } }
+async function cbPush(silent){ const client=await sbEnsureAuth(); if(!client){ if(!silent) cbSetStatus("未配置 Supabase 或登录失败",true); return false; }
+  try{
+    const uid=await sbGetUid(client); if(!uid){ if(!silent) cbSetStatus("获取用户标识失败",true); return false; }
+    const payload={user_id:uid, data:JSON.stringify(state), updated_at:new Date().toISOString()};
+    const {error}=await client.from(CB_TABLE).upsert(payload,{onConflict:"user_id"});
+    if(error) throw error;
+    state.cb.lastSync=Date.now(); saveNoPush();
+    if(!silent) cbSetStatus("最近同步："+fmtTime(state.cb.lastSync));
+    return true;
+  }catch(e){ if(!silent) cbSetStatus("同步失败："+(e&&e.message?e.message:e),true); return false; }
+}
+function saveNoPush(){ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }
+async function cbPull(){ const client=await sbEnsureAuth(); if(!client){ alert("请先填写并保存 Supabase 配置"); return; }
+  try{
+    const uid=await sbGetUid(client); if(!uid){ alert("获取用户标识失败"); return; }
+    const {data,error}=await client.from(CB_TABLE).select("data").eq("user_id",uid).maybeSingle();
+    if(error) throw error;
+    if(!data){ alert("云端还没有该设备的备份"); return; }
+    const parsed=JSON.parse(data.data);
+    confirmDialog("从云端恢复会覆盖本机数据","确定用云端数据覆盖当前手机数据吗？",function(){
+      state=Object.assign(defaultState(),parsed);
+      state.custom=state.custom||[]; state.checkins=state.checkins||[]; state.overrides=state.overrides||{};
+      if(!state.cb) state.cb={url:"",key:"",lastSync:null};
+      state.cb.lastSync=Date.now();
+      saveNoPush(); render();
+      alert("已从云端恢复");
+    },"从云端恢复");
+  }catch(e){ alert("拉取失败："+(e&&e.message?e.message:e)); }
+}
+function lcSaveConfig(){ const url=document.getElementById("sbUrl"); const key=document.getElementById("sbKey");
+  if(url) state.cb.url=url.value.trim(); if(key) state.cb.key=key.value.trim(); saveNoPush();
+  if(sbClientGet()){ cbSetStatus("配置已保存，正在首次同步…"); cbPush(); }
+  else cbSetStatus("配置已保存（未检测到 Supabase SDK 或信息不全）", !!(state.cb&&state.cb.url&&state.cb.key)); }
+function lcPushNow(){ if(!sbClientGet()){ alert("请先填写并保存 Supabase 配置（URL 和 Anon Key）"); return; } cbSetStatus("正在同步…"); cbPush(); }
+function lcPullNow(){ cbPull(); }
+
 
 function allDishes(){return DISHES.concat(state.custom).map(resolve);}
 function dishById(id){const d=DISHES.concat(state.custom).find(x=>x.id===id);return d?resolve(d):undefined;}
@@ -2945,11 +3010,14 @@ function editIngredients(id){
 function addIngRow(){
   const wrap=document.getElementById('ingEditList');
   if(!wrap) return;
+  const nin=document.getElementById('ingNew');
+  const val=nin?nin.value.trim():'';
   const div=document.createElement('div');
   div.className='ing-edit-row';
-  div.innerHTML='<input class="iei" value="" placeholder="食材名称"><button class="ing-del" onclick="delIngRow(this)">×</button>';
+  div.innerHTML=`<input class="iei" value="${esc(val)}" placeholder="食材名称"><button class="ing-del" onclick="delIngRow(this)">×</button>`;
   wrap.appendChild(div);
   const inp=div.querySelector('.iei'); if(inp) inp.focus();
+  if(nin){ nin.value=''; nin.focus(); }
 }
 function delIngRow(btn){ const r=btn.parentElement; if(r) r.remove(); }
 function saveIngredients(id){
@@ -3070,12 +3138,13 @@ function renderCheckins(){
     <div class="c">共 ${month.length} 次打卡</div>
   </div>
   <div class="rate-stat">
-    <div class="rs-title">评价分布（全部 ${state.checkins.length} 次）${state.ciRatingFilter?'· 已筛选 '+ratingOf(state.ciRatingFilter).label:''}</div>
+    <div class="rs-title">评价<span class="rs-count">${state.checkins.length} 次</span></div>
     <div class="rs-row">
       ${RATINGS.map(r=>{
         const active=state.ciRatingFilter===r.v;
-        const style=active?`background:${r.color};border-color:${r.color};color:#fff;`:`border-color:${r.color};color:${r.color};`;
-        return `<span class="rate-chip ${active?'active':''}" style="${style}" onclick="toggleRateFilter(${r.v})"><span class="rc-emoji">${r.emoji}</span>${r.label} <b>${state.checkins.filter(c=>c.rating===r.v).length}</b></span>`;
+        const count=state.checkins.filter(c=>c.rating===r.v).length;
+        const style=active?`background:${hexToRgba(r.color,0.14)};border-color:${r.color};`:`background:#F2F2F7;border-color:transparent;`;
+        return `<div class="rate-chip ${active?'active':''}" style="${style}" onclick="toggleRateFilter(${r.v})"><span class="rc-emoji">${r.emoji}</span><span class="rc-label">${r.label}</span><span class="rc-count">${count}</span></div>`;
       }).join("")}
     </div>
   </div>
@@ -3109,11 +3178,11 @@ function toggleRateFilter(v){
   const rs=document.querySelector('.rate-stat');
   if(rs){
     const title=rs.querySelector('.rs-title');
-    if(title) title.innerHTML=`评价分布（全部 ${state.checkins.length} 次）${state.ciRatingFilter?'· 已筛选 '+ratingOf(state.ciRatingFilter).label:''}`;
+    if(title) title.innerHTML=`评价<span class="rs-count">${state.checkins.length} 次</span>`;
     rs.querySelectorAll('.rate-chip').forEach((chip,i)=>{
       const r=RATINGS[i]; const active=state.ciRatingFilter===r.v;
       chip.classList.toggle('active',active);
-      chip.style.cssText=active?`background:${r.color};border-color:${r.color};color:#fff;`:`border-color:${r.color};color:${r.color};`;
+      chip.style.cssText=active?`background:${hexToRgba(r.color,0.14)};border-color:${r.color};`:`background:#F2F2F7;border-color:transparent;`;
     });
   }
 }
@@ -3343,6 +3412,25 @@ function renderOther(){
     <div class="dcard" onclick="document.getElementById('imp').click()"><div class="emoji">📥</div>
       <div class="body"><div class="nm">导入恢复</div><div class="meta">从 JSON 整覆盖恢复</div></div><span class="arrow">›</span></div>
     <input id="imp" type="file" accept="application/json" style="display:none" onchange="importBackup(this)">
+  </div>
+  <div class="list" style="margin-top:12px;">
+    <div class="dcard sync-card"><div class="emoji">☁️</div>
+      <div class="body" style="flex:1;min-width:0;">
+        <div class="nm">云端同步 (Supabase)</div>
+        <div class="meta">自动备份每日修改与新增数据</div>
+        <div class="lc-form">
+          <input id="sbUrl" placeholder="Supabase 项目 URL，如 https://xxxx.supabase.co" value="${esc(state.cb.url||"")}">
+          <input id="sbKey" type="password" placeholder="Supabase Anon Key（公开）" value="${esc(state.cb.key||"")}">
+          <div class="note-line">在 Supabase 控制台创建一个项目，并在 Authentication → Sign In / Providers 中开启「Anonymous」匿名登录。数据存于数据表 <b>mealdaily_sync</b>（字段 user_id、data、updated_at）。表权限建议设为「所有人可增改」，或按 user_id 限制。</div>
+          <div class="lc-actions">
+            <button class="ghost-btn" onclick="lcSaveConfig()">保存配置</button>
+            <button class="primary-btn" onclick="lcPushNow()">立即同步</button>
+            <button class="ghost-btn" onclick="lcPullNow()">从云端恢复</button>
+          </div>
+          <div class="lc-status" id="lcStatus">${state.cb.lastSync?("最近同步："+fmtTime(state.cb.lastSync)):"尚未同步"}</div>
+        </div>
+      </div>
+    </div>
   </div>
   ${tabbarHTML("other")}`;
 }
