@@ -50,8 +50,8 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .search-box .ic svg{width:100%;height:100%;}
 .search-box input{flex:1;border:0;outline:0;font-size:14px;background:transparent;color:var(--ink);}
 .search-box input::placeholder{color:#8E8E93;}
-.search-box .clear{width:18px;height:18px;border-radius:50%;border:0;background:rgba(0,0,0,.1);color:var(--ink2);
-  font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.search-box .clear{width:20px;height:20px;border-radius:50%;border:0;background:#C7C7CC;color:#fff;
+  font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;margin-left:2px;}
 
 /* ---------- 紧凑控件 ---------- */
 .controls{display:flex;flex-direction:column;gap:7px;padding:9px 16px 11px;background:transparent;border-bottom:0;}
@@ -217,6 +217,7 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .sheet-head h3{font-size:18px;font-weight:800;margin:0;}
 .sheet-head .x{font-size:22px;color:var(--gray);padding:0 4px;}
 .sheet-head .edit-title-btn{margin-left:8px;font-size:11px;font-weight:700;color:var(--accent);background:#FFF5D6;border:1px solid #FFE4A8;border-radius:8px;padding:2px 8px;vertical-align:middle;cursor:pointer;}
+.sheet-head .delete-title-btn{margin-left:8px;font-size:11px;font-weight:700;color:#FF3B30;background:#FFE5E3;border:1px solid #FFCCC9;border-radius:8px;padding:2px 8px;vertical-align:middle;cursor:pointer;}
 .sheet-body{padding:4px 18px 18px;}
 
 /* 居中弹窗（详情 / 新增·编辑打卡） */
@@ -2178,7 +2179,7 @@ function load(){
 function defaultState(){
   return {tab:"today",servings:2,dishCount:2,meatCount:1,vegCount:1,stapleCount:1,tangyinCount:1,snackCount:1,
     libLeft:"全部",libTop:"全部",libSearch:"",todaySearch:"",todaySearchActive:false,ciSearch:"",ciRatingFilter:null,
-    plan:null,custom:[],checkins:[],overrides:{},cb:{url:"",key:"",lastSync:null}};
+    plan:null,custom:[],checkins:[],overrides:{},deleted:[],cb:{url:"",key:"",code:"",lastSync:null}};
 }
 function save(){localStorage.setItem(STORE_KEY,JSON.stringify(state)); cbSchedulePush();}
 function fmtTime(ts){ if(!ts) return ""; const d=new Date(ts);
@@ -2193,10 +2194,15 @@ function cbSetStatus(msg,err){ const el=document.getElementById("lcStatus"); if(
 async function sbEnsureAuth(){ const client=sbClientGet(); if(!client) return null;
   try{ const {data}=await client.auth.getUser(); if(data&&data.user) return client;
     const r=await client.auth.signInAnonymously(); if(r&&r.data&&r.data.user) return client; return null; }catch(e){ return null; } }
-async function sbGetUid(client){ try{ const {data}=await client.auth.getUser(); return data&&data.user?data.user.id:null; }catch(e){ return null; } }
+async function sha256Hex(str){
+  const data=new TextEncoder().encode(str);
+  const buf=await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 async function cbPush(silent){ const client=await sbEnsureAuth(); if(!client){ if(!silent) cbSetStatus("未配置 Supabase 或登录失败",true); return false; }
+  if(!state.cb.code){ if(!silent) cbSetStatus("请先填写同步码",true); return false; }
   try{
-    const uid=await sbGetUid(client); if(!uid){ if(!silent) cbSetStatus("获取用户标识失败",true); return false; }
+    const uid=await sha256Hex(state.cb.code);
     const payload={user_id:uid, data:JSON.stringify(state), updated_at:new Date().toISOString()};
     const {error}=await client.from(CB_TABLE).upsert(payload,{onConflict:"user_id"});
     if(error) throw error;
@@ -2207,32 +2213,34 @@ async function cbPush(silent){ const client=await sbEnsureAuth(); if(!client){ i
 }
 function saveNoPush(){ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }
 async function cbPull(){ const client=await sbEnsureAuth(); if(!client){ alert("请先填写并保存 Supabase 配置"); return; }
+  if(!state.cb.code){ alert("请先填写同步码"); return; }
   try{
-    const uid=await sbGetUid(client); if(!uid){ alert("获取用户标识失败"); return; }
+    const uid=await sha256Hex(state.cb.code);
     const {data,error}=await client.from(CB_TABLE).select("data").eq("user_id",uid).maybeSingle();
     if(error) throw error;
-    if(!data){ alert("云端还没有该设备的备份"); return; }
+    if(!data){ alert("云端还没有该同步码的备份"); return; }
     const parsed=JSON.parse(data.data);
     confirmDialog("从云端恢复会覆盖本机数据","确定用云端数据覆盖当前手机数据吗？",function(){
       state=Object.assign(defaultState(),parsed);
-      state.custom=state.custom||[]; state.checkins=state.checkins||[]; state.overrides=state.overrides||{};
-      if(!state.cb) state.cb={url:"",key:"",lastSync:null};
+      state.custom=state.custom||[]; state.checkins=state.checkins||[]; state.overrides=state.overrides||{}; state.deleted=state.deleted||[];
+      if(!state.cb) state.cb={url:"",key:"",code:"",lastSync:null};
       state.cb.lastSync=Date.now();
       saveNoPush(); render();
       alert("已从云端恢复");
     },"从云端恢复");
   }catch(e){ alert("拉取失败："+(e&&e.message?e.message:e)); }
 }
-function lcSaveConfig(){ const url=document.getElementById("sbUrl"); const key=document.getElementById("sbKey");
-  if(url) state.cb.url=url.value.trim(); if(key) state.cb.key=key.value.trim(); saveNoPush();
+function lcSaveConfig(){ const url=document.getElementById("sbUrl"); const key=document.getElementById("sbKey"); const code=document.getElementById("sbCode");
+  if(url) state.cb.url=url.value.trim(); if(key) state.cb.key=key.value.trim(); if(code) state.cb.code=code.value.trim(); saveNoPush();
   if(sbClientGet()){ cbSetStatus("配置已保存，正在首次同步…"); cbPush(); }
   else cbSetStatus("配置已保存（未检测到 Supabase SDK 或信息不全）", !!(state.cb&&state.cb.url&&state.cb.key)); }
 function lcPushNow(){ if(!sbClientGet()){ alert("请先填写并保存 Supabase 配置（URL 和 Anon Key）"); return; } cbSetStatus("正在同步…"); cbPush(); }
 function lcPullNow(){ cbPull(); }
 
 
-function allDishes(){return DISHES.concat(state.custom).map(resolve);}
-function dishById(id){const d=DISHES.concat(state.custom).find(x=>x.id===id);return d?resolve(d):undefined;}
+function isDeleted(id){ return state.deleted && state.deleted.includes(id); }
+function allDishes(){return DISHES.concat(state.custom).filter(x=>!isDeleted(x.id)).map(resolve);}
+function dishById(id){if(isDeleted(id))return undefined;const d=DISHES.concat(state.custom).find(x=>x.id===id);return d?resolve(d):undefined;}
 
 // 今日餐食四个分类字段 <-> 菜品 kind 互转
 function fieldForDish(d){
@@ -2340,9 +2348,9 @@ function renderToday(){
     <div class="search-mini">
       <div class="search-box"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
         <input placeholder="输入关键词" value="${esc(state.todaySearch)}"
-          oninput="state.todaySearch=this.value;state.todaySearchActive=true;save();renderTodaySearch();"
+          oninput="state.todaySearch=this.value;state.todaySearchActive=true;save();renderTodaySearch();toggleClear('todayClearBtn',this.value);"
           onkeydown="if(event.key==='Enter'){event.preventDefault();}">
-        ${state.todaySearch?`<button class="clear" onclick="event.stopPropagation();clearTodaySearch()">×</button>`:""}
+        <button class="clear" id="todayClearBtn" style="${state.todaySearch?'':'display:none'}" onclick="event.stopPropagation();clearTodaySearch()">×</button>
       </div>
     </div>
   </div>
@@ -2443,9 +2451,14 @@ function renderTodaySearch(){
 }
 function clearTodaySearch(){
   state.todaySearch=""; state.todaySearchActive=false; save();
-  const inp=document.querySelector('.search-mini input');
-  if(inp) inp.value="";
-  renderTodaySearch();
+  render();
+}
+function clearLibSearch(){
+  state.libSearch=""; save(); render();
+}
+function toggleClear(btnId,val){
+  const b=document.getElementById(btnId);
+  if(b) b.style.display=val?"":"none";
 }
 function onTodaySearchOutside(e){
   if(state.tab!=="today" || !state.todaySearchActive) return;
@@ -2453,9 +2466,7 @@ function onTodaySearchOutside(e){
   const r=document.getElementById("todaySearchResults");
   if(s && r && !s.contains(e.target) && !r.contains(e.target)){
     state.todaySearch=""; state.todaySearchActive=false; save();
-    const inp=document.querySelector('.search-mini input');
-    if(inp) inp.value="";
-    renderTodaySearch();
+    render();
   }
 }
 function dishCountChip(){
@@ -2769,8 +2780,8 @@ function renderLibrary(){
     <div class="search-mini">
       <div class="search-box"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
         <input placeholder="输入关键词" value="${esc(state.libSearch)}"
-          oninput="state.libSearch=this.value;save();renderLibraryRight()">
-        ${state.libSearch?`<button class="clear" onclick="event.stopPropagation();state.libSearch='';save();renderLibraryRight();document.querySelector('.search-mini input').value=''">×</button>`:""}
+          oninput="state.libSearch=this.value;save();renderLibraryRight();toggleClear('libClearBtn',this.value);">
+        <button class="clear" id="libClearBtn" style="${state.libSearch?'':'display:none'}" onclick="event.stopPropagation();clearLibSearch()">×</button>
       </div>
     </div>
   </div>
@@ -2850,7 +2861,7 @@ function openDetail(id){
   const e=emoFor(d);
   const ing=d.ingredients.map(x=>`<span>${esc(x)}</span>`).join("");
   const urls=getVideoUrls(d);
-  showModal(`<div class="sheet-head"><h3>菜品详情<button class="edit-title-btn" onclick="editDish('${d.id}')">编辑</button></h3><span class="x" onclick="closeModal()">×</span></div>
+  showModal(`<div class="sheet-head"><h3>菜品详情<button class="edit-title-btn" onclick="editDish('${d.id}')">编辑</button><button class="delete-title-btn" onclick="deleteDish('${d.id}')">删除</button></h3><span class="x" onclick="closeModal()">×</span></div>
     <div class="sheet-body">
       <div class="detail-emoji">${e}</div>
       <div class="detail-name">${esc(d.name)}</div>
@@ -3392,6 +3403,28 @@ function submitEditDish(id){
   state.overrides[id]=o;
   save();closeModal();render();
 }
+function deleteDish(id){
+  const d=dishById(id); if(!d) return;
+  const name=d.name;
+  confirmDialog("删除菜品","确定删除「"+name+"」吗？删除后该菜品会从菜库和今日餐食中移除。",function(){
+    const builtin=DISHES.find(x=>x.id===id);
+    if(builtin){
+      if(!state.deleted) state.deleted=[];
+      if(!state.deleted.includes(id)) state.deleted.push(id);
+    }else{
+      state.custom=state.custom.filter(x=>x.id!==id);
+    }
+    if(state.overrides && state.overrides[id]) delete state.overrides[id];
+    if(state.plan){
+      state.plan.dishes=state.plan.dishes.filter(x=>x!==id);
+      state.plan.staples=state.plan.staples.filter(x=>x!==id);
+      state.plan.tangyin=state.plan.tangyin.filter(x=>x!==id);
+      state.plan.snacks=state.plan.snacks.filter(x=>x!==id);
+    }
+    save(); closeModal(); render();
+    alert("已删除「"+name+"」");
+  },"删除");
+}
 
 /* ============ 其他 ============ */
 function renderOther(){
@@ -3405,14 +3438,15 @@ function renderOther(){
     <input id="imp" type="file" accept="application/json" style="display:none" onchange="importBackup(this)">
   </div>
   <div class="list" style="margin-top:12px;">
-    <div class="dcard sync-card"><div class="emoji">☁️</div>
+    <div class="dcard sync-card">
       <div class="body" style="flex:1;min-width:0;">
         <div class="nm">云端同步 (Supabase)</div>
         <div class="meta">自动备份每日修改与新增数据</div>
         <div class="lc-form">
           <input id="sbUrl" placeholder="Supabase 项目 URL，如 https://xxxx.supabase.co" value="${esc(state.cb.url||"")}">
           <input id="sbKey" type="password" placeholder="Supabase Anon Key（公开）" value="${esc(state.cb.key||"")}">
-          <div class="note-line">在 Supabase 控制台创建一个项目，并在 Authentication → Sign In / Providers 中开启「Anonymous」匿名登录。数据存于数据表 <b>mealdaily_sync</b>（字段 user_id、data、updated_at）。表权限建议设为「所有人可增改」，或按 user_id 限制。</div>
+          <input id="sbCode" placeholder="同步码（自定，跨设备恢复用同一个）" value="${esc(state.cb.code||"")}">
+          <div class="note-line">数据存于数据表 <b>mealdaily_sync</b>。云端身份由「同步码」决定（取其 SHA-256 当主键），所以<b>换手机/换网址后，只要填同一个同步码就能找回数据</b>。同步码请牢记，谁拿到它谁就能读取你的备份。仍需在 Supabase 开启 Anonymous 匿名登录。</div>
           <div class="lc-actions">
             <button class="ghost-btn" onclick="lcSaveConfig()">保存配置</button>
             <button class="primary-btn" onclick="lcPushNow()">立即同步</button>
