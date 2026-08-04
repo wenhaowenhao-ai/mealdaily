@@ -70,6 +70,11 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .refresh-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   border:0;border-radius:10px;padding:0 12px;font-size:13px;font-weight:700;box-shadow:var(--shadow);width:100%;height:100%;}
 .refresh-btn:active{opacity:.85;}
+.top-refresh{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  color:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;
+  box-shadow:var(--shadow);-webkit-appearance:none;appearance:none;padding:0;margin-left:auto;}
+.top-refresh svg{width:20px;height:20px;display:block;}
+.top-refresh:active{opacity:.7;}
 
 /* ---------- 卡片 ---------- */
 .section-title{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 8px;}
@@ -313,6 +318,12 @@ button,a,label{-webkit-user-select:none;user-select:none;touch-action:manipulati
 .sync-card .lc-actions button{width:auto;flex:1;padding:11px 8px;font-size:13px;margin-top:0;border-radius:11px;}
 .sync-card .lc-status{font-size:12px;color:var(--ink2);margin-top:6px;}
 .sync-card .lc-status.err{color:#FF3B30;}
+.sync-card .lc-cloudinfo{margin-top:10px;padding:11px 12px;background:#F2F2F7;border-radius:12px;
+  font-size:12px;color:var(--ink2);line-height:1.55;}
+.sync-card .lc-cloudinfo .ci-title{font-weight:700;color:var(--ink);font-size:13px;margin-bottom:4px;}
+.sync-card .lc-cloudinfo .ci-time{color:var(--ink2);}
+.sync-card .lc-cloudinfo .ci-stats{margin-top:5px;color:var(--ink);font-weight:600;}
+.sync-card .lc-cloudinfo .ci-empty{color:var(--gray);}
 /* 食材编辑 */
 .mini-edit{display:inline-flex;align-items:center;margin-left:6px;line-height:1;
   color:var(--gray);cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -2234,10 +2245,35 @@ async function cbPull(){ const client=await sbEnsureAuth(); if(!client){ alert("
 }
 function lcSaveConfig(){ const url=document.getElementById("sbUrl"); const key=document.getElementById("sbKey"); const code=document.getElementById("sbCode");
   if(url) state.cb.url=url.value.trim(); if(key) state.cb.key=key.value.trim(); if(code) state.cb.code=code.value.trim(); saveNoPush();
-  if(sbClientGet()){ cbSetStatus("配置已保存，正在首次同步…"); cbPush(); }
+  if(sbClientGet()){ cbSetStatus("配置已保存，正在首次同步…"); cbPush().then(()=>cbRefreshCloudInfo()); }
   else cbSetStatus("配置已保存（未检测到 Supabase SDK 或信息不全）", !!(state.cb&&state.cb.url&&state.cb.key)); }
-function lcPushNow(){ if(!sbClientGet()){ alert("请先填写并保存 Supabase 配置（URL 和 Anon Key）"); return; } cbSetStatus("正在同步…"); cbPush(); }
+function lcPushNow(){ if(!sbClientGet()){ alert("请先填写并保存 Supabase 配置（URL 和 Anon Key）"); return; } cbSetStatus("正在同步…"); cbPush().then(()=>cbRefreshCloudInfo()); }
 function lcPullNow(){ cbPull(); }
+async function cbRefreshCloudInfo(){
+  const el=document.getElementById("lcCloudInfo");
+  if(!el) return;
+  const client=sbClientGet();
+  if(!client || !state.cb.code){ el.classList.add("hide"); return; }
+  try{
+    const uid=await sha256Hex(state.cb.code);
+    const {data,error}=await client.from(CB_TABLE).select("updated_at,data").eq("user_id",uid).maybeSingle();
+    if(error) throw error;
+    el.classList.remove("hide");
+    if(!data){ el.innerHTML='<span class="ci-empty">云端暂无该同步码的备份</span>'; return; }
+    let parsed=null; try{ parsed=JSON.parse(data.data); }catch(e){}
+    const custom=(parsed&&parsed.custom||[]).length;
+    const checkins=(parsed&&parsed.checkins||[]).length;
+    const overrides=Object.keys(parsed&&parsed.overrides||{}).length;
+    const deleted=(parsed&&parsed.deleted||[]).length;
+    const when=fmtTime(new Date(data.updated_at).getTime());
+    el.innerHTML=`<div class="ci-title">云端备份概况</div>`
+      +`<div class="ci-time">最近备份：${when}</div>`
+      +`<div class="ci-stats">自定义菜 ${custom} · 打卡 ${checkins} · 单菜修改 ${overrides} · 已删 ${deleted}</div>`;
+  }catch(e){
+    el.classList.remove("hide");
+    el.innerHTML='<span class="ci-empty">读取云端备份信息失败：'+(e&&e.message?e.message:e)+'</span>';
+  }
+}
 
 
 function isDeleted(id){ return state.deleted && state.deleted.includes(id); }
@@ -2329,6 +2365,7 @@ function render(){
   document.getElementById("addDishBtn").classList.toggle("hide",state.tab!=="library");
   document.getElementById("addCheckinBtn").classList.toggle("hide",state.tab!=="checkin");
   bindTabbar();
+  if(state.tab==="other") cbRefreshCloudInfo();
 }
 function bindTabbar(){
   document.querySelectorAll(".tabbar button").forEach(b=>{
@@ -3433,7 +3470,8 @@ function deleteDish(id){
 /* ============ 其他 ============ */
 function renderOther(){
   return `
-  <div class="topbar"><h1>其他</h1><div class="sub">数据导入导出</div></div>
+  <div class="topbar"><div class="title"><h1>其他</h1><div class="sub">数据导入导出</div></div>
+    <button class="top-refresh" onclick="appReload()" aria-label="刷新页面" title="刷新页面">${ICONS.refresh}</button></div>
   <div class="list">
     <div class="dcard" onclick="exportBackup()"><div class="emoji">💾</div>
       <div class="body"><div class="nm">导出备份</div><div class="meta">含自定义菜/打卡/单菜修改</div></div><span class="arrow">›</span></div>
@@ -3457,6 +3495,7 @@ function renderOther(){
             <button class="ghost-btn" onclick="lcPullNow()">从云端恢复</button>
           </div>
           <div class="lc-status" id="lcStatus">${state.cb.lastSync?("最近同步："+fmtTime(state.cb.lastSync)):"尚未同步"}</div>
+          <div class="lc-cloudinfo hide" id="lcCloudInfo"></div>
         </div>
       </div>
     </div>
@@ -3500,8 +3539,14 @@ const ICONS={
   today:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18a9 9 0 0 1-18 0z"/><path d="M8 6c0-1 1-2 1-3M12 6c0-1 1-2 1-3M16 6c0-1 1-2 1-3"/></svg>`,
   library:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v15H6a2 2 0 0 0-2 2z"/><path d="M4 19a2 2 0 0 1 2-2h12"/></svg>`,
   checkin:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>`,
-  other:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>`
+  other:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>`,
+  refresh:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>`
 };
+function appReload(){
+  if(confirm("刷新页面会重新加载最新内容与代码，未保存的输入框（URL / Key / 同步码）会丢失。确定刷新？")){
+    location.reload(true);
+  }
+}
 function tabbarHTML(active){
   const tabs=[["today","今日"],["library","菜库"],["checkin","打卡"],["other","其他"]];
   return `<div class="tabbar">`+tabs.map(t=>`<button data-t="${t[0]}" class="${active===t[0]?'active':''}"><span class="ic">${ICONS[t[0]]}</span>${t[1]}</button>`).join("")+`</div>`;
